@@ -88,7 +88,7 @@ export const TeamCreatePage = (props) => {
                   onlyNumber={true}
                   big={true}
                   value={team.engine}
-                />{" "}
+                />
                 <InputLabeled
                   label="Klasa"
                   name="carClassId"
@@ -96,7 +96,7 @@ export const TeamCreatePage = (props) => {
                   disabled={disable}
                   onlyNumber={true}
                   big={true}
-                  value={team.carClassIdId}
+                  value={team.carClassId}
                 />
                 {/* <Selector
                   label={"Rodzaj napędu"}
