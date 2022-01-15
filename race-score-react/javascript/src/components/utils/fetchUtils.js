@@ -1,3 +1,3 @@
 export const backendUrl = () => {
-  return "http://wyniki-backend.herokuapp.com";
+  return "https://wyniki-backend.herokuapp.com";
 };
