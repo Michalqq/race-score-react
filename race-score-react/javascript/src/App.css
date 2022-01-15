@@ -1,0 +1,153 @@
+.App {
+  text-align: center;
+  font-size: calc(10px + 1vmin);
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 6vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@charset "UTF-8";
+.logLevelLabel {
+  color: white;
+  height: 2em;
+  width: 5em;
+  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.logLevelLabel.undefined {
+  background-color: #3c3c3c;
+}
+
+.logLevelLabel.off {
+  background-color: black;
+}
+
+.logLevelLabel.error {
+  background-color: maroon;
+}
+
+.logLevelLabel.warn {
+  background-color: darkorange;
+}
+
+.logLevelLabel.info {
+  background-color: darkblue;
+}
+
+.logLevelLabel.debug {
+  background-color: darkgreen;
+}
+
+.logLevelLabel.trace {
+  color: black;
+  background-color: lightgray;
+}
+
+.logLevelLabel .logLabel {
+  padding-top: 5px;
+  text-align: center;
+  display: block;
+}
+
+.treeNode {
+  height: 3.5em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.treeNode::before {
+  content: "└";
+  font-size: 6em;
+  position: relative;
+  top: -0.3em;
+}
+
+.nodeName {
+  height: 2em;
+  margin-top: 1.4em;
+  margin-left: 1em;
+  text-align: left;
+}
+
+.title {
+  text-align: center;
+}
+
+.font14 {
+  font-size: 14px;
+}
+.font13 {
+  font-size: 13px;
+}
+.font12 {
+  font-size: 12px;
+}
+.font11 {
+  font-size: 11px;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.my-input {
+  width: 80px !important;
+  text-align: center;
+}
+
+.centered-grid {
+  display: grid;
+  justify-content: center;
+}
+
+.inline-flex {
+  display: inline-flex;
+  justify-content: center;
+}
+.inline-grid {
+  display: inline-grid;
+}
+
+.width-300 {
+  width: 300px;
+}
+
+.select {
+  border: solid rgb(138, 138, 138) 2px;
+  border-radius: 5px;
+}
