@@ -19,6 +19,7 @@ import authHeader from "../../service/auth-header";
 
 export const TeamListModal = ({ show, handleClose, eventId }) => {
   const [teams, setTeams] = useState([]);
+  const [startEvent, setStartEvent] = useState(false);
   const [loading, setLoading] = useState(true);
   const [referee, setReferee] = useState(false);
   const [teamToRemove, setTeamToRemove] = useState({
@@ -93,12 +94,23 @@ export const TeamListModal = ({ show, handleClose, eventId }) => {
       });
   };
 
+  const fetchStartEvent = () => {
+    axios
+      .post(`${backendUrl()}/event/startEvent?eventId=${eventId}`, {
+        headers: authHeader(),
+      })
+      .then(() => {});
+  };
+
   useEffect(() => {
-    if (show) {
-      fetchReferee();
-      fetchTeams();
-    }
+    if (show) fetchReferee();
+    fetchTeams();
   }, [show]);
+
+  useEffect(() => {
+    setTeams([]);
+    fetchTeams();
+  }, [referee]);
 
   const columns = useMemo(
     () => [
@@ -235,11 +247,34 @@ export const TeamListModal = ({ show, handleClose, eventId }) => {
             }}
           />
         )}
+        {startEvent && (
+          <OkCancelModal
+            show={true}
+            title={"Zamykanie listy / Rozpoczynanie wydarzenia"}
+            text={`Czy napewno chcesz zamknąć listę i rozpocząć wydarzenie? Operacja nieodwracalna`}
+            handleAccept={() => {
+              fetchStartEvent();
+              setStartEvent(false);
+            }}
+            handleClose={() => setStartEvent(false)}
+          />
+        )}
       </Modal.Body>
       <Modal.Footer className={"justify-content-center"}>
-        <Button className={"mx-3"} variant="secondary" onClick={handleClose}>
-          Anuluj
-        </Button>
+        <div className="d-grid">
+          {referee && (
+            <Button
+              className={"m-2"}
+              variant="success"
+              onClick={() => setStartEvent(true)}
+            >
+              Zamknij liste / Rozpocznij wydarzenie
+            </Button>
+          )}
+          <Button className={"m-1"} variant="secondary" onClick={handleClose}>
+            Anuluj
+          </Button>
+        </div>
       </Modal.Footer>
     </Modal>
   );

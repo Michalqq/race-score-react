@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -12,12 +12,15 @@ import { backendUrl } from "../utils/fetchUtils";
 import { format } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { Selector } from "../common/Selector";
+import authHeader from "../../service/auth-header";
 
 export const NewEventForm = ({ show, handleClose }) => {
   const [myEvent, setMyEvent] = useState({
     name: "",
     description: "",
     date: new Date(),
+    signDeadline: new Date(),
     admin: 1,
     stages: [],
   });
@@ -29,6 +32,22 @@ export const NewEventForm = ({ show, handleClose }) => {
     startFrequency: 1,
   });
   const [stages, setStages] = useState([]);
+  const [referee, setReferee] = useState([]);
+  const [refereeOptions, setRefereeOptions] = useState([]);
+
+  useEffect(() => {
+    if (!show) return;
+
+    axios
+      .get(`${backendUrl()}/event/getRefereeOptions`, {
+        headers: authHeader(),
+      })
+      .then((res) => {
+        setRefereeOptions(res.data);
+      });
+    setReferee([]);
+    setStages([]);
+  }, [show]);
 
   const handleChange = (event) => {
     setMyEvent({ ...myEvent, [event.target.name]: event.target.value });
@@ -38,7 +57,11 @@ export const NewEventForm = ({ show, handleClose }) => {
   };
 
   const handleAccept = () => {
-    const data = { ...myEvent, stages: stages };
+    const data = {
+      ...myEvent,
+      stages: stages,
+      referee: referee,
+    };
     axios.put(`${backendUrl()}/event/createNew`, data).then((res) => {
       handleClose();
     });
@@ -58,8 +81,18 @@ export const NewEventForm = ({ show, handleClose }) => {
 
   const removeFromStages = (id) => {
     const tempStages = stages.filter((x) => x.index !== id);
-    setStages([]);
     setStages(tempStages);
+  };
+
+  const removeReferee = (id) => {
+    const tempRef = referee.filter((x) => x.userId !== id);
+    setReferee(tempRef);
+  };
+
+  const addReferee = (id) => {
+    const tempRef = refereeOptions.find((x) => x.value === id);
+    const newRef = { userId: Number(tempRef.value), username: tempRef.label };
+    setReferee([...referee, newRef]);
   };
 
   const DatePickerContainer = ({ className, children }) => {
@@ -84,7 +117,7 @@ export const NewEventForm = ({ show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <div className="row u-text-center justify-content-center">
-          <div className="col-lg-4 mx-1 border-right shadow-sm p-3 mb-2 bg-white rounded">
+          <div className="col-lg-4 mx-1 border-right shadow mb-1 bg-white rounded">
             <h5>Wydarzenie</h5>
             <InputLabeled
               label="Nazwa"
@@ -92,6 +125,7 @@ export const NewEventForm = ({ show, handleClose }) => {
               handleChange={handleChange}
               big={true}
               value={myEvent.name}
+              multiline={2}
             />
             <InputLabeled
               label="Opis"
@@ -99,41 +133,53 @@ export const NewEventForm = ({ show, handleClose }) => {
               handleChange={handleChange}
               big={true}
               value={myEvent.description}
+              multiline={2}
             />
-            <CustomDatePicker
-              label={"Data wydarzenia"}
-              onChange={(value) => setMyEvent({ ...myEvent, date: value })}
-              selected={myEvent.date}
-              calendarContainer={DatePickerContainer}
-              //placeholderText={placeholderFrom}
-              minDate={new Date()}
-              maxDate={null}
+            <div className="d-flex">
+              <CustomDatePicker
+                label={"Data wydarzenia"}
+                onChange={(value) => setMyEvent({ ...myEvent, date: value })}
+                selected={myEvent.date}
+                calendarContainer={DatePickerContainer}
+                //placeholderText={placeholderFrom}
+                minDate={new Date()}
+                maxDate={null}
+              />
+              <CustomDatePicker
+                label={"Koniec zapisów"}
+                onChange={(value) =>
+                  setMyEvent({ ...myEvent, signDeadline: value })
+                }
+                selected={myEvent.signDeadline}
+                calendarContainer={DatePickerContainer}
+                //placeholderText={placeholderFrom}
+                minDate={new Date()}
+                maxDate={null}
+              />
+            </div>
+            <Selector
+              label={"Sędziowie"}
+              options={refereeOptions}
+              handleChange={(value) => addReferee(value)}
+              isValid={true}
+              skipDefault={true}
             />
-          </div>
-          <div className="col-lg-7 mx-2 shadow-sm p-3 mb-2 bg-white rounded">
-            <h5>Odcinki PS/OS (w kolejności)</h5>
             <Table responsive>
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Nazwa</th>
-                  <th>Czas startu</th>
-                  <th>Częstotliwość</th>
-                  <th>Usuń</th>
+                  <th>Login</th>
+                  <th className="text-end">Usuń</th>
                 </tr>
               </thead>
               <tbody>
-                {stages.map((x, index) => (
-                  <tr key={index}>
-                    <td>{index}</td>
-                    <td>{x.name}</td>
-                    <td>{format(x.startTime, "HH:mm")}</td>
-                    <td>{x.startFrequency + " min"}</td>
-                    <td>
+                {referee.map((x, index) => (
+                  <tr key={x.userId + index}>
+                    <td>{x.username}</td>
+                    <td className="text-end">
                       <FontAwesomeIcon
-                        className={"m-2 fa-lg"}
+                        className={"fa-lg"}
                         icon={faTimesCircle}
-                        onClick={() => removeFromStages(x.index)}
+                        onClick={() => removeReferee(x.userId)}
                         title={"Usuń załoge"}
                         cursor={"pointer"}
                       />
@@ -142,6 +188,41 @@ export const NewEventForm = ({ show, handleClose }) => {
                 ))}
               </tbody>
             </Table>
+          </div>
+          <div className="col-lg-7 mx-2 shadow mb-1 bg-white rounded">
+            <h5>Odcinki PS/OS (w kolejności)</h5>
+            {stages.length > 0 && (
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nazwa</th>
+                    <th>Czas startu</th>
+                    <th>Częstotliwość</th>
+                    <th className="text-end">Usuń</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stages.map((x, index) => (
+                    <tr key={index}>
+                      <td>{index}</td>
+                      <td>{x.name}</td>
+                      <td>{format(x.startTime, "HH:mm")}</td>
+                      <td>{x.startFrequency + " min"}</td>
+                      <td className="text-end">
+                        <FontAwesomeIcon
+                          className={"m-2 fa-lg"}
+                          icon={faTimesCircle}
+                          onClick={() => removeFromStages(x.index)}
+                          title={"Usuń załoge"}
+                          cursor={"pointer"}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
             <div className="d-block">
               <InputLabeled
                 label="Nazwa"
@@ -151,51 +232,48 @@ export const NewEventForm = ({ show, handleClose }) => {
                 value={stage.name}
               />
             </div>
-            <div className="row">
-              <div className="col-xl-3">
-                <InputLabeled
-                  label="Długość [m]"
-                  name="distance"
-                  handleChange={handleStageChange}
-                  big={true}
-                  onlyNumber={true}
-                  value={stage.distance}
-                />
-              </div>
-              <div className="col-xl-4">
-                <TimePicker
-                  label={"Czas startu odcinka"}
-                  onChange={(value) => {
-                    console.log(value);
-                    setStage({
-                      ...stage,
-                      startTime: value,
-                    });
-                  }}
-                  selected={stage.startTime}
-                  calendarContainer={DatePickerContainer}
-                  //placeholderText={placeholderFrom}
-                  minDate={new Date()}
-                  maxDate={null}
-                />
-              </div>
-              <div className="col-xl-5">
-                <InputLabeled
-                  label="Częstotliwość startów [min]"
-                  name="startFrequency"
-                  handleChange={handleStageChange}
-                  big={true}
-                  value={stage.startFrequency}
-                />
-              </div>
+            <div className="d-flex">
+              <InputLabeled
+                label="Długość [m]"
+                name="distance"
+                handleChange={handleStageChange}
+                big={true}
+                onlyNumber={true}
+                value={stage.distance}
+              />
+
+              <TimePicker
+                label={"Czas startu odcinka"}
+                onChange={(value) => {
+                  console.log(value);
+                  setStage({
+                    ...stage,
+                    startTime: value,
+                  });
+                }}
+                selected={stage.startTime}
+                calendarContainer={DatePickerContainer}
+                //placeholderText={placeholderFrom}
+                minDate={new Date()}
+                maxDate={null}
+              />
+              <InputLabeled
+                label="Częstotliwość startów [min]"
+                name="startFrequency"
+                handleChange={handleStageChange}
+                big={true}
+                value={stage.startFrequency}
+              />
             </div>
-            <Button
-              className={"px-4 mx-3"}
-              variant="success"
-              onClick={addStage}
-            >
-              Dodaj odcinek
-            </Button>
+            <div className="text-center py-3">
+              <Button
+                className={"px-4 mx-3"}
+                variant="success"
+                onClick={addStage}
+              >
+                Dodaj odcinek
+              </Button>
+            </div>
           </div>
         </div>
       </Modal.Body>
@@ -207,6 +285,7 @@ export const NewEventForm = ({ show, handleClose }) => {
           className={"px-4 mx-3"}
           variant="success"
           onClick={handleAccept}
+          disabled={stages.length === 0}
         >
           OK
         </Button>

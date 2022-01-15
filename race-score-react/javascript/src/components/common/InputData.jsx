@@ -113,7 +113,7 @@ export const InputData = ({
 
   return (
     <div className="l-col-12 l-table-row">
-      <div className="l-col-3 u-display_table-cell u-padding-top-m">
+      <div className="l-col-3 u-display_table-cell">
         <p className="u-font-bold" role={"inputDataLabel"}>
           {label}
         </p>

@@ -48,17 +48,16 @@ export const Selector = (props) => {
 
   return (
     <>
-      <div className="centered-grid form-group p-2">
+      <div className="form-group p-2">
         {props.label && (
-          <span className="input-group-text width-300 mb-1" id="">
+          <span className="input-group-text mb-1" id="">
             {props.label}
           </span>
         )}
         <Select
           aria-label="select-label"
           classNamePrefix="react-select"
-          menuPortalTarget={document.body}
-          className={"select width-300"}
+          className={"select"}
           value={selectedOption}
           onChange={(e) => handleChange(e)}
           options={props.options}

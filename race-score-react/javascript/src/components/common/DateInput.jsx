@@ -77,7 +77,7 @@ export const DateInput = (props) => {
 
 export const CustomDatePicker = (props) => {
   return (
-    <div className="centered-grid form-group p-2">
+    <div className="form-group p-1">
       <span className={"input-group-text"} id="">
         {props.label}
       </span>
@@ -106,7 +106,7 @@ export const CustomDatePicker = (props) => {
 
 export const TimePicker = (props) => {
   return (
-    <div className="centered-grid form-group p-2">
+    <div className="form-group p-1">
       <span className={"input-group-text"} id="">
         {props.label}
       </span>

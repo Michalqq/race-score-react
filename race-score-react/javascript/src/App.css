@@ -151,3 +151,7 @@
   border: solid rgb(138, 138, 138) 2px;
   border-radius: 5px;
 }
+
+.react-select__menu-portal {
+  z-index: 1000000;
+}

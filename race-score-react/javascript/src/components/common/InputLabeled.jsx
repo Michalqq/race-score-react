@@ -11,6 +11,7 @@ export const InputLabeled = ({
   max,
   big = false,
   type = "text",
+  multiline,
 }) => {
   const [error, setError] = useState(false);
 
@@ -43,20 +44,33 @@ export const InputLabeled = ({
   const errorClass = error ? " border border-danger border-3 rounded" : "";
 
   return (
-    <div className="form-group p-2">
+    <div className="form-group p-1">
       <span className={"input-group-text " + (big ? "" : "my-input")} id="">
         {label}
       </span>
-      <input
-        name={name}
-        className={"form-control " + (big ? "" : "my-input") + errorClass}
-        value={value}
-        placeholder={inputPlaceholder}
-        onChange={(e) => onChange(e)}
-        disabled={disabled}
-        max={max}
-        type={type}
-      ></input>
+      {multiline === undefined && (
+        <input
+          name={name}
+          className={"form-control " + (big ? "" : "my-input") + errorClass}
+          value={value}
+          placeholder={inputPlaceholder}
+          onChange={(e) => onChange(e)}
+          disabled={disabled}
+          max={max}
+          type={type}
+        ></input>
+      )}
+      {multiline !== undefined && (
+        <textarea
+          placeholder={inputPlaceholder}
+          value={value}
+          name={name}
+          onChange={(e) => onChange(e)}
+          className={"form-control "}
+          rows={multiline}
+          disabled={disabled}
+        />
+      )}
     </div>
   );
 };
