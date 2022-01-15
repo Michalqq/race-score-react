@@ -83,8 +83,8 @@ const HomePage = (props) => {
       <TeamListModal
         show={eventToTeamList !== undefined}
         handleClose={() => setEventToTeamList()}
-        eventId={eventToTeamList.eventId}
-        started={eventToTeamList.started}
+        eventId={eventToTeamList?.eventId}
+        started={eventToTeamList?.started}
       />
     </>
   );
