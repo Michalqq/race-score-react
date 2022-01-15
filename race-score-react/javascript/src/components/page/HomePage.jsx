@@ -49,7 +49,7 @@ const HomePage = (props) => {
               navigate("joinToEvent", { state: { eventId: x.eventId } })
             }
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
-            onTeamList={() => setEventToTeamList(x.eventId)}
+            onTeamList={() => setEventToTeamList(x)}
           />
         ))}
         <Card className="my-2">
@@ -63,7 +63,7 @@ const HomePage = (props) => {
               navigate("joinToEvent", { state: { eventId: x.eventId } })
             }
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
-            onTeamList={() => setEventToTeamList(x.eventId)}
+            onTeamList={() => setEventToTeamList(x)}
           />
         ))}
       </div>
@@ -83,7 +83,8 @@ const HomePage = (props) => {
       <TeamListModal
         show={eventToTeamList !== undefined}
         handleClose={() => setEventToTeamList()}
-        eventId={eventToTeamList}
+        eventId={eventToTeamList.eventId}
+        started={eventToTeamList.started}
       />
     </>
   );

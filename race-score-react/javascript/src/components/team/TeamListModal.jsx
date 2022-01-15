@@ -17,7 +17,7 @@ import {
 import { OkCancelModal } from "../common/Modal";
 import authHeader from "../../service/auth-header";
 
-export const TeamListModal = ({ show, handleClose, eventId }) => {
+export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
   const [startEvent, setStartEvent] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -267,6 +267,7 @@ export const TeamListModal = ({ show, handleClose, eventId }) => {
               className={"m-2"}
               variant="success"
               onClick={() => setStartEvent(true)}
+              disabled={started}
             >
               Zamknij liste / Rozpocznij wydarzenie
             </Button>
