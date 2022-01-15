@@ -14,7 +14,7 @@ export const TeamCreatePage = (props) => {
     coDriver: "",
     teamName: "",
     car: "",
-    carClass: 4,
+    carClassId: 4,
     driveType: "RWD",
   });
 
@@ -91,12 +91,12 @@ export const TeamCreatePage = (props) => {
                 />{" "}
                 <InputLabeled
                   label="Klasa"
-                  name="carClass"
+                  name="carClassId"
                   handleChange={handleChange}
                   disabled={disable}
                   onlyNumber={true}
                   big={true}
-                  value={team.carClass}
+                  value={team.carClassIdId}
                 />
                 {/* <Selector
                   label={"Rodzaj napędu"}
