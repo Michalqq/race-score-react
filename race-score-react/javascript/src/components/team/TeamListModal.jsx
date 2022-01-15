@@ -56,6 +56,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   };
 
   const fetchTeams = () => {
+    if (eventId === undefined) return;
     axios
       .get(`${backendUrl()}/event/getTeams?eventId=${eventId}`)
       .then((res) => {
