@@ -239,9 +239,10 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
                   </Card.Body>
                 </Card>
                 <Card className="text-center">
-                  {team.currentCar !== undefined && (
-                    <Card.Header className="bg-dark text-white">{`Aktualny samochód: ${team.currentCar.brand} ${team.currentCar.model} ${team.currentCar.licensePlate}`}</Card.Header>
-                  )}
+                  {team.currentCar !== undefined &&
+                    team.currentCar !== null && (
+                      <Card.Header className="bg-dark text-white">{`Aktualny samochód: ${team.currentCar.brand} ${team.currentCar.model} ${team.currentCar.licensePlate}`}</Card.Header>
+                    )}
                   <Card.Body>
                     <Selector
                       label={"Samochody"}
