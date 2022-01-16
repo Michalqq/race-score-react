@@ -74,7 +74,7 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
   };
 
   return (
-    <>
+    <div>
       <Modal
         show={show && !addCar}
         onHide={handleClose}
@@ -95,154 +95,185 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
           )}
           {team !== undefined && (
             <div className="row">
-              <div className="col-lg-7 pb-3">
+              <div className="col-lg-7 pb-3 px-1">
                 <Card className="">
                   <Card.Header className="bg-dark text-white">
                     Kierowca
                   </Card.Header>
                   <Card.Body>
-                    <div className="d-flex">
-                      <InputLabeled
-                        label="Imie i nazwisko"
-                        name="driver"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.driver}
-                      />
-                      <InputLabeled
-                        label="Nazwa Teamu"
-                        name="teamName"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.teamName}
-                      />
-                      <InputLabeled
-                        label="Automobilklub"
-                        name="club"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.club}
-                      />
+                    <div className="row d-flex">
+                      <div className="col-lg-4 px-0">
+                        <InputLabeled
+                          label="Imie i nazwisko"
+                          name="driver"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.driver}
+                        />
+                      </div>
+                      <div className="col-lg-4 px-0">
+                        <InputLabeled
+                          label="Nazwa Teamu"
+                          name="teamName"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.teamName}
+                        />
+                      </div>
+                      <div className="col-lg-4 px-0">
+                        <InputLabeled
+                          label="Automobilklub"
+                          name="club"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.club}
+                        />
+                      </div>
                     </div>
 
-                    <div className="d-flex mt-3">
-                      <InputLabeled
-                        label="Email"
-                        name="email"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.email}
-                      />
-                      <InputLabeled
-                        label="Nr. telefonu"
-                        name="phone"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.phone}
-                      />
+                    <div className="row mt-3">
+                      <div className="col-lg-6 px-0">
+                        <InputLabeled
+                          label="Email"
+                          name="email"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.email}
+                        />
+                      </div>
+                      <div className="col-lg-6 px-0">
+                        <InputLabeled
+                          label="Nr. telefonu"
+                          name="phone"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.phone}
+                        />
+                      </div>
                     </div>
-                    <div className="d-flex mt-3">
-                      <DateInput
-                        value={team.birthDate}
-                        label={"Data urodzenia"}
-                        onChange={(val) => setTeam({ ...team, birthDate: val })}
-                        disabled={disable}
-                        maxDate={new Date()}
-                      />
-                      <InputLabeled
-                        label="Nr. prawa jazdy"
-                        name="drivingLicense"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.drivingLicense}
-                      />
+                    <div className="row mt-3">
+                      <div className="col-lg-6 px-0">
+                        <DateInput
+                          value={team.birthDate}
+                          label={"Data urodzenia"}
+                          onChange={(val) =>
+                            setTeam({ ...team, birthDate: val })
+                          }
+                          disabled={disable}
+                          maxDate={new Date()}
+                        />
+                      </div>
+                      <div className="col-lg-6 px-0">
+                        <InputLabeled
+                          label="Nr. prawa jazdy"
+                          name="drivingLicense"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.drivingLicense}
+                        />
+                      </div>
                     </div>
-                    <div className="d-flex mt-3">
-                      <InputLabeled
-                        label="Imię i nazwisko (wypadek)"
-                        name="emergencyPerson"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.emergencyPerson}
-                      />
-                      <InputLabeled
-                        label="Nr. telefonu (wypadek)"
-                        name="emergencyPhone"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.emergencyPhone}
-                      />
+                    <div className="row mt-3">
+                      <div className="col-lg-6 px-0">
+                        <InputLabeled
+                          label="Imię i nazwisko (wypadek)"
+                          name="emergencyPerson"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.emergencyPerson}
+                        />
+                      </div>
+                      <div className="col-lg-6 px-0">
+                        <InputLabeled
+                          label="Nr. telefonu (wypadek)"
+                          name="emergencyPhone"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.emergencyPhone}
+                        />
+                      </div>
                     </div>
                   </Card.Body>
                 </Card>
               </div>
-              <div className="col-lg-5 pb-3 ">
+              <div className="col-lg-5 pb-3 px-1">
                 <Card className="text-center">
                   <Card.Header className="bg-dark text-white">
                     Pilot
                   </Card.Header>
                   <Card.Body>
-                    <div className="d-flex">
-                      <InputLabeled
-                        label="Imie i nazwisko"
-                        name="coDriver"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.coDriver}
-                      />
-                      <InputLabeled
-                        label="Email"
-                        name="coEmail"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.coEmail}
-                      />
-                      <InputLabeled
-                        label="Nr. telefonu"
-                        name="coPhone"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.coPhone}
-                      />
+                    <div className="row ">
+                      <div className="col-lg-5 px-0">
+                        <InputLabeled
+                          label="Imie i nazwisko"
+                          name="coDriver"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.coDriver}
+                        />
+                      </div>
+                      <div className="col-lg-3 px-0">
+                        <InputLabeled
+                          label="Email"
+                          name="coEmail"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.coEmail}
+                        />
+                      </div>
+                      <div className="col-lg-4 px-0">
+                        <InputLabeled
+                          label="Nr. telefonu"
+                          name="coPhone"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.coPhone}
+                        />
+                      </div>
                     </div>
-                    <div className="d-flex">
-                      <DateInput
-                        value={team.coBirthDate}
-                        label={"Data urodzenia"}
-                        onChange={(val) =>
-                          setTeam({ ...team, coBirthDate: val })
-                        }
-                        disabled={disable}
-                        maxDate={new Date()}
-                      />
-                      <InputLabeled
-                        label="Nr. prawa jazdy"
-                        name="coDrivingLicense"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.coDrivingLicense}
-                      />
-
-                      <InputLabeled
-                        label="Automobilklub"
-                        name="coClub"
-                        handleChange={handleChange}
-                        disabled={disable}
-                        big={true}
-                        value={team.coClub}
-                      />
+                    <div className="row px-0">
+                      <div className="col-lg-4 px-0">
+                        <DateInput
+                          value={team.coBirthDate}
+                          label={"Data urodzenia"}
+                          onChange={(val) =>
+                            setTeam({ ...team, coBirthDate: val })
+                          }
+                          disabled={disable}
+                          maxDate={new Date()}
+                        />
+                      </div>
+                      <div className="col-lg-4 px-0">
+                        <InputLabeled
+                          label="Nr. prawa jazdy"
+                          name="coDrivingLicense"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.coDrivingLicense}
+                        />
+                      </div>
+                      <div className="col-lg-4 px-0">
+                        <InputLabeled
+                          label="Automobilklub"
+                          name="coClub"
+                          handleChange={handleChange}
+                          disabled={disable}
+                          big={true}
+                          value={team.coClub}
+                        />
+                      </div>
                     </div>
                   </Card.Body>
                 </Card>
@@ -302,6 +333,6 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
         teamId={team?.teamId}
         carToEdit={addCar}
       />
-    </>
+    </div>
   );
 };

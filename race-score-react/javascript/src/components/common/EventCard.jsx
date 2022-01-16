@@ -31,23 +31,35 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore }) => {
             </div>
           </div>
         </Card.Body>
-        <Card.Footer className="text-end ">
-          {new Date().getTime() <= new Date(event.signDeadline).getTime() && (
-            <Button
-              className={"position-absolute mx-2 start-0 px-2"}
-              variant="success"
-              onClick={onJoin}
-            >
-              Zapisz się
-            </Button>
-          )}
+        <Card.Footer className="text-center">
+          <div className="row ">
+            <div className="col-lg-3 my-1">
+              {new Date().getTime() <=
+                new Date(event.signDeadline).getTime() && (
+                <Button
+                  className={"mx-2 start-0 px-2"}
+                  variant="success"
+                  onClick={onJoin}
+                >
+                  Zapisz się
+                </Button>
+              )}
+            </div>
 
-          <Button className={"px-2"} variant="dark" onClick={onTeamList}>
-            Lista zapisanych
-          </Button>
-          <Button className={"px-2 mx-3"} variant="warning" onClick={onScore}>
-            Wyniki
-          </Button>
+            <div className="col-lg-4 my-1"></div>
+            <div className="col-lg-5 my-1">
+              <Button className={"px-2"} variant="dark" onClick={onTeamList}>
+                Lista zapisanych
+              </Button>
+              <Button
+                className={"px-2 mx-3"}
+                variant="warning"
+                onClick={onScore}
+              >
+                Wyniki
+              </Button>
+            </div>
+          </div>
         </Card.Footer>
       </Card>
     </div>

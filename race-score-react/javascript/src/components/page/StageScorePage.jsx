@@ -174,7 +174,8 @@ const StageScorePage = (props) => {
 
   return (
     <div className="row">
-      <div className="col-xl-12">
+      <div className="col-xl-4"></div>
+      <div className="col-xl-4">
         <Selector
           label={"Klasyfikacja"}
           options={classesOptions}
@@ -185,8 +186,6 @@ const StageScorePage = (props) => {
           }}
           isValid={true}
         />
-      </div>
-      <div className="col-xl-12">
         <Selector
           label={"PS"}
           options={psOptions}
@@ -197,9 +196,10 @@ const StageScorePage = (props) => {
           isValid={true}
         />
       </div>
+      <div className="col-xl-4"></div>
       <div className="col-xl-6">
         <div className="shadow bg-body rounded">
-          <div className="alert alert-secondary p-1 m-0" role="alert">
+          <div className="fw-bold alert alert-secondary p-1 m-0 " role="alert">
             {`Czas NA - ${stageName}`}
           </div>
           <ResultTable
@@ -219,7 +219,7 @@ const StageScorePage = (props) => {
       </div>
       <div className="col-xl-6">
         <div className="shadow bg-body rounded">
-          <div className="alert alert-secondary p-1 m-0" role="alert">
+          <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
             {`Czas PO - ${stageName}`}
           </div>
           <ResultTable
@@ -239,7 +239,7 @@ const StageScorePage = (props) => {
       </div>
       <div className="col-xl-12">
         <div className="shadow bg-body rounded mt-4 p-0">
-          <div className="alert alert-secondary p-1 m-0" role="alert">
+          <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
             {"Kary"}
           </div>
           <PenaltyTable
@@ -249,7 +249,7 @@ const StageScorePage = (props) => {
           />
         </div>
         <div className="shadow bg-body rounded mt-4">
-          <div className="alert alert-secondary p-1 m-0" role="alert">
+          <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
             {`Dyskwalifikacje / Wycofania`}
           </div>
           <DisqualificationTable

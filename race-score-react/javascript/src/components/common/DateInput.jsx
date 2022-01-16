@@ -54,7 +54,7 @@ export const DateInput = (props) => {
 
   return (
     <div className="form-group p-1">
-      <span className={"input-group-text"} id="">
+      <span className={"input-group-text py-0 "} id="">
         {props.label}
       </span>
       <div>
@@ -75,7 +75,7 @@ export const DateInput = (props) => {
 export const CustomDatePicker = (props) => {
   return (
     <div className="form-group p-1">
-      <span className={"input-group-text"} id="">
+      <span className={"input-group-text py-0 "} id="">
         {props.label}
       </span>
       <DatePicker

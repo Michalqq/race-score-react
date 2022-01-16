@@ -24,7 +24,7 @@ export const LoginPage = (props) => {
           sessionStorage.setItem("username", res.data.username);
           sessionStorage.setItem("token", res.data.token);
           sessionStorage.setItem("roles", res.data.roles);
-          navigate("");
+          navigate("/");
         } else {
           setError(res.data);
         }

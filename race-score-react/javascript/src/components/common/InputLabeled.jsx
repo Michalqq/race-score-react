@@ -45,7 +45,10 @@ export const InputLabeled = ({
 
   return (
     <div className="form-group p-1">
-      <span className={"input-group-text " + (big ? "" : "my-input")} id="">
+      <span
+        className={"input-group-text py-0 " + (big ? "" : "my-input")}
+        id=""
+      >
         {label}
       </span>
       {multiline === undefined && (

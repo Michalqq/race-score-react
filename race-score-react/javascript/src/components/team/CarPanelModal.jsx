@@ -84,122 +84,145 @@ export const CarPanelModal = ({ show, handleClose, teamId, carToEdit }) => {
         <Modal.Title className="text-white">Dodawanie samochodu</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="row">
+        <div className="row text-center">
           <div className="col-lg-12 pb-3">
             <Card className="">
               <Card.Body>
-                <div className="d-flex">
-                  <InputLabeled
-                    label="Marka"
-                    name="brand"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.brand}
-                  />
-                  <InputLabeled
-                    label="Model"
-                    name="model"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.model}
-                  />
-                  <InputLabeled
-                    label="Rok produkcji"
-                    name="year"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.year}
-                  />
-                </div>
-                <div className="d-flex">
-                  <InputLabeled
-                    label="Nr. rejestracyjny"
-                    name="licensePlate"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.licensePlate}
-                  />
-                  <InputLabeled
-                    label="VIN"
-                    name="vin"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.vin}
-                  />
-                </div>
-                <div className="d-flex">
-                  <InputLabeled
-                    label="Silnik [dm3]"
-                    name="engineCapacity"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.engineCapacity}
-                  />
-
-                  <Form>
-                    <span className={"mt-1 input-group-text"} id="">
-                      Turbo
-                    </span>
-                    <Form.Check
-                      inline
-                      label="TAK"
-                      name="turbo"
-                      type={"radio"}
-                      id={`inline-1`}
-                      checked={car.turbo}
-                      onClick={() => setCar({ ...car, turbo: true })}
+                <div className="row">
+                  <div className="col-lg-3 px-1">
+                    <InputLabeled
+                      label="Marka"
+                      name="brand"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.brand}
                     />
-                    <Form.Check
-                      inline
-                      label="NIE"
-                      name="turbo"
-                      type={"radio"}
-                      id={`inline-2`}
-                      checked={!car.turbo}
-                      onClick={() => setCar({ ...car, turbo: false })}
+                  </div>
+                  <div className="col-lg-3 px-1">
+                    <InputLabeled
+                      label="Model"
+                      name="model"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.model}
                     />
-                  </Form>
-                  <Selector
-                    label={"Rodzaj napędu"}
-                    options={options?.driveTypeOption}
-                    handleChange={(value) =>
-                      setCar({ ...car, driveType: value })
-                    }
-                    isValid={true}
-                  />
-                  <Selector
-                    label={"Paliwo"}
-                    options={options?.petrolOption}
-                    handleChange={(value) => setCar({ ...car, petrol: value })}
-                    isValid={true}
-                  />
+                  </div>
+                  <div className="col-lg-2 px-1">
+                    <InputLabeled
+                      label="Rok produkcji"
+                      name="year"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.year}
+                    />
+                  </div>
                 </div>
-                <div className="d-flex">
-                  <DateInput
-                    value={car.carInspectionExpiryDate}
-                    label={"Data ważności przeglądu samochodu"}
-                    onChange={(val) =>
-                      setCar({ ...car, carInspectionExpiryDate: val })
-                    }
-                    minDate={new Date()}
-                  />
+                <div className="row py-2">
+                  <div className="col-lg-3 px-1">
+                    <InputLabeled
+                      label="Nr. rejestracyjny"
+                      name="licensePlate"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.licensePlate}
+                    />
+                  </div>
+                  <div className="col-lg-5 px-1">
+                    <InputLabeled
+                      label="VIN"
+                      name="vin"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.vin}
+                    />
+                  </div>
                 </div>
-                <div className="d-flex">
-                  <InputLabeled
-                    label="Nr. polisy ubezpieczeniowej + firma"
-                    name="insurance"
-                    handleChange={handleChange}
-                    big={true}
-                    value={car.insurance}
-                  />
-                  <DateInput
-                    value={car.insuranceExpiryDate}
-                    label={"Data ważności polisy"}
-                    onChange={(val) =>
-                      setCar({ ...car, insuranceExpiryDate: val })
-                    }
-                    minDate={new Date()}
-                  />
+                <div className="row py-2">
+                  <div className="col-lg-3 px-1">
+                    <InputLabeled
+                      label="Silnik [dm3]"
+                      name="engineCapacity"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.engineCapacity}
+                    />
+                  </div>
+                  <div className="col-lg-2 px-1">
+                    <Form>
+                      <span className={"py-0 mb-2 mt-1 mx-1 input-group-text"}>
+                        Turbo
+                      </span>
+                      <Form.Check
+                        inline
+                        label="TAK"
+                        name="turbo"
+                        type={"radio"}
+                        id={`inline-1`}
+                        checked={car.turbo}
+                        onClick={() => setCar({ ...car, turbo: true })}
+                      />
+                      <Form.Check
+                        inline
+                        label="NIE"
+                        name="turbo"
+                        type={"radio"}
+                        id={`inline-2`}
+                        checked={!car.turbo}
+                        onClick={() => setCar({ ...car, turbo: false })}
+                      />
+                    </Form>
+                  </div>
+                  <div className="col-lg-2 px-0">
+                    <Selector
+                      label={"Rodzaj napędu"}
+                      options={options?.driveTypeOption}
+                      handleChange={(value) =>
+                        setCar({ ...car, driveType: value })
+                      }
+                      isValid={true}
+                    />
+                  </div>
+                  <div className="col-lg-2 px-0">
+                    <Selector
+                      label={"Paliwo"}
+                      options={options?.petrolOption}
+                      handleChange={(value) =>
+                        setCar({ ...car, petrol: value })
+                      }
+                      isValid={true}
+                    />
+                  </div>
+                </div>
+                <div className="row py-2">
+                  <div className="col-lg-4 px-1">
+                    <DateInput
+                      value={car.carInspectionExpiryDate}
+                      label={"Data ważności przeglądu samochodu"}
+                      onChange={(val) =>
+                        setCar({ ...car, carInspectionExpiryDate: val })
+                      }
+                      minDate={new Date()}
+                    />
+                  </div>
+                  <div className="col-lg-4 px-0">
+                    <InputLabeled
+                      label="Nr. polisy ubezpieczeniowej + firma"
+                      name="insurance"
+                      handleChange={handleChange}
+                      big={true}
+                      value={car.insurance}
+                    />
+                  </div>
+                  <div className="col-lg-3 px-0">
+                    <DateInput
+                      value={car.insuranceExpiryDate}
+                      label={"Data ważności polisy"}
+                      onChange={(val) =>
+                        setCar({ ...car, insuranceExpiryDate: val })
+                      }
+                      minDate={new Date()}
+                    />
+                  </div>
                 </div>
               </Card.Body>
             </Card>
