@@ -31,9 +31,11 @@ export const RegisterPage = (props) => {
     <div className="u-text-center">
       <div className="u-box-shadow">
         <div className="row justify-content-center">
-          <div className="col-lg-4 pb-3 border-bottom u-box-shadow">
+          <div className="col-lg-4 pb-3 u-box-shadow">
             <Card className="text-center">
-              <Card.Header>Rejestracja</Card.Header>
+              <Card.Header className="bg-dark text-white">
+                Rejestracja
+              </Card.Header>
               <Card.Body>
                 <InputLabeled
                   label="Login"

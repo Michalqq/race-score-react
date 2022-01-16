@@ -82,7 +82,7 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
         keyboard={false}
         size="xl"
       >
-        <Modal.Header closeButton className="bg-secondary">
+        <Modal.Header className="bg-dark text-white" closeButton>
           <Modal.Title className="text-white">{`Panel zawodnika: ${
             team?.driver || ""
           }`}</Modal.Title>

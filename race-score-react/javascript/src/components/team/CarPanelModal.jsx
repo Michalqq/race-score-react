@@ -80,7 +80,7 @@ export const CarPanelModal = ({ show, handleClose, teamId, carToEdit }) => {
       keyboard={false}
       size="xl"
     >
-      <Modal.Header closeButton className="bg-secondary">
+      <Modal.Header closeButton className="bg-dark text-white">
         <Modal.Title className="text-white">Dodawanie samochodu</Modal.Title>
       </Modal.Header>
       <Modal.Body>

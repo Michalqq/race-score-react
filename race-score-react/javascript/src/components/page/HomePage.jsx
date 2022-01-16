@@ -43,7 +43,7 @@ const HomePage = (props) => {
       <Card className="my-2">
         <h3>Najbliższe wydarzenia</h3>
       </Card>
-      <div className="row">
+      <div className="row justify-content-center">
         {futureEvents.map((x) => (
           <EventCard
             event={x}

@@ -112,7 +112,7 @@ export const NewEventForm = ({ show, handleClose }) => {
       keyboard={false}
       size="xl"
     >
-      <Modal.Header closeButton>
+      <Modal.Header className="bg-dark text-white" closeButton>
         <Modal.Title>Dodawanie nowego wydarzenia</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -232,38 +232,43 @@ export const NewEventForm = ({ show, handleClose }) => {
                 value={stage.name}
               />
             </div>
-            <div className="d-flex">
-              <InputLabeled
-                label="Długość [m]"
-                name="distance"
-                handleChange={handleStageChange}
-                big={true}
-                onlyNumber={true}
-                value={stage.distance}
-              />
-
-              <TimePicker
-                label={"Czas startu odcinka"}
-                onChange={(value) => {
-                  console.log(value);
-                  setStage({
-                    ...stage,
-                    startTime: value,
-                  });
-                }}
-                selected={stage.startTime}
-                calendarContainer={DatePickerContainer}
-                //placeholderText={placeholderFrom}
-                minDate={new Date()}
-                maxDate={null}
-              />
-              <InputLabeled
-                label="Częstotliwość startów [min]"
-                name="startFrequency"
-                handleChange={handleStageChange}
-                big={true}
-                value={stage.startFrequency}
-              />
+            <div className="row">
+              <div className="col-lg-3">
+                <InputLabeled
+                  label="Długość [m]"
+                  name="distance"
+                  handleChange={handleStageChange}
+                  big={true}
+                  onlyNumber={true}
+                  value={stage.distance}
+                />
+              </div>
+              <div className="col-lg-4">
+                <TimePicker
+                  label={"Czas startu odcinka"}
+                  onChange={(value) => {
+                    console.log(value);
+                    setStage({
+                      ...stage,
+                      startTime: value,
+                    });
+                  }}
+                  selected={stage.startTime}
+                  calendarContainer={DatePickerContainer}
+                  //placeholderText={placeholderFrom}
+                  minDate={new Date()}
+                  maxDate={null}
+                />
+              </div>
+              <div className="col-lg-5">
+                <InputLabeled
+                  label="Częstotliwość startów [min]"
+                  name="startFrequency"
+                  handleChange={handleStageChange}
+                  big={true}
+                  value={stage.startFrequency}
+                />
+              </div>
             </div>
             <div className="text-center py-3">
               <Button

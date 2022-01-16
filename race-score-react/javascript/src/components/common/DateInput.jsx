@@ -104,7 +104,7 @@ export const CustomDatePicker = (props) => {
 export const TimePicker = (props) => {
   return (
     <div className="form-group p-1">
-      <span className={"input-group-text"} id="">
+      <span className={"input-group-text py-0"} id="">
         {props.label}
       </span>
       <DatePicker
