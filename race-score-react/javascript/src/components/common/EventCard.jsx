@@ -16,7 +16,7 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore }) => {
           <div class="container d-flex">
             <div class="col-2 px-0">
               <img
-                src="https://bialapodlaska.pl/media/thumb/1287?size=xl"
+                src="/akbpLogo.png"
                 className="img-fluid rounded float-left"
                 alt="..."
               />

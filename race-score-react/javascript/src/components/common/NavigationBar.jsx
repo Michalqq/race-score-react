@@ -35,7 +35,7 @@ export const NavigationBar = () => {
   return (
     <Navbar bg="warning gradient" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">Wyniki online AKBP</Navbar.Brand>
+        <Navbar.Brand href="/">Wyniki online AKBP</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
