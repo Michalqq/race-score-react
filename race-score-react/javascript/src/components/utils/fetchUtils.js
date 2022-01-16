@@ -1,3 +1,3 @@
 export const backendUrl = () => {
-  return "http://localhost:8080";
+  return "https://wyniki-backend.herokuapp.com";
 };
