@@ -141,7 +141,10 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         width: "12%",
         id: "car",
         Header: "Samochód",
-        accessor: (cellInfo) => cellInfo.team.car,
+        accessor: (cellInfo) =>
+          (cellInfo.team.currentCar?.brand || "") +
+          " " +
+          (cellInfo.team.currentCar?.model || ""),
         disableFilters: true,
       },
       {
