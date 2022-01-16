@@ -61,8 +61,8 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
       .get(`${backendUrl()}/event/getTeams?eventId=${eventId}`)
       .then((res) => {
         setTeams(res.data);
+        //setLoading(false);
       });
-    setLoading(false);
   };
 
   const fetchRemoveTeam = (teamId) => {
@@ -104,7 +104,11 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   };
 
   useEffect(() => {
-    if (show) fetchReferee();
+    if (show) {
+      fetchReferee();
+      setLoading(true);
+      setTeams([]);
+    }
     fetchTeams();
   }, [show]);
 
@@ -134,7 +138,9 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         id: "team",
         Header: "Załoga",
         accessor: (cellInfo) =>
-          cellInfo.team.driver + " " + cellInfo.team.coDriver,
+          cellInfo.team.driver +
+          " " +
+          (cellInfo.team.coDriver ? cellInfo.team.coDriver : ""),
         disableFilters: true,
       },
       {
@@ -190,7 +196,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         ),
       },
     ],
-    []
+    [teams]
   );
   return (
     <Modal
@@ -205,7 +211,9 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
       </Modal.Header>
       <Modal.Body>
         {loading && (
-          <Spinner animation="border" variant="secondary" size="lg" />
+          <div className="text-center">
+            <Spinner animation="border" variant="secondary" size="lg" />
+          </div>
         )}
         {!loading && teams.length === 0 && (
           <h1 className="text-center">Brak zgłoszeń</h1>

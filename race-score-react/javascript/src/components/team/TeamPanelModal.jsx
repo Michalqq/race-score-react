@@ -26,6 +26,11 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
 
     if (sessionStorage.getItem("username") === null) navigate("login");
 
+    fetchGetTeam();
+    setCarsOption([]);
+  }, [show]);
+
+  const fetchGetTeam = () => {
     axios
       .get(`${backendUrl()}/team/getTeam`, {
         headers: authHeader(),
@@ -33,12 +38,11 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
       .then((res) => {
         setTeam(res.data);
       });
-    setCarsOption([]);
-  }, [show]);
+  };
 
   useEffect(() => {
     let tempOptions = [];
-    if (team !== undefined) {
+    if (team !== undefined && team.cars !== null) {
       team.cars.map((x) => {
         const option = {
           label: x.brand + " " + x.model + " " + x.licensePlate,
@@ -79,11 +83,15 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
         size="xl"
       >
         <Modal.Header closeButton className="bg-secondary">
-          <Modal.Title className="text-white">{`Panel zawodnika: ${team?.driver}`}</Modal.Title>
+          <Modal.Title className="text-white">{`Panel zawodnika: ${
+            team?.driver || ""
+          }`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {team === undefined && (
-            <Spinner animation="border" variant="secondary" size="lg" />
+            <div className="text-center">
+              <Spinner animation="border" variant="secondary" size="lg" />
+            </div>
           )}
           {team !== undefined && (
             <div className="row">
@@ -287,7 +295,10 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
       </Modal>
       <CarPanelModal
         show={addCar}
-        handleClose={() => setAddCar(false)}
+        handleClose={() => {
+          setAddCar(false);
+          fetchGetTeam();
+        }}
         teamId={team?.teamId}
         carToEdit={addCar}
       />
