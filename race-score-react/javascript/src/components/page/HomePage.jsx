@@ -40,7 +40,7 @@ const HomePage = (props) => {
 
   return (
     <>
-      <Card className="my-2">
+      <Card className=" my-2 pt-1">
         <h3>Najbliższe wydarzenia</h3>
       </Card>
       <div className="row justify-content-center">
@@ -52,10 +52,12 @@ const HomePage = (props) => {
             onTeamList={() => setEventToTeamList(x)}
           />
         ))}
-        <Card className="my-2">
-          <h3>Archiwalne wydarzenia</h3>
-        </Card>
+      </div>
+      <Card className="my-2 pt-1">
+        <h3>Archiwalne wydarzenia</h3>
+      </Card>
 
+      <div className="row justify-content-center">
         {archiveEvents.map((x) => (
           <EventCard
             event={x}
