@@ -33,11 +33,10 @@ export const AddScorePage = (props) => {
   const [teamId, setTeamId] = useState();
   const [stage, setStage] = useState();
 
-  const [penaltySec, setPenaltySec] = useState("");
-  const [penaltyDesc, setPenaltyDesc] = useState("");
-
   const [loadingTeams, setLoadingTeams] = useState(false);
   const [disable, setDisable] = useState(false);
+
+  const [valid, setValid] = useState(true);
 
   const fetchPsOptions = () => {
     axios
@@ -115,6 +114,12 @@ export const AddScorePage = (props) => {
   };
 
   const addScoreClick = () => {
+    if (notValid()) {
+      setValid("Wprowadź pełny wynik");
+      return;
+    }
+    setValid();
+
     const startStageInMin = stageStartHour * 60 + stageStartMin;
     const scoreInMilis =
       scoreMin * 60 * 1000 + scoreSec * 1000 + scoreMiliSec * 10;
@@ -131,12 +136,25 @@ export const AddScorePage = (props) => {
     resetData();
   };
 
+  const notValid = () => {
+    return (
+      scoreMin === undefined ||
+      scoreMin === null ||
+      scoreMin === "" ||
+      scoreSec === undefined ||
+      scoreSec === null ||
+      scoreSec === "" ||
+      scoreMiliSec === undefined ||
+      scoreMiliSec === null ||
+      scoreMiliSec === ""
+    );
+  };
+
   const checkboxChange = (e) => {
     if (e.target.checked && editMode !== e.target.value) {
       setEditMode(e.target.value);
       resetData();
       setTeamOptions([]);
-      console.log(e.target.value);
     }
   };
 
@@ -145,9 +163,6 @@ export const AddScorePage = (props) => {
     setScoreMin("");
     setScoreSec("");
     setScoreMiliSec("");
-
-    setPenaltyDesc("");
-    setPenaltySec("");
   };
 
   return (
@@ -225,6 +240,7 @@ export const AddScorePage = (props) => {
                   />
                 </div>
                 <div className="col-xl-12 pt-1 fw-bolder">{msg}</div>
+                <div className="col-xl-12 pt-1 fw-bolder">{valid}</div>
                 <div className="col-xl-12 pt-3">
                   <button
                     type="button"
