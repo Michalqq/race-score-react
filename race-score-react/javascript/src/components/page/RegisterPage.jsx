@@ -14,7 +14,6 @@ export const RegisterPage = (props) => {
   const [error, setError] = useState();
 
   const registerUser = () => {
-    console.log(user);
     axios
       .post(`${backendUrl()}/auth/signup`, user)
       .then((res) => {

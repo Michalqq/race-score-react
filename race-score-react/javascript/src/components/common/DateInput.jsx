@@ -1,5 +1,5 @@
 import React from "react";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+import DayPicker from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { dateToIsoDateFormat } from "../utils/utils";
 import MomentLocaleUtils, {
@@ -46,22 +46,19 @@ export const DateInput = (props) => {
     disabled: props.disabled,
     readOnly: true,
     style: {
-      color: props.disabled ? "darkslategrey" : "black",
+      color: "black",
     },
-    className: "data-input grey-select",
+    className: "form-control bg-white",
     role: props.role,
   };
 
   return (
-    <div
-      className="l-col-12 u-margin-top-m l-table-row"
-      role={"dayPickerInput"}
-    >
-      <div className="l-col-3 u-display_table-cell">
-        <label role={"date-input-label"}>{props.label}</label>
-      </div>
-      <div className="l-col-9 u-display_table-cell">
-        <DayPickerInput
+    <div className="form-group p-1">
+      <span className={"input-group-text"} id="">
+        {props.label}
+      </span>
+      <div>
+        <DayPicker
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
           formatDate={formatDate}

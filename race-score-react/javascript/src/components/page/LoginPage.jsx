@@ -5,11 +5,13 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { InputLabeled } from "../common/InputLabeled";
 import { backendUrl } from "../utils/fetchUtils";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = (props) => {
   const [user, setUser] = useState({ username: "", password: null, email: "" });
   const [logged, setLogged] = useState(sessionStorage.getItem("username"));
   const [error, setError] = useState();
+  const navigate = useNavigate();
 
   const signIn = () => {
     setError();
@@ -22,6 +24,7 @@ export const LoginPage = (props) => {
           sessionStorage.setItem("username", res.data.username);
           sessionStorage.setItem("token", res.data.token);
           sessionStorage.setItem("roles", res.data.roles);
+          navigate("");
         } else {
           setError(res.data);
         }

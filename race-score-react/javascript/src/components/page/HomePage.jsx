@@ -8,12 +8,14 @@ import { NewEventForm } from "../event/NewEventForm";
 import { EventCard } from "../common/EventCard";
 import Card from "react-bootstrap/Card";
 import { TeamListModal } from "../team/TeamListModal";
+import { TeamPanelModal } from "../team/TeamPanelModal";
 
 const HomePage = (props) => {
   const [futureEvents, setFutureEvents] = useState([]);
   const [archiveEvents, setArchiveEvents] = useState([]);
   const [createEvent, setCreateEvent] = useState(false);
   const [eventToTeamList, setEventToTeamList] = useState();
+  const [eventToTeamPanel, setEventToTeamPanel] = useState();
 
   const navigate = useNavigate();
 
@@ -45,9 +47,7 @@ const HomePage = (props) => {
         {futureEvents.map((x) => (
           <EventCard
             event={x}
-            onJoin={() =>
-              navigate("joinToEvent", { state: { eventId: x.eventId } })
-            }
+            onJoin={() => setEventToTeamPanel(x)}
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
             onTeamList={() => setEventToTeamList(x)}
           />
@@ -59,9 +59,7 @@ const HomePage = (props) => {
         {archiveEvents.map((x) => (
           <EventCard
             event={x}
-            onJoin={() =>
-              navigate("joinToEvent", { state: { eventId: x.eventId } })
-            }
+            onJoin={() => setEventToTeamPanel(x)}
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
             onTeamList={() => setEventToTeamList(x)}
           />
@@ -85,6 +83,11 @@ const HomePage = (props) => {
         handleClose={() => setEventToTeamList()}
         eventId={eventToTeamList?.eventId}
         started={eventToTeamList?.started}
+      />
+      <TeamPanelModal
+        show={eventToTeamPanel !== undefined}
+        handleClose={() => setEventToTeamPanel()}
+        eventId={eventToTeamPanel?.eventId}
       />
     </>
   );
