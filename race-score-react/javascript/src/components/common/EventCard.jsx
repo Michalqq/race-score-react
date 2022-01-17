@@ -1,15 +1,29 @@
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-export const EventCard = ({ event, onJoin, onTeamList, onScore }) => {
+export const EventCard = ({ event, onJoin, onTeamList, onScore, onEdit }) => {
   return (
     <div className="col-lg-6 pb-3 u-box-shadow">
       <Card className="">
-        <Card.Header className="bg-secondary text-white text-start fw-bold">
-          {event?.name}
+        <Card.Header className="bg-secondary text-white text-start fw-bold py-1">
+          <div class="row px-1">
+            <div class="col-11 px-0">{event?.name}</div>
+            <div class="col-1 px-0 text-end">
+              {onEdit !== undefined && (
+                <FontAwesomeIcon
+                  className={"text-white fa-lg"}
+                  icon={faEdit}
+                  onClick={onEdit}
+                  cursor={"pointer"}
+                />
+              )}
+            </div>
+          </div>
         </Card.Header>
-        <Card.Body>
+        <Card.Body className="p-1">
           <div className="position-absolute end-0 mx-3 text-end badge bg-primary text-wrap fst-italic">
             {moment(event?.date).format("dddd, DD MMM YYYY, HH:mm")}
           </div>
@@ -28,31 +42,44 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore }) => {
                   "dddd, DD MMM YYYY, HH:mm"
                 )}`}
               </p>
+              {event.joined && (
+                <div className="d-inline-flex">
+                  <FontAwesomeIcon
+                    className={"text-success fa-lg"}
+                    icon={faStar}
+                  />
+                  <h6>Jesteś zapisany</h6>
+                </div>
+              )}
             </div>
           </div>
         </Card.Body>
-        <Card.Footer className="text-center">
+        <Card.Footer className="text-start py-0">
           <div className="row ">
-            <div className="col-lg-3 my-1">
+            <div className="col-lg-4 my-1">
               {new Date().getTime() <=
                 new Date(event.signDeadline).getTime() && (
                 <Button
-                  className={"mx-2 start-0 px-2"}
+                  className={"mx-2 start-0 py-1 px-2"}
                   variant="success"
                   onClick={onJoin}
                 >
-                  Zapisz się
+                  {event.joined ? "Moje zgłoszenie" : "Info / Zgłoszenia"}
                 </Button>
               )}
             </div>
 
-            <div className="col-lg-4 my-1"></div>
-            <div className="col-lg-5 my-1">
-              <Button className={"px-2"} variant="dark" onClick={onTeamList}>
+            <div className="col-lg-3 my-1"></div>
+            <div className="col-lg-5 my-1 text-end">
+              <Button
+                className={"py-1 px-2"}
+                variant="dark"
+                onClick={onTeamList}
+              >
                 Lista zapisanych
               </Button>
               <Button
-                className={"px-2 mx-3"}
+                className={"py-1 px-2 mx-3"}
                 variant="warning"
                 onClick={onScore}
               >

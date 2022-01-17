@@ -9,29 +9,34 @@ import { EventCard } from "../common/EventCard";
 import Card from "react-bootstrap/Card";
 import { TeamListModal } from "../team/TeamListModal";
 import { TeamPanelModal } from "../team/TeamPanelModal";
+import authHeader from "../../service/auth-header";
 
 const HomePage = (props) => {
   const [futureEvents, setFutureEvents] = useState([]);
   const [archiveEvents, setArchiveEvents] = useState([]);
-  const [createEvent, setCreateEvent] = useState(false);
+  const [createEvent, setCreateEvent] = useState();
   const [eventToTeamList, setEventToTeamList] = useState();
   const [eventToTeamPanel, setEventToTeamPanel] = useState();
 
   const navigate = useNavigate();
 
   const fetchTeams = () => {
-    axios.get(`${backendUrl()}/event/getAll`).then((res) => {
-      setFutureEvents(
-        res.data.filter(
-          (x) => new Date().getTime() <= new Date(x.date).getTime()
-        )
-      );
-      setArchiveEvents(
-        res.data.filter(
-          (x) => new Date().getTime() > new Date(x.date).getTime()
-        )
-      );
-    });
+    axios
+      .get(`${backendUrl()}/event/getAll`, {
+        headers: authHeader(),
+      })
+      .then((res) => {
+        setFutureEvents(
+          res.data.filter(
+            (x) => new Date().getTime() <= new Date(x.date).getTime()
+          )
+        );
+        setArchiveEvents(
+          res.data.filter(
+            (x) => new Date().getTime() > new Date(x.date).getTime()
+          )
+        );
+      });
   };
 
   useEffect(() => {
@@ -46,10 +51,12 @@ const HomePage = (props) => {
       <div className="row justify-content-center">
         {futureEvents.map((x) => (
           <EventCard
+            key={x.eventId}
             event={x}
             onJoin={() => setEventToTeamPanel(x)}
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
             onTeamList={() => setEventToTeamList(x)}
+            onEdit={() => setCreateEvent(x)}
           />
         ))}
       </div>
@@ -60,6 +67,7 @@ const HomePage = (props) => {
       <div className="row justify-content-center">
         {archiveEvents.map((x) => (
           <EventCard
+            key={x.eventId}
             event={x}
             onJoin={() => setEventToTeamPanel(x)}
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
@@ -77,8 +85,9 @@ const HomePage = (props) => {
         </Button>
       </div>
       <NewEventForm
-        show={createEvent}
-        handleClose={() => setCreateEvent(false)}
+        show={createEvent !== undefined}
+        handleClose={() => setCreateEvent()}
+        event={createEvent}
       />
       <TeamListModal
         show={eventToTeamList !== undefined}
@@ -89,7 +98,7 @@ const HomePage = (props) => {
       <TeamPanelModal
         show={eventToTeamPanel !== undefined}
         handleClose={() => setEventToTeamPanel()}
-        eventId={eventToTeamPanel?.eventId}
+        event={eventToTeamPanel}
       />
     </>
   );

@@ -15,7 +15,7 @@ import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { Selector } from "../common/Selector";
 import authHeader from "../../service/auth-header";
 
-export const NewEventForm = ({ show, handleClose }) => {
+export const NewEventForm = ({ show, handleClose, event }) => {
   const [myEvent, setMyEvent] = useState({
     name: "",
     description: "",
@@ -47,6 +47,9 @@ export const NewEventForm = ({ show, handleClose }) => {
       });
     setReferee([]);
     setStages([]);
+    if (event !== undefined) fetchEventToEdit();
+
+    console.log(stages);
   }, [show]);
 
   const handleChange = (event) => {
@@ -93,6 +96,24 @@ export const NewEventForm = ({ show, handleClose }) => {
     const tempRef = refereeOptions.find((x) => x.value === id);
     const newRef = { userId: Number(tempRef.value), username: tempRef.label };
     setReferee([...referee, newRef]);
+  };
+
+  const fetchEventToEdit = () => {
+    axios
+      .get(`${backendUrl()}/event/getEvent?eventId=${event.eventId}`)
+      .then((res) => {
+        setMyEvent({
+          ...res.data,
+          date: new Date(res.data.date),
+          signDeadline: new Date(res.data.signDeadline),
+        });
+        setStages(
+          res.data.stages.map((x) => {
+            return { ...x, startTime: new Date(x.startTime) };
+          })
+        );
+        setReferee(res.data.referee);
+      });
   };
 
   const DatePickerContainer = ({ className, children }) => {
@@ -207,7 +228,11 @@ export const NewEventForm = ({ show, handleClose }) => {
                     <tr key={index}>
                       <td>{index}</td>
                       <td>{x.name}</td>
-                      <td>{format(x.startTime, "HH:mm")}</td>
+                      <td>
+                        {x.startTime === null
+                          ? ""
+                          : format(x.startTime, "HH:mm")}
+                      </td>
                       <td>{x.startFrequency + " min"}</td>
                       <td className="text-end">
                         <FontAwesomeIcon
@@ -247,13 +272,14 @@ export const NewEventForm = ({ show, handleClose }) => {
                 <TimePicker
                   label={"Czas startu odcinka"}
                   onChange={(value) => {
-                    console.log(value);
                     setStage({
                       ...stage,
                       startTime: value,
                     });
                   }}
-                  selected={stage.startTime}
+                  // selected={
+                  //   stage.startTime === null ? new Date() : stage.startTime
+                  // }
                   calendarContainer={DatePickerContainer}
                   //placeholderText={placeholderFrom}
                   minDate={new Date()}

@@ -74,8 +74,24 @@ export const NavigationBar = () => {
             )}
           </Nav>
           <Nav>
-            <Nav.Link href="/login">Zaloguj</Nav.Link>
-            <Nav.Link href="/register">Rejestracja</Nav.Link>
+            {sessionStorage.getItem("username") === null && (
+              <>
+                <Nav.Link href="/login">Zaloguj</Nav.Link>
+                <Nav.Link href="/register">Rejestracja</Nav.Link>
+              </>
+            )}
+            {sessionStorage.getItem("username") !== null && (
+              <>
+                <Nav.Link
+                  onClick={() => {
+                    sessionStorage.removeItem("username");
+                    window.location.reload();
+                  }}
+                >
+                  Wyloguj
+                </Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
