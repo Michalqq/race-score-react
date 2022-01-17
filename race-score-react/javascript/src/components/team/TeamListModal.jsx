@@ -61,7 +61,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
       .get(`${backendUrl()}/event/getTeams?eventId=${eventId}`)
       .then((res) => {
         setTeams(res.data);
-        //setLoading(false);
+        setLoading(false);
       });
   };
 
