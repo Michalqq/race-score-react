@@ -8,7 +8,7 @@ import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { InputLabeled } from "../common/InputLabeled";
 import { backendUrl } from "../utils/fetchUtils";
-import { DateInput } from "../common/DateInput";
+import { DateInput, MyDatePicker } from "../common/DateInput";
 import { Selector } from "../common/Selector";
 
 export const CarPanelModal = ({ show, handleClose, teamId, carToEdit }) => {
@@ -195,13 +195,12 @@ export const CarPanelModal = ({ show, handleClose, teamId, carToEdit }) => {
                 </div>
                 <div className="row py-2">
                   <div className="col-lg-4 px-1">
-                    <DateInput
-                      value={car.carInspectionExpiryDate}
-                      label={"Data ważności przeglądu samochodu"}
+                    <MyDatePicker
+                      label={"Data ważn. przeglądu samochodu"}
                       onChange={(val) =>
                         setCar({ ...car, carInspectionExpiryDate: val })
                       }
-                      minDate={new Date()}
+                      selected={car.carInspectionExpiryDate || new Date()}
                     />
                   </div>
                   <div className="col-lg-4 px-0">
@@ -214,13 +213,12 @@ export const CarPanelModal = ({ show, handleClose, teamId, carToEdit }) => {
                     />
                   </div>
                   <div className="col-lg-3 px-0">
-                    <DateInput
-                      value={car.insuranceExpiryDate}
+                    <MyDatePicker
                       label={"Data ważności polisy"}
                       onChange={(val) =>
                         setCar({ ...car, insuranceExpiryDate: val })
                       }
-                      minDate={new Date()}
+                      selected={car.insuranceExpiryDate || new Date()}
                     />
                   </div>
                 </div>

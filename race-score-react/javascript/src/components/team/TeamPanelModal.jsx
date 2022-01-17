@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { InputLabeled } from "../common/InputLabeled";
 import { backendUrl } from "../utils/fetchUtils";
-import { DateInput } from "../common/DateInput";
+import { MyDatePicker, DateInput } from "../common/DateInput";
 import { CarPanelModal } from "./CarPanelModal";
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
@@ -158,14 +158,12 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
                     </div>
                     <div className="row mt-3">
                       <div className="col-lg-6 px-0">
-                        <DateInput
-                          value={team.birthDate}
+                        <MyDatePicker
                           label={"Data urodzenia"}
                           onChange={(val) =>
                             setTeam({ ...team, birthDate: val })
                           }
-                          disabled={disable}
-                          maxDate={new Date()}
+                          selected={team.birthDate || new Date()}
                         />
                       </div>
                       <div className="col-lg-6 px-0">
@@ -244,14 +242,12 @@ export const TeamPanelModal = ({ show, handleClose, eventId }) => {
                     </div>
                     <div className="row px-0">
                       <div className="col-lg-4 px-0">
-                        <DateInput
-                          value={team.coBirthDate}
+                        <MyDatePicker
                           label={"Data urodzenia"}
                           onChange={(val) =>
                             setTeam({ ...team, coBirthDate: val })
                           }
-                          disabled={disable}
-                          maxDate={new Date()}
+                          selected={team.coBirthDate || new Date()}
                         />
                       </div>
                       <div className="col-lg-4 px-0">

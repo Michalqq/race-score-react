@@ -101,6 +101,27 @@ export const CustomDatePicker = (props) => {
   );
 };
 
+export const MyDatePicker = (props) => {
+  return (
+    <div className="form-group p-1">
+      <span className={"input-group-text py-0"} id="">
+        {props.label}
+      </span>
+      <DatePicker
+        className="form-control "
+        showMonthDropdown
+        showYearDropdown
+        timeCaption="Data"
+        dateFormat="dd-MM-yyyy"
+        onChange={props.onChange}
+        selected={props.selected ? props.selected : null}
+        locale={pl}
+        placeholderText={props.placeholderText}
+      />
+    </div>
+  );
+};
+
 export const TimePicker = (props) => {
   return (
     <div className="form-group p-1">
