@@ -22,9 +22,9 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore }) => {
               />
             </div>
             <div class="col-10 mt-3">
-              <p className="m-4">Organizator: Automobilklub BialskoPodlaski</p>
+              <p className="m-4">Organizator: Automobilklub Bialskopodlaski</p>
               <p className=" fw-bold fst-italic m-4">
-                {`Koniec zapisów:  ${moment(event?.date).format(
+                {`Koniec zapisów:  ${moment(event?.signDeadline).format(
                   "dddd, DD MMM YYYY, HH:mm"
                 )}`}
               </p>
