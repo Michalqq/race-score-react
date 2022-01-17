@@ -196,7 +196,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         ),
       },
     ],
-    [teams]
+    []
   );
   return (
     <Modal
@@ -222,13 +222,13 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
           <ResultTable
             columns={columns}
             data={teams}
-            pageCount={3}
             isLoading={false}
             isFooter={false}
             isHeader={true}
             hiddenColumns={
               referee ? [""] : ["entryFee", "confirmEntryFee", "delete"]
             }
+            manualPagination={true}
           />
         )}
         {teamToRemove.teamId !== null && (
