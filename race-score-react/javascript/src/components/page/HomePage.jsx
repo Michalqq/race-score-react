@@ -10,6 +10,7 @@ import Card from "react-bootstrap/Card";
 import { TeamListModal } from "../team/TeamListModal";
 import { TeamPanelModal } from "../team/TeamPanelModal";
 import authHeader from "../../service/auth-header";
+import { useLocation } from "react-router-dom";
 
 const HomePage = (props) => {
   const [futureEvents, setFutureEvents] = useState([]);
@@ -17,6 +18,7 @@ const HomePage = (props) => {
   const [createEvent, setCreateEvent] = useState();
   const [eventToTeamList, setEventToTeamList] = useState();
   const [eventToTeamPanel, setEventToTeamPanel] = useState();
+  let eventRedirect = useLocation().search;
 
   const navigate = useNavigate();
 
@@ -36,6 +38,13 @@ const HomePage = (props) => {
             (x) => new Date().getTime() > new Date(x.date).getTime()
           )
         );
+        if (eventRedirect !== undefined) {
+          const event = res.data.find(
+            (x) => x.eventId === Number(eventRedirect.replace("?", ""))
+          );
+          setEventToTeamPanel(event);
+          eventRedirect = null;
+        }
       });
   };
 

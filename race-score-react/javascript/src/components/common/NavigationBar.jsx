@@ -85,7 +85,7 @@ export const NavigationBar = () => {
                 <Nav.Link
                   onClick={() => {
                     sessionStorage.removeItem("username");
-                    window.location.reload();
+                    window.location.href = "/";
                   }}
                 >
                   Wyloguj
