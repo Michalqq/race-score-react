@@ -48,8 +48,6 @@ export const NewEventForm = ({ show, handleClose, event }) => {
     setReferee([]);
     setStages([]);
     if (event !== undefined) fetchEventToEdit();
-
-    console.log(stages);
   }, [show]);
 
   const handleChange = (event) => {

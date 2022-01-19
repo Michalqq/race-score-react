@@ -18,7 +18,6 @@ export const LoginPage = (props) => {
     axios
       .post(`${backendUrl()}/auth/signin`, user)
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           setLogged(res.data.username);
           sessionStorage.setItem("username", res.data.username);

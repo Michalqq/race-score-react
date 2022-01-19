@@ -24,7 +24,8 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   const [carsOption, setCarsOption] = useState([]);
   const [addCar, setAddCar] = useState();
   const [file, setFile] = useState();
-  const [upload, setUpload] = useState();
+  const [uploading, setUploading] = useState(false);
+  const [fileMsg, setFileMsg] = useState();
 
   useEffect(() => {
     if (!show) return;
@@ -33,7 +34,8 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
 
     fetchGetTeam();
     setCarsOption([]);
-    setUpload();
+    setUploading(false);
+    setFileMsg();
   }, [show]);
 
   const fetchGetTeam = () => {
@@ -59,6 +61,20 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
       });
       setCarsOption(tempOptions);
     }
+    if (event?.eventId !== undefined && team?.teamId !== undefined)
+      axios
+        .get(
+          `${backendUrl()}/event/getEntryFeeFile?eventId=${
+            event.eventId
+          }&teamId=${team.teamId}`
+        )
+        .then((res) => {
+          if (res.status === 204) setTeam({ ...team, notJoined: true });
+          else setFileMsg("Mamy już Twoje potwierdzenie");
+        })
+        .catch((error) => {
+          setFileMsg();
+        });
   }, [team]);
 
   const fetchAddTeam = () => {
@@ -80,6 +96,12 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   };
 
   const fetchUpload = (eventId, teamId) => {
+    if (file.size > 2 * 1024 * 1024) {
+      setFileMsg("Plik jest zbyt duży (maksymalnie 2mb)");
+      return;
+    }
+    setUploading(true);
+
     const formData = new FormData();
     formData.append("file", file);
     axios
@@ -91,7 +113,10 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
         }
       )
       .then((res) => {
-        setUpload(res.data);
+        setUploading(false);
+        res.data
+          ? setFileMsg("Plik został dodany")
+          : setFileMsg("Plik NIE został dodany - błąd");
       });
   };
 
@@ -145,32 +170,37 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                     Wpisowe
                   </Card.Header>
                   <Card.Body>
-                    <p>Dodaj plik z potwierdzeniem opłacenia wpisowego</p>
+                    {team?.notJoined === true ? (
+                      <p>
+                        Zapisz się a następnie będziesz miał możliwosć
+                        przesłania pliku
+                      </p>
+                    ) : (
+                      <p>Dodaj plik z potwierdzeniem opłacenia wpisowego</p>
+                    )}
                     <input
+                      disabled={team?.notJoined === true}
                       type="file"
                       name="file"
                       accept="application/pdf,application/vnd.ms-excel"
                       onChange={(e) => setFile(e.target.files[0])}
                     />
-                    {upload === true && (
-                      <p className="fw-bold m-2">
-                        Plik został dodany poprawnie
-                      </p>
-                    )}
-                    {upload === false && (
-                      <p className="fw-bold m-2 text-danger">
-                        Plik NIE został dodany
-                      </p>
-                    )}
+                    {fileMsg && <p className="fw-bold m-2">{fileMsg}</p>}
                     <div>
-                      <Button
-                        className={"mt-2 mb-0"}
-                        variant="secondary"
-                        onClick={() => fetchUpload(event.eventId, team.teamId)}
-                        disabled={file === undefined}
-                      >
-                        Wyślij plik
-                      </Button>
+                      {uploading ? (
+                        <Spinner animation="border" variant="secondary" />
+                      ) : (
+                        <Button
+                          className={"mt-2 mb-0"}
+                          variant="secondary"
+                          onClick={() =>
+                            fetchUpload(event.eventId, team.teamId)
+                          }
+                          disabled={file === undefined}
+                        >
+                          Wyślij plik
+                        </Button>
+                      )}
                     </div>
                   </Card.Body>
                 </Card>

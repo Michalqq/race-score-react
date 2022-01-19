@@ -32,7 +32,6 @@ export const TeamCreatePage = (props) => {
   };
 
   const addTeam = () => {
-    console.log(team);
     fetchAddTeam();
   };
 

@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoins,
   faDollarSign,
+  faDownload,
   faExclamation,
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
@@ -84,6 +85,24 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         fetchTeams();
       });
   };
+
+  const fetchEntryFeeFile = (teamId, teamName) => {
+    download(
+      `${backendUrl()}/event/getEntryFeeFile?eventId=${eventId}&teamId=${teamId}`,
+      "potwierdzenie_wplaty_" + teamName + ".pdf"
+    );
+  };
+
+  function download(url, filename) {
+    fetch(url).then(function (t) {
+      return t.blob().then((b) => {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(b);
+        a.setAttribute("download", filename);
+        a.click();
+      });
+    });
+  }
 
   const fetchReferee = () => {
     axios
@@ -182,6 +201,29 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
       },
       {
         width: "12%",
+        id: "entryFeeFile",
+        Header: "Wpisowe plik",
+        disableFilters: true,
+        Cell: (cellInfo) =>
+          cellInfo.row.original.entryFeeFile !== null ? (
+            <FontAwesomeIcon
+              className={"m-2 fa-lg"}
+              icon={faDownload}
+              onClick={() =>
+                fetchEntryFeeFile(
+                  cellInfo.row.original.teamId,
+                  cellInfo.row.original.team.driver
+                )
+              }
+              title={"Pobierz plik"}
+              cursor={"pointer"}
+            />
+          ) : (
+            <></>
+          ),
+      },
+      {
+        width: "12%",
         id: "delete",
         Header: "Usuń załoge",
         disableFilters: true,
@@ -226,7 +268,9 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
             isFooter={false}
             isHeader={true}
             hiddenColumns={
-              referee ? [""] : ["entryFee", "confirmEntryFee", "delete"]
+              referee
+                ? [""]
+                : ["entryFee", "confirmEntryFee", "entryFeeFile", "delete"]
             }
             manualPagination={true}
           />
