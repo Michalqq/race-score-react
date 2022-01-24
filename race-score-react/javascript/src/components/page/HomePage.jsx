@@ -11,6 +11,7 @@ import { TeamListModal } from "../team/TeamListModal";
 import { TeamPanelModal } from "../team/TeamPanelModal";
 import authHeader from "../../service/auth-header";
 import { useLocation } from "react-router-dom";
+import { AdminTeamList } from "../team/AdminTeamList";
 
 const HomePage = (props) => {
   const [futureEvents, setFutureEvents] = useState([]);
@@ -98,7 +99,7 @@ const HomePage = (props) => {
         handleClose={() => setCreateEvent()}
         event={createEvent}
       />
-      <TeamListModal
+      <AdminTeamList
         show={eventToTeamList !== undefined}
         handleClose={() => setEventToTeamList()}
         eventId={eventToTeamList?.eventId}

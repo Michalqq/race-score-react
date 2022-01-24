@@ -82,6 +82,13 @@ export const NavigationBar = () => {
             )}
             {sessionStorage.getItem("username") !== null && (
               <>
+                <Navbar.Brand
+                  className="mx-5"
+                  href="/"
+                >{`Użytkownik: ${sessionStorage.getItem(
+                  "username"
+                )}`}</Navbar.Brand>
+
                 <Nav.Link
                   onClick={() => {
                     sessionStorage.removeItem("username");

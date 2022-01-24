@@ -17,6 +17,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { OkCancelModal } from "../common/Modal";
 import authHeader from "../../service/auth-header";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Card from "react-bootstrap/Card";
 
 export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
@@ -136,13 +138,26 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
     fetchTeams();
   }, [referee]);
 
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(teams);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    let index = 0;
+    items.map((x) => (x.number = index++));
+
+    setTeams(items);
+  };
+
   const columns = useMemo(
     () => [
       {
         width: "5%",
         id: "index",
         Header: "L.p.",
-        accessor: (cellInfo) => cellInfo.teamId,
+        accessor: (row) => row.id - 1,
         disableFilters: true,
       },
       {
@@ -314,6 +329,58 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
             }}
             handleClose={() => setStartEvent(false)}
           />
+        )}
+        {teams && (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="selectedCases">
+              {(provided) => (
+                <ol
+                  className="selectedCases"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {teams?.map((item, index) => {
+                    console.log(item);
+                    return (
+                      <Draggable
+                        key={item.number}
+                        draggableId={item.number.toString()}
+                        index={index}
+                        draggable={false}
+                      >
+                        {(provided) => (
+                          <li
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <Card className="my-2">
+                              <Card.Body className="p-1">
+                                <table>
+                                  <tr className="d-table-row">
+                                    <th style={{ width: "250px" }}>
+                                      &#9776; {item.team.driver}
+                                    </th>
+                                    <th style={{ width: "250px" }}>
+                                      {item.team.currentCar?.brand +
+                                        " " +
+                                        item.team.currentCar?.model}
+                                    </th>
+                                    <th style={{ width: "250px" }}>Country</th>
+                                  </tr>
+                                </table>
+                              </Card.Body>
+                            </Card>
+                          </li>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </ol>
+              )}
+            </Droppable>
+          </DragDropContext>
         )}
       </Modal.Body>
       <Modal.Footer className={"justify-content-center"}>

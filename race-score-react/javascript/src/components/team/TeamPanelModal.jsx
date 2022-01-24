@@ -15,6 +15,8 @@ import Spinner from "react-bootstrap/Spinner";
 import { Selector } from "../common/Selector";
 import authHeader from "../../service/auth-header";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 export const TeamPanelModal = ({ show, handleClose, event }) => {
   const disable = false;
@@ -27,19 +29,19 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   const [uploading, setUploading] = useState(false);
   const [fileMsg, setFileMsg] = useState();
   const [notJoined, setNotJoined] = useState(false);
+  const [myEvent, setMyEvent] = useState();
 
   const loggedUser = sessionStorage.getItem("username") !== null;
 
   useEffect(() => {
     if (!show) return;
 
-    //if () navigate("login");
-
     fetchGetTeam();
     setCarsOption([]);
     setUploading(false);
     setFileMsg();
     setNotJoined(false);
+    setMyEvent(event);
   }, [show]);
 
   const fetchGetTeam = () => {
@@ -48,7 +50,8 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
         headers: authHeader(),
       })
       .then((res) => {
-        setTeam(res.data);
+        setNotJoined(res.data === "");
+        if (res.data !== "") setTeam(res.data);
       });
   };
 
@@ -88,6 +91,21 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
       })
       .then(() => {
         handleClose();
+      });
+  };
+
+  const fetchRemoveFromEvent = () => {
+    axios
+      .post(
+        `${backendUrl()}/event/removeTeam?eventId=${event.eventId}&teamId=${
+          team?.teamId
+        }`,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then(() => {
+        setMyEvent({ ...myEvent, joined: false });
       });
   };
 
@@ -134,7 +152,18 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
         size="xl"
       >
         <Modal.Header className="bg-dark text-white" closeButton>
-          <Modal.Title className="text-white">{`Informacje o wydarzeniu`}</Modal.Title>
+          <Modal.Title className="w-100 row">
+            <div className="col-lg-8">{`Informacje o wydarzeniu`}</div>
+            {myEvent?.joined && (
+              <div className="col-lg-4">
+                <FontAwesomeIcon
+                  className={"text-success fa-lg"}
+                  icon={faStar}
+                />
+                Jesteś zapisany
+              </div>
+            )}
+          </Modal.Title>
         </Modal.Header>
         <Tabs className="m-0 fw-bold">
           <Tab eventKey="event" title="Informacje">
@@ -174,7 +203,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                   <Card.Body>
                     {notJoined ? (
                       <p>
-                        Zapisz się a następnie będziesz miał możliwosć
+                        Zapisz się a następnie będziesz miał możliwość
                         przesłania pliku
                       </p>
                     ) : (
@@ -212,7 +241,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
           {!loggedUser ? (
             <></>
           ) : (
-            <Tab eventKey="team" title="Panel zawodnika">
+            <Tab eventKey="team" title="Moje dane zawodnika">
               <Modal.Body>
                 {team === undefined && (
                   <div className="text-center">
@@ -450,11 +479,20 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
               loggedUser ? addTeam() : navigate(`login?${event.eventId}`);
             }}
           >
-            Zapisz / dodaj
+            {myEvent?.joined ? "Ok" : "Zapisz / dodaj"}
           </Button>
           <Button className={"m-1"} variant="secondary" onClick={handleClose}>
-            Anuluj
+            Zamknij okno
           </Button>
+          {myEvent?.joined && (
+            <Button
+              className={"mx-3"}
+              variant="danger"
+              onClick={() => fetchRemoveFromEvent()}
+            >
+              Wypisz się
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
       <CarPanelModal
