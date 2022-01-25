@@ -244,7 +244,8 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                       </td>
                                       <td style={{ width: "300px" }}>
                                         {item.team.driver +
-                                          (item.team?.coDriver === null
+                                          (item.team?.coDriver === null ||
+                                          item.team.coDriver === ""
                                             ? ""
                                             : " / " + item.team?.coDriver)}
                                       </td>

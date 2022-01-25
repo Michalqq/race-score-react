@@ -24,6 +24,8 @@ export const NewEventForm = ({ show, handleClose, event }) => {
     signDeadline: new Date(),
     admin: 1,
     stages: [],
+    organizer: "",
+    logoPath: "",
   });
   const [stage, setStage] = useState({
     index: 0,
@@ -39,6 +41,12 @@ export const NewEventForm = ({ show, handleClose, event }) => {
     eventId: event?.eventId,
     awd: false,
   });
+  const [eventPaths, setEventPaths] = useState([]);
+  const [path, setPath] = useState({
+    eventId: event?.eventId,
+    path: "",
+    description: "",
+  });
   const [stages, setStages] = useState([]);
   const [referee, setReferee] = useState([]);
   const [refereeOptions, setRefereeOptions] = useState([]);
@@ -47,6 +55,8 @@ export const NewEventForm = ({ show, handleClose, event }) => {
 
   useEffect(() => {
     if (!show) return;
+
+    console.log(event);
 
     axios
       .get(`${backendUrl()}/event/getRefereeOptions`, {
@@ -83,6 +93,7 @@ export const NewEventForm = ({ show, handleClose, event }) => {
       stages: stages,
       referee: referee,
       eventClasses: eventClasses,
+      eventPaths: eventPaths,
     };
     axios.put(`${backendUrl()}/event/createNew`, data).then((res) => {
       handleClose();
@@ -109,6 +120,15 @@ export const NewEventForm = ({ show, handleClose, event }) => {
       maxEngineCapacity: "",
       eventId: event?.eventId,
       awd: false,
+    });
+  };
+
+  const addPath = () => {
+    eventPaths.push(path);
+    setPath({
+      eventId: event?.eventId,
+      path: "",
+      description: "",
     });
   };
 
@@ -172,6 +192,7 @@ export const NewEventForm = ({ show, handleClose, event }) => {
             return { ...x, carClassName: x.carClass.name };
           })
         );
+        setEventPaths(res.data.eventPaths);
       });
   };
 
@@ -219,6 +240,21 @@ export const NewEventForm = ({ show, handleClose, event }) => {
                     big={true}
                     value={myEvent.description}
                     multiline={2}
+                  />
+                  <InputLabeled
+                    label="Nazwa organizatora"
+                    name="organizer"
+                    handleChange={handleChange}
+                    big={true}
+                    value={myEvent.organizer}
+                  />
+                  <InputLabeled
+                    label="Ścieżka do logo wydarzenia"
+                    inputPlaceholder="http://www.akteam.pl/logo.jpg"
+                    name="logoPath"
+                    handleChange={handleChange}
+                    big={true}
+                    value={myEvent.logoPath}
                   />
                   <div className="d-flex">
                     <CustomDatePicker
@@ -276,8 +312,6 @@ export const NewEventForm = ({ show, handleClose, event }) => {
                   </Table>
                 </Card.Body>
               </Card>
-            </div>
-            <div className="col-lg-12 border-right rounded">
               <Card className="text-center">
                 <Card.Header className="bg-dark text-white">
                   Podział na klasy
@@ -343,99 +377,167 @@ export const NewEventForm = ({ show, handleClose, event }) => {
             </div>
           </div>
           <div className="col-lg-7 mx-2 shadow mb-1 bg-white rounded">
-            <h5>Odcinki PS/OS (w kolejności)</h5>
-            {stages.length > 0 && (
-              <Table responsive>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nazwa</th>
-                    <th>Czas startu</th>
-                    <th>Częstotliwość</th>
-                    <th className="text-end">Usuń</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stages.map((x, index) => (
-                    <tr key={index}>
-                      <td>{index}</td>
-                      <td>{x.name}</td>
-                      <td>
-                        {x.startTime === null
-                          ? ""
-                          : format(x.startTime, "HH:mm")}
-                      </td>
-                      <td>{x.startFrequency + " min"}</td>
-                      <td className="text-end">
-                        <FontAwesomeIcon
-                          icon={faTimesCircle}
-                          onClick={() => removeFromStages(x.index)}
-                          title={"Usuń załoge"}
-                          cursor={"pointer"}
-                        />
-                      </td>
+            <Card>
+              <Card.Header className="bg-dark text-white">
+                Odcinki PS/OS (w kolejności)
+              </Card.Header>
+              <Card.Body className="p-0">
+                {stages.length > 0 && (
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Nazwa</th>
+                        <th>Czas startu</th>
+                        <th>Częstotliwość</th>
+                        <th className="text-end">Usuń</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {stages.map((x, index) => (
+                        <tr key={index}>
+                          <td>{index}</td>
+                          <td>{x.name}</td>
+                          <td>
+                            {x.startTime === null
+                              ? ""
+                              : format(x.startTime, "HH:mm")}
+                          </td>
+                          <td>{x.startFrequency + " min"}</td>
+                          <td className="text-end">
+                            <FontAwesomeIcon
+                              icon={faTimesCircle}
+                              onClick={() => removeFromStages(x.index)}
+                              title={"Usuń załoge"}
+                              cursor={"pointer"}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
+                <div className="d-block">
+                  <InputLabeled
+                    label="Nazwa"
+                    name="name"
+                    handleChange={handleStageChange}
+                    big={true}
+                    value={stage.name}
+                  />
+                </div>
+                <div className="row">
+                  <div className="col-lg-3">
+                    <InputLabeled
+                      label="Długość [m]"
+                      name="distance"
+                      handleChange={handleStageChange}
+                      big={true}
+                      onlyNumber={true}
+                      value={stage.distance}
+                    />
+                  </div>
+                  <div className="col-lg-4">
+                    <TimePicker
+                      label={"Czas startu odcinka"}
+                      onChange={(value) => {
+                        setStage({
+                          ...stage,
+                          startTime: value,
+                        });
+                      }}
+                      calendarContainer={DatePickerContainer}
+                      minDate={new Date()}
+                      maxDate={null}
+                    />
+                  </div>
+                  <div className="col-lg-5">
+                    <InputLabeled
+                      label="Częstotliwość startów [min]"
+                      name="startFrequency"
+                      handleChange={handleStageChange}
+                      big={true}
+                      value={stage.startFrequency}
+                    />
+                  </div>
+                </div>
+                <div className="text-center py-3">
+                  <Button
+                    className={"px-4 mx-3"}
+                    variant="success"
+                    onClick={addStage}
+                  >
+                    Dodaj odcinek
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
+
+            <Card className="text-center">
+              <Card.Header className="bg-dark text-white">
+                Linki do regulaminow, informacji itd.
+              </Card.Header>
+              <Card.Body className="p-0">
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th>Link</th>
+                      <th>Opis</th>
+                      <th className="text-end">Usuń</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            )}
-            <div className="d-block">
-              <InputLabeled
-                label="Nazwa"
-                name="name"
-                handleChange={handleStageChange}
-                big={true}
-                value={stage.name}
-              />
-            </div>
-            <div className="row">
-              <div className="col-lg-3">
-                <InputLabeled
-                  label="Długość [m]"
-                  name="distance"
-                  handleChange={handleStageChange}
-                  big={true}
-                  onlyNumber={true}
-                  value={stage.distance}
-                />
-              </div>
-              <div className="col-lg-4">
-                <TimePicker
-                  label={"Czas startu odcinka"}
-                  onChange={(value) => {
-                    setStage({
-                      ...stage,
-                      startTime: value,
-                    });
-                  }}
-                  // selected={
-                  //   stage.startTime === null ? new Date() : stage.startTime
-                  // }
-                  calendarContainer={DatePickerContainer}
-                  //placeholderText={placeholderFrom}
-                  minDate={new Date()}
-                  maxDate={null}
-                />
-              </div>
-              <div className="col-lg-5">
-                <InputLabeled
-                  label="Częstotliwość startów [min]"
-                  name="startFrequency"
-                  handleChange={handleStageChange}
-                  big={true}
-                  value={stage.startFrequency}
-                />
-              </div>
-            </div>
-            <div className="text-center py-3">
-              <Button
-                className={"px-4 mx-3"}
-                variant="success"
-                onClick={addStage}
-              >
-                Dodaj odcinek
-              </Button>
-            </div>
+                  </thead>
+                  <tbody>
+                    {eventPaths.map((path, index) => (
+                      <tr key={index}>
+                        <td>{path.path}</td>
+                        <td>{path.description}</td>
+                        <td className="text-end">
+                          <FontAwesomeIcon
+                            icon={faTimesCircle}
+                            onClick={() =>
+                              setEventPaths(
+                                eventPaths.filter(
+                                  (elem) => elem.path !== path.path
+                                )
+                              )
+                            }
+                            title={"Usuń link"}
+                            cursor={"pointer"}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <div className="d-grid">
+                  <InputLabeled
+                    label="Link/ścieżka"
+                    name="path"
+                    handleChange={(e) =>
+                      setPath({ ...path, path: e.target.value })
+                    }
+                    big={true}
+                    value={path.path}
+                  />
+                  <InputLabeled
+                    label="Opis"
+                    name="description"
+                    handleChange={(e) =>
+                      setPath({ ...path, description: e.target.value })
+                    }
+                    big={true}
+                    value={path.description}
+                  />
+                </div>
+                <Button
+                  className={"px-4 my-3"}
+                  variant="success"
+                  onClick={addPath}
+                >
+                  Dodaj link
+                </Button>
+              </Card.Body>
+            </Card>
           </div>
         </div>
       </Modal.Body>

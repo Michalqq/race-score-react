@@ -28,15 +28,25 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore, onEdit }) => {
             {moment(event?.date).format("dddd, DD MMM YYYY, HH:mm")}
           </div>
           <div class="container d-flex">
-            <div class="col-2 px-0">
-              <img
-                src="/akbpLogo.png"
-                className="img-fluid rounded float-left"
-                alt="..."
-              />
+            <div class="col-2 px-0 align-self-center">
+              {event.logoPath !== undefined && event.logoPath !== null ? (
+                <img
+                  className="img-fluid rounded float-left"
+                  src="http://www.automobilklub.chelm.pl/img_news/30wospb.jpg"
+                  alt="Logo"
+                ></img>
+              ) : (
+                <img
+                  src="/akbpLogo.png"
+                  className="img-fluid rounded float-left"
+                  alt="..."
+                />
+              )}
             </div>
             <div class="col-10 mt-3">
-              <p className="m-4">Organizator: Automobilklub Bialskopodlaski</p>
+              {event.organizer !== undefined && event.organizer !== null && (
+                <p className="m-4">{`Organizator: ${event.organizer}`}</p>
+              )}
               <p className=" fw-bold fst-italic m-4">
                 {`Koniec zapisów:  ${moment(event?.signDeadline).format(
                   "dddd, DD MMM YYYY, HH:mm"

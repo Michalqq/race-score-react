@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { backendUrl } from "../utils/fetchUtils";
 import Button from "react-bootstrap/Button";
 import { NewEventForm } from "../event/NewEventForm";
@@ -10,8 +10,8 @@ import Card from "react-bootstrap/Card";
 import { TeamListModal } from "../team/TeamListModal";
 import { TeamPanelModal } from "../team/TeamPanelModal";
 import authHeader from "../../service/auth-header";
-import { useLocation } from "react-router-dom";
 import { AdminTeamList } from "../team/AdminTeamList";
+import Spinner from "react-bootstrap/Spinner";
 
 const HomePage = (props) => {
   const [futureEvents, setFutureEvents] = useState([]);
@@ -19,11 +19,13 @@ const HomePage = (props) => {
   const [createEvent, setCreateEvent] = useState();
   const [eventToTeamList, setEventToTeamList] = useState();
   const [eventToTeamPanel, setEventToTeamPanel] = useState();
+  const [loading, setLoading] = useState(true);
   let eventRedirect = useLocation().search;
 
   const navigate = useNavigate();
 
-  const fetchTeams = () => {
+  const fetchEvents = () => {
+    setLoading(true);
     axios
       .get(`${backendUrl()}/event/getAll`, {
         headers: authHeader(),
@@ -46,11 +48,12 @@ const HomePage = (props) => {
           setEventToTeamPanel(event);
           eventRedirect = null;
         }
+        setLoading(false);
       });
   };
 
   useEffect(() => {
-    fetchTeams();
+    fetchEvents();
   }, []);
 
   return (
@@ -59,6 +62,11 @@ const HomePage = (props) => {
         <h3>Najbliższe wydarzenia</h3>
       </Card>
       <div className="row justify-content-center">
+        {loading && (
+          <div className="text-center">
+            <Spinner animation="border" variant="secondary" size="lg" />
+          </div>
+        )}
         {futureEvents.map((x) => (
           <EventCard
             key={x.eventId}
@@ -75,6 +83,11 @@ const HomePage = (props) => {
       </Card>
 
       <div className="row justify-content-center">
+        {loading && (
+          <div className="text-center">
+            <Spinner animation="border" variant="secondary" size="lg" />
+          </div>
+        )}
         {archiveEvents.map((x) => (
           <EventCard
             key={x.eventId}
@@ -96,18 +109,27 @@ const HomePage = (props) => {
       </div>
       <NewEventForm
         show={createEvent !== undefined}
-        handleClose={() => setCreateEvent()}
+        handleClose={() => {
+          setCreateEvent();
+          fetchEvents();
+        }}
         event={createEvent}
       />
       <AdminTeamList
         show={eventToTeamList !== undefined}
-        handleClose={() => setEventToTeamList()}
+        handleClose={() => {
+          setEventToTeamList();
+          fetchEvents();
+        }}
         eventId={eventToTeamList?.eventId}
         started={eventToTeamList?.started}
       />
       <TeamPanelModal
         show={eventToTeamPanel !== undefined}
-        handleClose={() => setEventToTeamPanel()}
+        handleClose={() => {
+          setEventToTeamPanel();
+          fetchEvents();
+        }}
         event={eventToTeamPanel}
       />
     </>

@@ -36,6 +36,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   useEffect(() => {
     if (!show) return;
 
+    console.log(event);
     fetchGetTeam();
     setCarsOption([]);
     setUploading(false);
@@ -184,12 +185,22 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
               <div className="col-lg-6 pb-3 px-1">
                 <Card className="text-center">
                   <Card.Header className="bg-dark text-white">
-                    Lista plików
+                    Linki związane z wydarzeniem
                   </Card.Header>
                   <Card.Body>
                     <div className="row ">
-                      <div className="col-lg-4 px-0">
-                        todo pliki do pobrania
+                      <div className="col-lg-12 px-0">
+                        {event?.eventPaths?.map((path, index) => (
+                          <h6 key={index} className="my-1">
+                            <a
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              href={path.path}
+                            >
+                              {path.description}
+                            </a>
+                          </h6>
+                        )) || "Organizator nie dodał linków"}
                       </div>
                     </div>
                   </Card.Body>
