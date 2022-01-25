@@ -88,15 +88,6 @@ export const TeamCreatePage = (props) => {
                   big={true}
                   value={team.engine}
                 />
-                <InputLabeled
-                  label="Klasa"
-                  name="carClassId"
-                  handleChange={handleChange}
-                  disabled={disable}
-                  onlyNumber={true}
-                  big={true}
-                  value={team.carClassId}
-                />
                 {/* <Selector
                   label={"Rodzaj napędu"}
                   options={psOptions}

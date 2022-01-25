@@ -244,8 +244,9 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                       </td>
                                       <td style={{ width: "300px" }}>
                                         {item.team.driver +
-                                          " / " +
-                                          item.team?.coDriver || ""}
+                                          (item.team?.coDriver === null
+                                            ? ""
+                                            : " / " + item.team?.coDriver)}
                                       </td>
                                       <td style={{ width: "300px" }}>
                                         {(item.team.currentCar?.brand || "") +
@@ -253,9 +254,9 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                           (item.team.currentCar?.model || "")}
                                       </td>
                                       <td style={{ width: "120px" }}>
-                                        {item.team.carClass.name || ""}
+                                        {item.carClass.name || ""}
                                       </td>
-                                      <td style={{ width: "100px" }}>
+                                      <td style={{ width: "90px" }}>
                                         {item.entryFeePaid ? (
                                           <FontAwesomeIcon
                                             className={"text-success"}
@@ -268,7 +269,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                           />
                                         )}
                                       </td>
-                                      <td style={{ width: "100px" }}>
+                                      <td style={{ width: "90px" }}>
                                         <FontAwesomeIcon
                                           className={""}
                                           icon={faCoins}
@@ -281,7 +282,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                           cursor={"pointer"}
                                         />
                                       </td>
-                                      <td style={{ width: "100px" }}>
+                                      <td style={{ width: "90px" }}>
                                         {item.entryFeeFile !== null ? (
                                           <FontAwesomeIcon
                                             className={""}
@@ -299,7 +300,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                           <></>
                                         )}
                                       </td>
-                                      <td style={{ width: "100px" }}>
+                                      <td style={{ width: "90px" }}>
                                         <FontAwesomeIcon
                                           className={""}
                                           icon={faTimesCircle}

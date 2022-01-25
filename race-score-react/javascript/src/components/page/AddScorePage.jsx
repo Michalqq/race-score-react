@@ -103,7 +103,7 @@ export const AddScorePage = (props) => {
   const getTeamData = () => {
     axios
       .get(
-        `${backendUrl()}/score/getTeamScore?stageId=${stage}&teamId=${teamId}`
+        `${backendUrl()}/score/getTeamScore?eventId=${eventId}&stageId=${stage}&teamId=${teamId}`
       )
       .then((res) => {
         setScoreMin(res.data.scoreMin);

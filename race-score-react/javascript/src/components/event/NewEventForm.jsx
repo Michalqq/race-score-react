@@ -4,6 +4,7 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { InputLabeled } from "../common/InputLabeled";
 import { CustomDatePicker, TimePicker } from "../common/DateInput";
@@ -31,9 +32,18 @@ export const NewEventForm = ({ show, handleClose, event }) => {
     startTime: new Date(),
     startFrequency: 1,
   });
+  const [eventClass, setEventClass] = useState({
+    carClassId: 0,
+    carClassName: null,
+    maxEngineCapacity: null,
+    eventId: event?.eventId,
+    awd: false,
+  });
   const [stages, setStages] = useState([]);
   const [referee, setReferee] = useState([]);
   const [refereeOptions, setRefereeOptions] = useState([]);
+  const [eventClasses, setEventClasses] = useState([]);
+  const [eventClassesOptions, setEventClassesOptions] = useState([]);
 
   useEffect(() => {
     if (!show) return;
@@ -45,6 +55,16 @@ export const NewEventForm = ({ show, handleClose, event }) => {
       .then((res) => {
         setRefereeOptions(res.data);
       });
+
+    axios
+      .get(`${backendUrl()}/event/getEventClassesOptions`, {
+        headers: authHeader(),
+      })
+      .then((res) => {
+        setEventClassesOptions(res.data);
+      });
+
+    setEventClasses([]);
     setReferee([]);
     setStages([]);
     if (event !== undefined) fetchEventToEdit();
@@ -62,6 +82,7 @@ export const NewEventForm = ({ show, handleClose, event }) => {
       ...myEvent,
       stages: stages,
       referee: referee,
+      eventClasses: eventClasses,
     };
     axios.put(`${backendUrl()}/event/createNew`, data).then((res) => {
       handleClose();
@@ -80,6 +101,17 @@ export const NewEventForm = ({ show, handleClose, event }) => {
     });
   };
 
+  const addClass = () => {
+    eventClasses.push(eventClass);
+    setEventClass({
+      carClassId: 0,
+      carClassName: null,
+      maxEngineCapacity: "",
+      eventId: event?.eventId,
+      awd: false,
+    });
+  };
+
   const removeFromStages = (id) => {
     const tempStages = stages.filter((x) => x.index !== id);
     setStages(tempStages);
@@ -90,10 +122,34 @@ export const NewEventForm = ({ show, handleClose, event }) => {
     setReferee(tempRef);
   };
 
+  const removeClass = (id) => {
+    const tempClass = eventClasses.filter((x) => x.carClassId !== id);
+    setEventClasses(tempClass);
+
+    // const removedClass = eventClasses.filter((x) => x.carClassId === id);
+    // const classesOptions = eventClassesOptions;
+    // classesOptions.push({
+    //   value: removedClass.carClassName,
+    //   label: removedClass.carClassId,
+    //   defValue: false,
+    // });
+    // setEventClassesOptions(classesOptions);
+  };
+
   const addReferee = (id) => {
     const tempRef = refereeOptions.find((x) => x.value === id);
     const newRef = { userId: Number(tempRef.value), username: tempRef.label };
     setReferee([...referee, newRef]);
+  };
+
+  const addEventClass = (id) => {
+    const tempClass = eventClassesOptions.find((x) => x.value === id);
+
+    setEventClass({
+      ...eventClass,
+      carClassId: id,
+      carClassName: tempClass.label,
+    });
   };
 
   const fetchEventToEdit = () => {
@@ -111,6 +167,11 @@ export const NewEventForm = ({ show, handleClose, event }) => {
           })
         );
         setReferee(res.data.referee);
+        setEventClasses(
+          res.data.eventClasses.map((x) => {
+            return { ...x, carClassName: x.carClass.name };
+          })
+        );
       });
   };
 
@@ -136,77 +197,150 @@ export const NewEventForm = ({ show, handleClose, event }) => {
       </Modal.Header>
       <Modal.Body>
         <div className="row u-text-center justify-content-center">
-          <div className="col-lg-4 mx-1 border-right shadow mb-1 bg-white rounded">
-            <h5>Wydarzenie</h5>
-            <InputLabeled
-              label="Nazwa"
-              name="name"
-              handleChange={handleChange}
-              big={true}
-              value={myEvent.name}
-              multiline={2}
-            />
-            <InputLabeled
-              label="Opis"
-              name="description"
-              handleChange={handleChange}
-              big={true}
-              value={myEvent.description}
-              multiline={2}
-            />
-            <div className="d-flex">
-              <CustomDatePicker
-                label={"Data wydarzenia"}
-                onChange={(value) => setMyEvent({ ...myEvent, date: value })}
-                selected={myEvent.date}
-                calendarContainer={DatePickerContainer}
-                //placeholderText={placeholderFrom}
-                minDate={new Date()}
-                maxDate={null}
-              />
-              <CustomDatePicker
-                label={"Koniec zapisów"}
-                onChange={(value) =>
-                  setMyEvent({ ...myEvent, signDeadline: value })
-                }
-                selected={myEvent.signDeadline}
-                calendarContainer={DatePickerContainer}
-                //placeholderText={placeholderFrom}
-                minDate={new Date()}
-                maxDate={null}
-              />
+          <div className="col-lg-4 mx-1 border-right shadow bg-white rounded">
+            <div className="col-lg-12 border-right rounded">
+              <Card className="text-center">
+                <Card.Header className="bg-dark text-white">
+                  Wydarzenie
+                </Card.Header>
+                <Card.Body className="p-0">
+                  <InputLabeled
+                    label="Nazwa"
+                    name="name"
+                    handleChange={handleChange}
+                    big={true}
+                    value={myEvent.name}
+                    multiline={2}
+                  />
+                  <InputLabeled
+                    label="Opis"
+                    name="description"
+                    handleChange={handleChange}
+                    big={true}
+                    value={myEvent.description}
+                    multiline={2}
+                  />
+                  <div className="d-flex">
+                    <CustomDatePicker
+                      label={"Data wydarzenia"}
+                      onChange={(value) =>
+                        setMyEvent({ ...myEvent, date: value })
+                      }
+                      selected={myEvent.date}
+                      calendarContainer={DatePickerContainer}
+                      //placeholderText={placeholderFrom}
+                      minDate={new Date()}
+                      maxDate={null}
+                    />
+                    <CustomDatePicker
+                      label={"Koniec zapisów"}
+                      onChange={(value) =>
+                        setMyEvent({ ...myEvent, signDeadline: value })
+                      }
+                      selected={myEvent.signDeadline}
+                      calendarContainer={DatePickerContainer}
+                      //placeholderText={placeholderFrom}
+                      minDate={new Date()}
+                      maxDate={null}
+                    />
+                  </div>
+                  <Selector
+                    label={"Sędziowie"}
+                    options={refereeOptions}
+                    handleChange={(value) => addReferee(value)}
+                    isValid={true}
+                    skipDefault={true}
+                  />
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th>Login</th>
+                        <th className="text-end">Usuń</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {referee.map((x, index) => (
+                        <tr key={x.userId + index}>
+                          <td>{x.username}</td>
+                          <td className="text-end">
+                            <FontAwesomeIcon
+                              icon={faTimesCircle}
+                              onClick={() => removeReferee(x.userId)}
+                              title={"Usuń załoge"}
+                              cursor={"pointer"}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Card.Body>
+              </Card>
             </div>
-            <Selector
-              label={"Sędziowie"}
-              options={refereeOptions}
-              handleChange={(value) => addReferee(value)}
-              isValid={true}
-              skipDefault={true}
-            />
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>Login</th>
-                  <th className="text-end">Usuń</th>
-                </tr>
-              </thead>
-              <tbody>
-                {referee.map((x, index) => (
-                  <tr key={x.userId + index}>
-                    <td>{x.username}</td>
-                    <td className="text-end">
-                      <FontAwesomeIcon
-                        className={"fa-lg"}
-                        icon={faTimesCircle}
-                        onClick={() => removeReferee(x.userId)}
-                        title={"Usuń załoge"}
-                        cursor={"pointer"}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+            <div className="col-lg-12 border-right rounded">
+              <Card className="text-center">
+                <Card.Header className="bg-dark text-white">
+                  Podział na klasy
+                </Card.Header>
+                <Card.Body className="p-0">
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th>Klasa</th>
+                        <th>Max silnik [dm3]</th>
+                        <th className="text-end">Usuń</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {eventClasses.map((x, index) => (
+                        <tr key={x.carClassId + index}>
+                          <td>{x.carClassName}</td>
+                          <td>{x.maxEngineCapacity}</td>
+                          <td className="text-end">
+                            <FontAwesomeIcon
+                              icon={faTimesCircle}
+                              onClick={() => removeClass(x.carClassId)}
+                              title={"Usuń klase"}
+                              cursor={"pointer"}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                  <div className="d-grid">
+                    <Selector
+                      className={"w-50"}
+                      label={"Klasa"}
+                      options={eventClassesOptions}
+                      handleChange={(value) => addEventClass(value)}
+                      isValid={true}
+                      value={eventClass.carClassId}
+                      skipDefault={true}
+                    />
+                    <InputLabeled
+                      label="Max silnik [dm3]"
+                      name="name"
+                      handleChange={(e) =>
+                        setEventClass({
+                          ...eventClass,
+                          maxEngineCapacity: e.target.value,
+                        })
+                      }
+                      big={true}
+                      value={eventClass.maxEngineCapacity}
+                    />
+                  </div>
+                  <Button
+                    className={"px-4 my-3"}
+                    variant="success"
+                    onClick={addClass}
+                  >
+                    Dodaj klase
+                  </Button>
+                </Card.Body>
+              </Card>
+            </div>
           </div>
           <div className="col-lg-7 mx-2 shadow mb-1 bg-white rounded">
             <h5>Odcinki PS/OS (w kolejności)</h5>
@@ -234,7 +368,6 @@ export const NewEventForm = ({ show, handleClose, event }) => {
                       <td>{x.startFrequency + " min"}</td>
                       <td className="text-end">
                         <FontAwesomeIcon
-                          className={"m-2 fa-lg"}
                           icon={faTimesCircle}
                           onClick={() => removeFromStages(x.index)}
                           title={"Usuń załoge"}
