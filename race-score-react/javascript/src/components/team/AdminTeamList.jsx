@@ -254,7 +254,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                           (item.team.currentCar?.model || "")}
                                       </td>
                                       <td style={{ width: "120px" }}>
-                                        {item.carClass.name || ""}
+                                        {item.carClass?.name || ""}
                                       </td>
                                       <td style={{ width: "90px" }}>
                                         {item.entryFeePaid ? (
