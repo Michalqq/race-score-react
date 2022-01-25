@@ -165,7 +165,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    let index = 0;
+    let index = 1;
     items.map((x) => (x.number = index++));
 
     setTeams(items);
