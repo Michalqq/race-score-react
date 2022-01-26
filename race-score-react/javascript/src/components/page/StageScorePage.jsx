@@ -6,17 +6,20 @@ import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ScoreDiv, ScoreDivPenalty, TeamDiv, CarDiv } from "../common/Div";
 import { Selector } from "../common/Selector";
-import Badge from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
 import { backendUrl } from "../utils/fetchUtils";
 import PenaltyTable from "../tables/PenaltyTable";
 import DisqualificationTable from "../tables/DisqualificationTable";
 import authHeader from "../../service/auth-header";
+import moment from "moment";
 
 const StageScorePage = (props) => {
   const location = useLocation();
   const eventId = location.state.eventId;
 
   const GENERAL = "GENERALNA";
+
+  const [event, setEvent] = useState();
 
   const [scores, setScores] = useState([]);
   const [referee, setReferee] = useState(false);
@@ -61,11 +64,23 @@ const StageScorePage = (props) => {
       });
   };
 
+  const fetchEvent = () => {
+    axios
+      .get(`${backendUrl()}/event/getEvent?eventId=${eventId}`)
+      .then((res) => {
+        setEvent({
+          ...res.data,
+          date: new Date(res.data.date),
+          signDeadline: new Date(res.data.signDeadline),
+        });
+      });
+  };
   const fetchData = () => {
     setLoading(true);
     if (stage !== undefined) {
       fetchScores();
       fetchSummedScores();
+      fetchEvent();
     }
   };
 
@@ -100,15 +115,24 @@ const StageScorePage = (props) => {
         Cell: (row) => <> {row.row.index + 1}</>,
       },
       {
-        width: "5%",
+        width: "7%",
         id: "nr",
         Header: "Nr",
         accessor: (cellInfo) => cellInfo.number,
         disableFilters: true,
         disableSortBy: true,
         Cell: (row) => (
-          <Badge className={"p-1 py-0 "} bg="primary">
-            {row.value}
+          <Badge
+            style={{
+              paddingTop: "8px",
+              paddingLeft: "5px",
+              width: "30px",
+              height: "30px",
+              borderRadius: "20px",
+              backgroundColor: "#270ca4 !important",
+            }}
+          >
+            {"#" + row.value}
           </Badge>
         ),
       },
@@ -173,93 +197,126 @@ const StageScorePage = (props) => {
   );
 
   return (
-    <div className="row">
-      <div className="col-xl-4"></div>
-      <div className="col-xl-4">
-        <Selector
-          label={"Klasyfikacja"}
-          options={classesOptions}
-          handleChange={(value) => {
-            setCurrentClass(
-              classesOptions.find((e) => e.value === value).label
-            );
-          }}
-          isValid={true}
-        />
-        <Selector
-          label={"PS"}
-          options={psOptions}
-          handleChange={(value) => {
-            setStage(value);
-            setStageName(psOptions.find((e) => e.value === value).label);
-          }}
-          isValid={true}
-        />
-      </div>
-      <div className="col-xl-4"></div>
-      <div className="col-xl-6">
-        <div className="shadow bg-body rounded">
-          <div className="fw-bold alert alert-secondary p-1 m-0 " role="alert">
-            {`Czas NA - ${stageName}`}
+    <>
+      <div className="row">
+        <h4>{event?.name || ""}</h4>
+        <div className="col-xl-4">
+          <div className="m-2 text-center">
+            {event?.logoPath !== undefined && event?.logoPath !== null ? (
+              <img
+                style={{ height: "140px" }}
+                className="img-fluid rounded float-left"
+                src="http://www.automobilklub.chelm.pl/img_news/30wospb.jpg"
+                alt="Logo"
+              ></img>
+            ) : (
+              <img
+                style={{ height: "140px" }}
+                src="/akbpLogo.png"
+                className="img-fluid rounded float-left"
+                alt="..."
+              />
+            )}
           </div>
-          <ResultTable
-            columns={columns}
-            data={
-              currentClass !== GENERAL
-                ? scores.filter((x) => x.className === currentClass)
-                : scores
-            }
-            pageCount={3}
-            isLoading={loading}
-            isFooter={false}
-            isHeader={true}
-            cursor={"pointer"}
+        </div>
+        <div className="col-xl-4">
+          <Selector
+            label={"Klasyfikacja"}
+            options={classesOptions}
+            handleChange={(value) => {
+              setCurrentClass(
+                classesOptions.find((e) => e.value === value).label
+              );
+            }}
+            isValid={true}
+          />
+          <Selector
+            label={"PS"}
+            options={psOptions}
+            handleChange={(value) => {
+              setStage(value);
+              setStageName(psOptions.find((e) => e.value === value).label);
+            }}
+            isValid={true}
           />
         </div>
-      </div>
-      <div className="col-xl-6">
-        <div className="shadow bg-body rounded">
-          <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
-            {`Czas PO - ${stageName}`}
+        <div className="col-xl-4">
+          <div className="m-2 text-center">
+            <h6>{`Data wydarzenia:  `}</h6>
+            <h6 className="fw-bold">
+              {moment(event?.date).format(" dddd, DD MMM YYYY, HH:mm")}
+            </h6>
           </div>
-          <ResultTable
-            columns={columns}
-            data={
-              currentClass !== GENERAL
-                ? summedScores.filter((x) => x.className === currentClass)
-                : summedScores
-            }
-            pageCount={3}
-            isLoading={loading}
-            isFooter={false}
-            isHeader={true}
-            cursor={"pointer"}
-          />
         </div>
       </div>
-      <div className="col-xl-12">
-        <div className="shadow bg-body rounded mt-4 p-0">
-          <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
-            {"Kary"}
+      <div className="row">
+        <div className="col-xl-6">
+          <div className="shadow bg-body rounded">
+            <div
+              className="fw-bold alert alert-secondary p-1 m-0 "
+              role="alert"
+            >
+              {`Czas NA - ${stageName}`}
+            </div>
+            <ResultTable
+              columns={columns}
+              data={
+                currentClass !== GENERAL
+                  ? scores.filter((x) => x.className === currentClass)
+                  : scores
+              }
+              pageCount={3}
+              isLoading={loading}
+              isFooter={false}
+              isHeader={true}
+              cursor={"pointer"}
+            />
           </div>
-          <PenaltyTable
-            eventId={eventId}
-            onRemove={fetchData}
-            referee={referee}
-          />
         </div>
-        <div className="shadow bg-body rounded mt-4">
-          <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
-            {`Dyskwalifikacje / Wycofania`}
+        <div className="col-xl-6">
+          <div className="shadow bg-body rounded">
+            <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
+              {`Czas PO - ${stageName}`}
+            </div>
+            <ResultTable
+              columns={columns}
+              data={
+                currentClass !== GENERAL
+                  ? summedScores.filter((x) => x.className === currentClass)
+                  : summedScores
+              }
+              pageCount={3}
+              isLoading={loading}
+              isFooter={false}
+              isHeader={true}
+              cursor={"pointer"}
+            />
           </div>
-          <DisqualificationTable
-            eventId={eventId}
-            onRemove={fetchData}
-            referee={referee}
-          />
+        </div>
+        <div className="col-xl-12">
+          <div className="shadow bg-body rounded mt-4 p-0">
+            <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
+              {"Kary"}
+            </div>
+            <PenaltyTable
+              eventId={eventId}
+              onRemove={fetchData}
+              referee={referee}
+            />
+          </div>
+          <div className="shadow bg-body rounded mt-4">
+            <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
+              {`Dyskwalifikacje / Wycofania`}
+            </div>
+            <DisqualificationTable
+              eventId={eventId}
+              onRemove={fetchData}
+              referee={referee}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

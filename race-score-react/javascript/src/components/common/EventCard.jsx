@@ -28,7 +28,7 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore, onEdit }) => {
             {moment(event?.date).format("dddd, DD MMM YYYY, HH:mm")}
           </div>
           <div class="container d-flex">
-            <div class="col-2 px-0 align-self-center">
+            <div class="col-2 px-0 align-self-center" style={{ width: "90px" }}>
               {event.logoPath !== undefined && event.logoPath !== null ? (
                 <img
                   className="img-fluid rounded float-left"
