@@ -18,12 +18,15 @@ import { OkCancelModal } from "../common/Modal";
 import authHeader from "../../service/auth-header";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Card from "react-bootstrap/Card";
+import { Selector } from "../common/Selector";
+import Badge from "react-bootstrap/Badge";
 
 export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
   const [startEvent, setStartEvent] = useState(false);
   const [loading, setLoading] = useState(true);
   const [referee, setReferee] = useState(false);
+  const [refreshSelect, setRefreshSelect] = useState(false);
   const [teamToRemove, setTeamToRemove] = useState({
     driver: null,
     teamId: null,
@@ -33,6 +36,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
     teamId: null,
   });
   const [msg, setMsg] = useState();
+  const [eventClasses, setEventClasses] = useState([]);
 
   const eraseTeamToRemove = () => {
     setTeamToRemove({
@@ -84,6 +88,17 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
         fetchTeams();
       });
   };
+  const fetchEvent = () => {
+    axios
+      .get(`${backendUrl()}/event/getEvent?eventId=${eventId}`)
+      .then((res) => {
+        setEventClasses(
+          res.data.eventClasses.map((x) => {
+            return { ...x, value: x.carClassId, label: x.carClass.name };
+          })
+        );
+      });
+  };
 
   const fetchEntryFeeFile = (teamId, teamName) => {
     download(
@@ -122,22 +137,28 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
   };
 
   const sortByClass = () => {
+    setRefreshSelect(true);
     axios
       .get(`${backendUrl()}/event/sortByClass?eventId=${eventId}`, {
         headers: authHeader(),
       })
       .then((res) => {
         setTeams(res.data);
+        setRefreshSelect(false);
       });
   };
 
-  const saveNumbers = () => {
+  const saveNumbersAndClasses = () => {
     axios
-      .post(`${backendUrl()}/event/saveNumbers?eventId=${eventId}`, teams, {
-        headers: authHeader(),
-      })
+      .post(
+        `${backendUrl()}/event/saveNumbersAndClasses?eventId=${eventId}`,
+        teams,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => {
-        if (res.data) setMsg("Kolejność została zapisana");
+        if (res.data) setMsg("Kolejność i klasy zostały zapisane");
         else setMsg("Coś poszło nie tak");
 
         setTimeout(() => setMsg(), 5000);
@@ -149,6 +170,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
       fetchReferee();
       setLoading(true);
       setTeams([]);
+      fetchEvent();
     }
     fetchTeams();
   }, [show]);
@@ -169,6 +191,15 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
     items.map((x) => (x.number = index++));
 
     setTeams(items);
+    setRefreshSelect(false);
+  };
+
+  const changeCarClass = (id, newCarClassId) => {
+    const index = teams.findIndex((x) => x.id === id);
+
+    if (teams[index].carClassId === newCarClassId) return;
+    teams[index].carClassId = newCarClassId;
+    setTeams(teams);
   };
 
   return (
@@ -195,18 +226,21 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
           <>
             <table>
               <th className="d-table-row fs-6">
-                <td style={{ width: "60px" }}></td>
+                <td style={{ width: "80px" }}></td>
                 <td style={{ width: "60px" }}>Nr</td>
-                <td style={{ width: "320px" }}>Załoga</td>
-                <td style={{ width: "320px" }}>Samochód</td>
-                <td style={{ width: "120px" }}>Klasa</td>
+                <td style={{ width: "350px" }}>Załoga</td>
+                <td style={{ width: "350px" }}>Samochód</td>
+                <td style={{ width: "100px" }}>Klasa</td>
                 <td style={{ width: "100px" }}>Zapłacone</td>
                 <td style={{ width: "110px" }}>Potwierdź wpisowe</td>
                 <td style={{ width: "100px" }}>Plik</td>
                 <td style={{ width: "100px" }}>Usuń załogę</td>
               </th>
             </table>
-            <DragDropContext onDragEnd={handleOnDragEnd}>
+            <DragDropContext
+              onDragStart={() => setRefreshSelect(true)}
+              onDragEnd={handleOnDragEnd}
+            >
               <Droppable droppableId="selectedCases">
                 {(provided) => (
                   <ol
@@ -215,13 +249,12 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                     ref={provided.innerRef}
                   >
                     {teams?.map((item, index) => {
-                      console.log(item);
                       return (
                         <Draggable
                           key={item.number}
                           draggableId={item.number.toString()}
                           index={index}
-                          draggable={false}
+                          draggable={true}
                         >
                           {(provided) => (
                             <li
@@ -232,7 +265,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                               <Card className="my-1">
                                 <Card.Body className="p-0">
                                   <table className="m-0">
-                                    <th className="d-table-row fw-normal">
+                                    <th className="d-table-row fw-normal align-middle">
                                       <td
                                         className="fw-bold"
                                         style={{ width: "30px" }}
@@ -240,24 +273,68 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                         &#9776;
                                       </td>
                                       <td style={{ width: "50px" }}>
-                                        #{item.number}
+                                        <Badge
+                                          style={{
+                                            paddingTop: "8px",
+                                            paddingLeft: "5px",
+                                            width: "30px",
+                                            height: "30px",
+                                            borderRadius: "20px",
+                                            backgroundColor:
+                                              "#270ca4 !important",
+                                          }}
+                                        >
+                                          {"#" + item.number}
+                                        </Badge>
                                       </td>
-                                      <td style={{ width: "300px" }}>
+                                      <td style={{ width: "270px" }}>
                                         {item.team.driver +
                                           (item.team?.coDriver === null ||
                                           item.team.coDriver === ""
                                             ? ""
                                             : " / " + item.team?.coDriver)}
                                       </td>
-                                      <td style={{ width: "300px" }}>
+                                      <td style={{ width: "270px" }}>
                                         {(item.team.currentCar?.brand || "") +
                                           " " +
                                           (item.team.currentCar?.model || "")}
                                       </td>
-                                      <td style={{ width: "120px" }}>
-                                        {item.carClass?.name || ""}
+                                      <td
+                                        style={{
+                                          width: "100px",
+                                          display: "flex",
+                                        }}
+                                      >
+                                        {item.carClassId}
+                                        {!refreshSelect && (
+                                          <Selector
+                                            className={"m-0 p-0"}
+                                            options={eventClasses}
+                                            handleChange={(value) => {
+                                              changeCarClass(item.id, value);
+                                            }}
+                                            isValid={true}
+                                            value={item.carClassId}
+                                          />
+                                        )}
+                                        {refreshSelect && (
+                                          <Selector
+                                            className={"m-0 p-0"}
+                                            options={eventClasses}
+                                            handleChange={(value) => {
+                                              changeCarClass(item.id, value);
+                                            }}
+                                            isValid={true}
+                                            skipDefault={true}
+                                          />
+                                        )}
                                       </td>
-                                      <td style={{ width: "90px" }}>
+                                      <td
+                                        style={{
+                                          width: "90px",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         {item.entryFeePaid ? (
                                           <FontAwesomeIcon
                                             className={"text-success"}
@@ -374,8 +451,12 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
           <Button className={"m-1"} variant="primary" onClick={sortByClass}>
             Sortuj wstępnie wg. klas
           </Button>
-          <Button className={"m-1"} variant="success" onClick={saveNumbers}>
-            Zapisz kolejność załóg
+          <Button
+            className={"m-1"}
+            variant="success"
+            onClick={saveNumbersAndClasses}
+          >
+            Zapisz klasy i kolejność załóg
           </Button>
           <p>{msg}</p>
         </div>
