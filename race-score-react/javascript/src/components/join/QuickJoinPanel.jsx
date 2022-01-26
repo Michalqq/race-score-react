@@ -7,9 +7,11 @@ import authHeader from "../../service/auth-header";
 import { InputLabeled } from "../common/InputLabeled";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 
 export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
   const [msg, setMsg] = useState();
+  const [loading, setLoading] = useState(false);
   const [team, setTeam] = useState({
     coSportLicense: false,
     sportLicense: false,
@@ -53,16 +55,20 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
           carInspectionExpiryDate: new Date(),
         },
       });
+      setMsg();
+      setLoading(false);
     }
   }, [show]);
 
   const fetchAddTeam = () => {
+    setLoading(true);
     axios
       .post(`${backendUrl()}/team/addTeam?eventId=${eventId}`, team, {
         headers: authHeader(),
       })
-      .then(() => {
-        setMsg("Dodano nowego zawodnika");
+      .then((res) => {
+        setMsg(res.data);
+        setLoading(false);
       });
   };
 
@@ -183,12 +189,18 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
                   />
                 </Form>
               </div>
-              <p>{msg}</p>
+
+              <div className="text-center" style={{ height: "50px" }}>
+                <p>{msg}</p>
+                {loading && (
+                  <Spinner animation="border" variant="secondary" size="lg" />
+                )}
+              </div>
               <Button
                 className={"m-1"}
                 variant="success"
                 type="submit"
-                // disabled={msg}
+                disabled={msg}
               >
                 Dołącz do wydarzenia
               </Button>
