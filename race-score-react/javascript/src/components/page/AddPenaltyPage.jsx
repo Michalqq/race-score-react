@@ -103,10 +103,7 @@ export const AddPenaltyPage = (props) => {
   };
 
   const resetPenalty = () => {
-    setPenalty({
-      penaltyDesc: "",
-      penaltyKind: null,
-    });
+    setPenalty({ ...penalty, penaltyDesc: "" });
   };
 
   const handleChange = (event) => {

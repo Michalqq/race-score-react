@@ -96,15 +96,15 @@ const PenaltyTable = (props) => {
                   </td>
                   <td className="text-left px-3">{penalty.name}</td>
                   <td>
-                    {props.referee ? (
-                      <FontAwesomeIcon
-                        icon={faTimesCircle}
-                        onClick={() => removePenalty(penalty.penaltyId)}
-                        title={"Usuń kare"}
-                      />
-                    ) : (
+                    {/* {props.referee ? ( */}
+                    <FontAwesomeIcon
+                      icon={faTimesCircle}
+                      onClick={() => removePenalty(penalty.penaltyId)}
+                      title={"Usuń kare"}
+                    />
+                    {/* ) : (
                       <></>
-                    )}
+                    )} */}
                   </td>
                 </tr>
               </>

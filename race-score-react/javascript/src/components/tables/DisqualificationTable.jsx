@@ -99,15 +99,15 @@ const DisqualificationTable = (props) => {
                   </td>
                   <td className="text-left px-3">{penalty.name}</td>
                   <td>
-                    {props.referee ? (
-                      <FontAwesomeIcon
-                        icon={faTimesCircle}
-                        onClick={() => removePenalty(penalty.penaltyId)}
-                        title={"Wycofaj dyskwalifikacje"}
-                      />
-                    ) : (
+                    {/* {props.referee ? ( */}
+                    <FontAwesomeIcon
+                      icon={faTimesCircle}
+                      onClick={() => removePenalty(penalty.penaltyId)}
+                      title={"Wycofaj dyskwalifikacje"}
+                    />
+                    {/* ) : (
                       <></>
-                    )}
+                    )} */}
                   </td>
                 </tr>
               </>
