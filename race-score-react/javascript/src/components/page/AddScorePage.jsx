@@ -5,11 +5,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { InputLabeled } from "../common/InputLabeled";
 import { RadioButton } from "../common/Button";
 import { backendUrl } from "../utils/fetchUtils";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import authHeader from "../../service/auth-header";
+import Button from "react-bootstrap/Button";
 
 export const AddScorePage = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const eventId = location.state.eventId;
 
   const mode = [
@@ -61,7 +63,6 @@ export const AddScorePage = (props) => {
       .then((res) => {
         setTeamOptions(res.data);
         setLoadingTeams(false);
-        setMsg("");
         setDisable(false);
         if (res.data.length === 0) {
           resetData();
@@ -77,6 +78,12 @@ export const AddScorePage = (props) => {
       })
       .then((res) => {
         fetchTeamsOptions();
+        setMsg(
+          `Dodano wynik kierowcy: ${
+            teamOptions.find((x) => x.value === data.teamId)?.label
+          }`
+        );
+        setTimeout(() => setMsg(), 10000);
       });
   };
 
@@ -257,9 +264,28 @@ export const AddScorePage = (props) => {
         </div>
       </div>
       <div className="col-sm pt-5"></div>
-      <Link to={"/add_penalty?" + eventId} className="btn btn-primary">
+      <Button
+        className={"mx-2 py-1 px-2"}
+        variant="primary"
+        onClick={() =>
+          navigate(`/add_penalty`, {
+            state: { eventId: eventId },
+          })
+        }
+      >
         Przejdź do dodawania kar
-      </Link>
+      </Button>
+      <Button
+        className={"mx-2 py-1 px-2"}
+        variant="success"
+        onClick={() =>
+          navigate(`/event`, {
+            state: { eventId: eventId },
+          })
+        }
+      >
+        Wyniki
+      </Button>
     </div>
   );
 };

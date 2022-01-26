@@ -4,11 +4,13 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { backendUrl } from "../utils/fetchUtils";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import authHeader from "../../service/auth-header";
+import Button from "react-bootstrap/Button";
 
 export const AddPenaltyPage = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const eventId = location.state.eventId;
 
   const [psOptions, setPsOptions] = useState([]);
@@ -19,12 +21,13 @@ export const AddPenaltyPage = (props) => {
   const [stage, setStage] = useState();
 
   const [penalty, setPenalty] = useState({
-    penaltyDesc: null,
+    penaltyDesc: "",
     penaltyKind: null,
   });
 
   const [loadingTeams, setLoadingTeams] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [msg, setMsg] = useState();
 
   const fetchPsOptions = () => {
     axios
@@ -61,7 +64,14 @@ export const AddPenaltyPage = (props) => {
         headers: authHeader(),
       })
       .then((res) => {
-        setPenaltyOptions(res.data);
+        if (res.data === 1) {
+          const team = teamOptions.find((x) => x.value === data.teamId)?.label;
+          const penalty = penaltyOptions.find(
+            (x) => x.value === data.penaltyKind
+          );
+          setMsg(`Dodano karę ${penalty.label}; Kierowca:${team}`);
+          setTimeout(() => setMsg(), 10000);
+        }
       });
   };
 
@@ -94,7 +104,7 @@ export const AddPenaltyPage = (props) => {
 
   const resetPenalty = () => {
     setPenalty({
-      penaltyDesc: null,
+      penaltyDesc: "",
       penaltyKind: null,
     });
   };
@@ -110,8 +120,8 @@ export const AddPenaltyPage = (props) => {
           <h4 className="pb-2 mb-3 border-bottom">Dodaj kare:</h4>
         </div>
         <div className="row justify-content-center">
-          <div className="col-lg-4 pb-3 border-bottom">
-            <div className="pb-3" />
+          <div className="col-lg-4 pb-1">
+            <h5 className={"pt-1"}>Załoga</h5>
             <Selector
               label={"PS"}
               options={psOptions}
@@ -125,55 +135,66 @@ export const AddPenaltyPage = (props) => {
               isValid={true}
               isLoading={loadingTeams}
             />
-          </div>
+            <h5 className={"pt-1"}>Kara</h5>
 
-          <div className="col-lg-4 pb-1 border-bottom">
-            <div className="row">
-              <div className="col-xl-12">
-                <h4>Kara</h4>
+            <Selector
+              label={"Rodzaj kary"}
+              options={penaltyOptions}
+              handleChange={(value) =>
+                setPenalty({ ...penalty, penaltyKind: value })
+              }
+              isValid={true}
+              isLoading={penaltyOptions.length === 0}
+            />
+            <textarea
+              placeholder={"Dodatkowy opis"}
+              value={penalty.penaltyDesc}
+              name="penaltyDesc"
+              onChange={handleChange}
+              className={"form-control centered-grid "}
+              rows={2}
+              disabled={disable}
+            />
 
-                <div className="inline-flex">
-                  <Selector
-                    label={"Rodzaj kary"}
-                    options={penaltyOptions}
-                    handleChange={(value) =>
-                      setPenalty({ ...penalty, penaltyKind: value })
-                    }
-                    isValid={true}
-                    isLoading={penaltyOptions.length === 0}
-                  />
-                </div>
-                <div className="inline-flex">
-                  <textarea
-                    placeholder={"Dodatkowy opis"}
-                    value={penalty.penaltyDesc}
-                    name="penaltyDesc"
-                    onChange={handleChange}
-                    className={"form-control centered-grid "}
-                    rows={2}
-                    disabled={disable}
-                  />
-                </div>
-
-                <div className="col-xl-12 pt-3">
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    onClick={addPenalty}
-                    disabled={disable || teamId === undefined}
-                  >
-                    Zapisz karę
-                  </button>
-                </div>
-              </div>
+            <div className="col-xl-12 pt-1">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={addPenalty}
+                disabled={disable || teamId === undefined}
+              >
+                Zapisz karę
+              </button>
             </div>
+          </div>
+          <div className="col-lg-10 border-bottom" style={{ height: "40px" }}>
+            <p className={"px-0"}>{msg}</p>
           </div>
         </div>
       </div>
-      <div className="col-sm pt-5"></div>{" "}
-      <Link to={"/add_score?" + eventId} className="btn btn-primary">
+      <div className="col-sm pt-1"></div>
+      <Button
+        className={"mx-2 py-1 px-2"}
+        variant="primary"
+        onClick={() =>
+          navigate(`/add_score`, {
+            state: { eventId: eventId },
+          })
+        }
+      >
         Przejdź do dodawania wyników
-      </Link>
+      </Button>
+      <Button
+        className={"mx-2 py-1 px-2"}
+        variant="success"
+        onClick={() =>
+          navigate(`/event`, {
+            state: { eventId: eventId },
+          })
+        }
+      >
+        Wyniki
+      </Button>
     </div>
   );
 };

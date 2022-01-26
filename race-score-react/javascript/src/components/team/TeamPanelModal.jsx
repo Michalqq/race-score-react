@@ -17,6 +17,7 @@ import authHeader from "../../service/auth-header";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { QuickJoinPanel } from "../join/QuickJoinPanel";
 
 export const TeamPanelModal = ({ show, handleClose, event }) => {
   const disable = false;
@@ -30,13 +31,13 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   const [fileMsg, setFileMsg] = useState();
   const [notJoined, setNotJoined] = useState(false);
   const [myEvent, setMyEvent] = useState();
+  const [quickJoin, setQuickJoin] = useState();
 
   const loggedUser = sessionStorage.getItem("username") !== null;
 
   useEffect(() => {
     if (!show) return;
 
-    console.log(event);
     fetchGetTeam();
     setCarsOption([]);
     setUploading(false);
@@ -146,7 +147,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   return (
     <div>
       <Modal
-        show={show && !addCar}
+        show={show && !addCar && !quickJoin}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
@@ -181,7 +182,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                 )}`}
               </p>
             </div>
-            <div className="row mx-2">
+            <div className="row mx-2 justify-content-center">
               <div className="col-lg-6 pb-3 px-1">
                 <Card className="text-center">
                   <Card.Header className="bg-dark text-white">
@@ -206,49 +207,61 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                   </Card.Body>
                 </Card>
               </div>
-              <div className="col-lg-6 pb-3 px-1">
-                <Card className="text-center ">
-                  <Card.Header className="bg-dark text-white">
-                    Wpisowe
-                  </Card.Header>
-                  <Card.Body>
-                    {notJoined ? (
-                      <p>
-                        Zapisz się a następnie będziesz miał możliwość
-                        przesłania pliku
-                      </p>
-                    ) : (
-                      <p>Dodaj plik z potwierdzeniem opłacenia wpisowego</p>
-                    )}
-                    <input
-                      disabled={notJoined}
-                      type="file"
-                      name="file"
-                      accept="application/pdf,application/vnd.ms-excel"
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                    {fileMsg && <p className="fw-bold m-2">{fileMsg}</p>}
-                    <div>
-                      {uploading ? (
-                        <Spinner animation="border" variant="secondary" />
-                      ) : (
-                        <Button
-                          className={"mt-2 mb-0"}
-                          variant="secondary"
-                          onClick={() =>
-                            fetchUpload(event.eventId, team.teamId)
-                          }
-                          disabled={file === undefined}
-                        >
-                          Wyślij plik
-                        </Button>
-                      )}
-                    </div>
-                  </Card.Body>
-                </Card>
-              </div>
             </div>
           </Tab>
+          {!loggedUser ? (
+            <></>
+          ) : (
+            <Tab eventKey="entryFee" title="Wpisowe">
+              <div className="row mx-2 justify-content-center">
+                <div className="col-lg-6 pb-3 px-1">
+                  <h5 className="text-center py-4">
+                    Tutaj możesz dodać plik z potwierdzeniem wpisowego,
+                    przyspieszy to proces odbioru administracyjnego
+                  </h5>
+                  <Card className="text-center ">
+                    <Card.Header className="bg-dark text-white">
+                      Wpisowe
+                    </Card.Header>
+                    <Card.Body>
+                      {notJoined ? (
+                        <p>
+                          Zapisz się a następnie będziesz miał możliwość
+                          przesłania pliku
+                        </p>
+                      ) : (
+                        <p>Dodaj plik z potwierdzeniem opłacenia wpisowego</p>
+                      )}
+                      <input
+                        disabled={notJoined}
+                        type="file"
+                        name="file"
+                        accept="application/pdf,application/vnd.ms-excel"
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                      {fileMsg && <p className="fw-bold m-2">{fileMsg}</p>}
+                      <div>
+                        {uploading ? (
+                          <Spinner animation="border" variant="secondary" />
+                        ) : (
+                          <Button
+                            className={"mt-2 mb-0"}
+                            variant="secondary"
+                            onClick={() =>
+                              fetchUpload(event.eventId, team.teamId)
+                            }
+                            disabled={file === undefined}
+                          >
+                            Wyślij plik
+                          </Button>
+                        )}
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            </Tab>
+          )}
           {!loggedUser ? (
             <></>
           ) : (
@@ -482,28 +495,45 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
             </Tab>
           )}
         </Tabs>
-        <Modal.Footer className={"justify-content-center"}>
-          <Button
-            className={"m-1"}
-            variant="success"
-            onClick={() => {
-              loggedUser ? addTeam() : navigate(`login?${event.eventId}`);
-            }}
-          >
-            {myEvent?.joined ? "Ok" : "Zapisz / dodaj"}
-          </Button>
-          <Button className={"m-1"} variant="secondary" onClick={handleClose}>
-            Zamknij okno
-          </Button>
-          {myEvent?.joined && (
-            <Button
-              className={"mx-3"}
-              variant="danger"
-              onClick={() => fetchRemoveFromEvent()}
-            >
-              Wypisz się
-            </Button>
-          )}
+        <Modal.Footer className={""}>
+          <div className="row col-lg-12">
+            <div className="col-lg-9 justify-content-center d-inline-flex">
+              <Button
+                className={"m-1"}
+                variant="success"
+                onClick={() => {
+                  loggedUser ? addTeam() : navigate(`login?${event.eventId}`);
+                }}
+              >
+                {myEvent?.joined ? "Ok" : "Zapisz (po zalogowaniu)"}
+              </Button>
+              <Button
+                className={"m-1"}
+                variant="secondary"
+                onClick={handleClose}
+              >
+                Zamknij okno
+              </Button>
+              {myEvent?.joined && (
+                <Button
+                  className={"mx-3"}
+                  variant="danger"
+                  onClick={() => fetchRemoveFromEvent()}
+                >
+                  Wypisz się
+                </Button>
+              )}
+            </div>
+            <div className="col-lg-3 justify-content-end d-inline-flex">
+              <Button
+                className={"m-1"}
+                variant="secondary"
+                onClick={() => setQuickJoin(true)}
+              >
+                Zapisz się bez logowania
+              </Button>
+            </div>
+          </div>
         </Modal.Footer>
       </Modal>
       <CarPanelModal
@@ -514,6 +544,11 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
         }}
         teamId={team?.teamId}
         carToEdit={addCar}
+      />
+      <QuickJoinPanel
+        show={quickJoin}
+        handleClose={() => setQuickJoin()}
+        eventId={event?.eventId}
       />
     </div>
   );

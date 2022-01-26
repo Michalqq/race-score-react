@@ -12,6 +12,7 @@ export const InputLabeled = ({
   big = false,
   type = "text",
   multiline,
+  required,
 }) => {
   const [error, setError] = useState(false);
 
@@ -52,16 +53,32 @@ export const InputLabeled = ({
         {label}
       </span>
       {multiline === undefined && (
-        <input
-          name={name}
-          className={"form-control " + (big ? "" : "my-input") + errorClass}
-          value={value}
-          placeholder={inputPlaceholder}
-          onChange={(e) => onChange(e)}
-          disabled={disabled}
-          max={max}
-          type={type}
-        ></input>
+        <>
+          {required ? (
+            <input
+              name={name}
+              className={"form-control " + (big ? "" : "my-input") + errorClass}
+              value={value}
+              placeholder={inputPlaceholder}
+              onChange={(e) => onChange(e)}
+              disabled={disabled}
+              max={max}
+              type={type}
+              required
+            ></input>
+          ) : (
+            <input
+              name={name}
+              className={"form-control " + (big ? "" : "my-input") + errorClass}
+              value={value}
+              placeholder={inputPlaceholder}
+              onChange={(e) => onChange(e)}
+              disabled={disabled}
+              max={max}
+              type={type}
+            ></input>
+          )}
+        </>
       )}
       {multiline !== undefined && (
         <textarea
