@@ -48,8 +48,19 @@ const PenaltyTable = (props) => {
         disableFilters: true,
         disableSortBy: true,
         Cell: (row) => (
-          <Badge className={"p-1 py-0 "} bg="primary">
-            {row.value}
+          <Badge
+            style={{
+              paddingTop: "5px",
+              paddingLeft: "5px",
+              width: "30px",
+              height: "30px",
+              borderRadius: "20px",
+              backgroundColor: "#270ca4 !important",
+              fontSize: 12,
+              fontWeight: 700,
+            }}
+          >
+            {"#" + row.value}
           </Badge>
         ),
       },
