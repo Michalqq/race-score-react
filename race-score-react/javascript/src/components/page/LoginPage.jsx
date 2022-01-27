@@ -31,7 +31,7 @@ export const LoginPage = (props) => {
         }
       })
       .catch((err) => {
-        setError("Błędne dane logowania");
+        setError(err.response.data);
       });
   };
 
@@ -66,7 +66,7 @@ export const LoginPage = (props) => {
                 {logged && logged !== null && (
                   <p>{`Zalogowany użytkownik: ${logged}`}</p>
                 )}
-                {error && <p>{`Błąd: ${error}`}</p>}
+                {error && <p>{`${error}`}</p>}
                 <Button
                   className={"px-4 m-3"}
                   variant="success"

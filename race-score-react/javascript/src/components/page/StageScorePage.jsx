@@ -124,10 +124,10 @@ const StageScorePage = (props) => {
         Cell: (row) => (
           <Badge
             style={{
-              paddingTop: "8px",
-              paddingLeft: "5px",
-              width: "30px",
-              height: "30px",
+              paddingTop: "5px",
+              paddingLeft: "1px",
+              width: "25px",
+              height: "25px",
               borderRadius: "20px",
               backgroundColor: "#270ca4 !important",
             }}
@@ -250,7 +250,7 @@ const StageScorePage = (props) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-xl-6">
+        <div className="col-xl-6 px-1">
           <div className="shadow bg-body rounded">
             <div
               className="fw-bold alert alert-secondary p-1 m-0 "
@@ -273,7 +273,7 @@ const StageScorePage = (props) => {
             />
           </div>
         </div>
-        <div className="col-xl-6">
+        <div className="col-xl-6 px-1">
           <div className="shadow bg-body rounded">
             <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
               {`Czas PO - ${stageName}`}
@@ -293,7 +293,7 @@ const StageScorePage = (props) => {
             />
           </div>
         </div>
-        <div className="col-xl-12">
+        <div className="col-xl-12 px-1">
           <div className="shadow bg-body rounded mt-4 p-0">
             <div className="fw-bold alert alert-secondary p-1 m-0" role="alert">
               {"Kary"}

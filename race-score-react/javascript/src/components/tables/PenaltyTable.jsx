@@ -41,44 +41,40 @@ const PenaltyTable = (props) => {
   const columns = useMemo(
     () => [
       {
-        width: "5%",
-        id: "nr",
-        Header: "Nr",
-        accessor: (cellInfo) => cellInfo.number,
-        disableFilters: true,
-        disableSortBy: true,
-        Cell: (row) => (
-          <Badge
-            style={{
-              paddingTop: "5px",
-              paddingLeft: "5px",
-              width: "30px",
-              height: "30px",
-              borderRadius: "20px",
-              backgroundColor: "#270ca4 !important",
-              fontSize: 12,
-              fontWeight: 700,
-            }}
-          >
-            {"#" + row.value}
-          </Badge>
-        ),
-      },
-      {
         width: "20%",
         id: "team",
         Header: "Załoga",
         disableFilters: true,
         disableSortBy: true,
         Cell: (cellInfo) => (
-          <TeamDiv
-            line1={cellInfo.row.original.driver}
-            line2={cellInfo.row.original.coDriver}
-          />
+          <>
+            <div className="py-1 px-2 mx-1 d-grid">
+              <Badge
+                style={{
+                  paddingTop: "3px",
+                  paddingLeft: "1px",
+                  width: "25px",
+                  height: "25px",
+                  borderRadius: "20px",
+                  backgroundColor: "#270ca4 !important",
+                  fontSize: 12,
+                  fontWeight: 700,
+                }}
+              >
+                {"#" + cellInfo.row.original.number}
+              </Badge>
+            </div>
+            <div className="px-1 mx-1 d-grid">
+              <TeamDiv
+                line1={cellInfo.row.original.driver}
+                line2={cellInfo.row.original.coDriver}
+              />
+            </div>
+          </>
         ),
       },
       {
-        width: "60%",
+        width: "70%",
         id: "penalty",
         Header: "Czas - Powód - OS/PS",
         disableFilters: true,
@@ -88,23 +84,25 @@ const PenaltyTable = (props) => {
             {cellInfo.row.original.penalties.map((penalty) => (
               <>
                 <tr>
-                  <td className="text-left fw-bolder">
+                  <td className="text-left fw-bolder" style={{ width: "20%" }}>
                     {penalty.penaltySec + " s"}
                   </td>
-                  <td className="text-left px-3 width-300">
+                  <td className="text-left px-3" style={{ width: "45%" }}>
                     {penalty.description}
                   </td>
-                  <td className="text-left px-3">{penalty.name}</td>
-                  <td>
-                    {/* {props.referee ? ( */}
-                    <FontAwesomeIcon
-                      icon={faTimesCircle}
-                      onClick={() => removePenalty(penalty.penaltyId)}
-                      title={"Usuń kare"}
-                    />
-                    {/* ) : (
+                  <td className="text-left px-3" style={{ width: "50%" }}>
+                    {penalty.name}
+                  </td>
+                  <td style={{ width: "15%" }}>
+                    {props.referee ? (
+                      <FontAwesomeIcon
+                        icon={faTimesCircle}
+                        onClick={() => removePenalty(penalty.penaltyId)}
+                        title={"Usuń kare"}
+                      />
+                    ) : (
                       <></>
-                    )} */}
+                    )}
                   </td>
                 </tr>
               </>
@@ -117,17 +115,15 @@ const PenaltyTable = (props) => {
   );
 
   return (
-    <>
-      <ResultTable
-        columns={columns}
-        data={penalties}
-        pageCount={3}
-        isLoading={isLoading}
-        isFooter={false}
-        isHeader={true}
-        cursor={"pointer"}
-      />
-    </>
+    <ResultTable
+      columns={columns}
+      data={penalties}
+      pageCount={3}
+      isLoading={isLoading}
+      isFooter={false}
+      isHeader={true}
+      cursor={"pointer"}
+    />
   );
 };
 

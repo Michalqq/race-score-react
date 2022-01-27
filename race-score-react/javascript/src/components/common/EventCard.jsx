@@ -4,7 +4,14 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-export const EventCard = ({ event, onJoin, onTeamList, onScore, onEdit }) => {
+export const EventCard = ({
+  event,
+  onJoin,
+  onTeamList,
+  onScore,
+  onEdit,
+  mainAdmin,
+}) => {
   return (
     <div className="col-lg-6 pb-3 u-box-shadow">
       <Card className="">
@@ -12,7 +19,7 @@ export const EventCard = ({ event, onJoin, onTeamList, onScore, onEdit }) => {
           <div class="row px-1">
             <div class="col-11 px-0">{event?.name}</div>
             <div class="col-1 px-0 text-end">
-              {onEdit !== undefined && (
+              {onEdit !== undefined && mainAdmin && (
                 <FontAwesomeIcon
                   className={"text-white fa-lg"}
                   icon={faEdit}

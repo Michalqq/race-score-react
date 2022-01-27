@@ -41,8 +41,7 @@ export const NavigationBar = () => {
           <Nav className="me-auto">
             <Nav.Link href="/">Lista wydarzeń</Nav.Link>
 
-            {/* {referee && location.state?.eventId !== undefined && ( */}
-            {location.state?.eventId !== undefined && (
+            {referee && location.state?.eventId !== undefined && (
               <NavDropdown title="Administrator" id="basic-nav-dropdown">
                 <NavDropdown.Item
                   onClick={() =>

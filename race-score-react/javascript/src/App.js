@@ -22,7 +22,7 @@ function App() {
       <BrowserRouter>
         <NavigationBar />
         <div className="shadow bg-body rounded pb-3">
-          <div className="p-3">
+          <div className="p-1">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />

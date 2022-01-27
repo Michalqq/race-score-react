@@ -20,6 +20,8 @@ const HomePage = (props) => {
   const [eventToTeamList, setEventToTeamList] = useState();
   const [eventToTeamPanel, setEventToTeamPanel] = useState();
   const [loading, setLoading] = useState(true);
+  const [mainAdmin, setMainAdmin] = useState(false);
+
   let eventRedirect = useLocation().search;
 
   const navigate = useNavigate();
@@ -52,8 +54,25 @@ const HomePage = (props) => {
       });
   };
 
+  const fetchMainAdmin = () => {
+    if (sessionStorage.getItem("username") !== null)
+      axios
+        .get(
+          `${backendUrl()}/auth/isMainAdmin?login=${sessionStorage.getItem(
+            "username"
+          )}`,
+          {
+            headers: authHeader(),
+          }
+        )
+        .then((res) => {
+          setMainAdmin(res.data);
+        });
+  };
+
   useEffect(() => {
     fetchEvents();
+    fetchMainAdmin();
   }, []);
 
   return (
@@ -75,6 +94,7 @@ const HomePage = (props) => {
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
             onTeamList={() => setEventToTeamList(x)}
             onEdit={() => setCreateEvent(x)}
+            mainAdmin={mainAdmin}
           />
         ))}
       </div>
@@ -95,17 +115,21 @@ const HomePage = (props) => {
             onJoin={() => setEventToTeamPanel(x)}
             onScore={() => navigate("event", { state: { eventId: x.eventId } })}
             onTeamList={() => setEventToTeamList(x)}
+            onEdit={() => setCreateEvent(x)}
+            mainAdmin={mainAdmin}
           />
         ))}
       </div>
       <div className="p-3 border-top">
-        <Button
-          className={"border-top mx-3"}
-          variant="primary"
-          onClick={() => setCreateEvent(true)}
-        >
-          Dodaj wydarzenie
-        </Button>
+        {mainAdmin && (
+          <Button
+            className={"border-top mx-3"}
+            variant="primary"
+            onClick={() => setCreateEvent(true)}
+          >
+            Dodaj wydarzenie
+          </Button>
+        )}
       </div>
       <NewEventForm
         show={createEvent !== undefined}
@@ -115,15 +139,28 @@ const HomePage = (props) => {
         }}
         event={createEvent}
       />
-      <AdminTeamList
-        show={eventToTeamList !== undefined}
-        handleClose={() => {
-          setEventToTeamList();
-          fetchEvents();
-        }}
-        eventId={eventToTeamList?.eventId}
-        started={eventToTeamList?.started}
-      />
+      {mainAdmin && (
+        <AdminTeamList
+          show={eventToTeamList !== undefined}
+          handleClose={() => {
+            setEventToTeamList();
+            fetchEvents();
+          }}
+          eventId={eventToTeamList?.eventId}
+          started={eventToTeamList?.started}
+        />
+      )}
+      {!mainAdmin && (
+        <TeamListModal
+          show={eventToTeamList !== undefined}
+          handleClose={() => {
+            setEventToTeamList();
+            fetchEvents();
+          }}
+          eventId={eventToTeamList?.eventId}
+          started={eventToTeamList?.started}
+        />
+      )}
       <TeamPanelModal
         show={eventToTeamPanel !== undefined}
         handleClose={() => {

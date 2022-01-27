@@ -20,7 +20,7 @@ export const RegisterPage = (props) => {
         setRegistred(res.data.username);
       })
       .catch((err) => {
-        setError(err);
+        setError(err.response.data);
       });
   };
 
@@ -62,9 +62,7 @@ export const RegisterPage = (props) => {
                 {registred && (
                   <p>{`Zarejestrowano użytkownika: ${registred}`}</p>
                 )}
-                {error && (
-                  <p>{`Coś poszło nie tak: ${error}. Popraw formularz`}</p>
-                )}
+                {error && <p>{`${error}. Popraw formularz`}</p>}
                 <Button
                   className={"px-4 mt-3"}
                   variant="success"

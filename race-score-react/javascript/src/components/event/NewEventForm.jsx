@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { Selector } from "../common/Selector";
 import authHeader from "../../service/auth-header";
+import { OkCancelModal } from "../common/Modal";
 
 export const NewEventForm = ({ show, handleClose, event }) => {
   const [myEvent, setMyEvent] = useState({
@@ -52,11 +53,10 @@ export const NewEventForm = ({ show, handleClose, event }) => {
   const [refereeOptions, setRefereeOptions] = useState([]);
   const [eventClasses, setEventClasses] = useState([]);
   const [eventClassesOptions, setEventClassesOptions] = useState([]);
+  const [removeEvent, setRemoveEvent] = useState(false);
 
   useEffect(() => {
     if (!show) return;
-
-    console.log(event);
 
     axios
       .get(`${backendUrl()}/event/getRefereeOptions`, {
@@ -145,15 +145,6 @@ export const NewEventForm = ({ show, handleClose, event }) => {
   const removeClass = (id) => {
     const tempClass = eventClasses.filter((x) => x.carClassId !== id);
     setEventClasses(tempClass);
-
-    // const removedClass = eventClasses.filter((x) => x.carClassId === id);
-    // const classesOptions = eventClassesOptions;
-    // classesOptions.push({
-    //   value: removedClass.carClassName,
-    //   label: removedClass.carClassId,
-    //   defValue: false,
-    // });
-    // setEventClassesOptions(classesOptions);
   };
 
   const addReferee = (id) => {
@@ -193,6 +184,14 @@ export const NewEventForm = ({ show, handleClose, event }) => {
           })
         );
         setEventPaths(res.data.eventPaths);
+      });
+  };
+
+  const fetchRemoveEvent = () => {
+    axios
+      .get(`${backendUrl()}/event/deleteEvent?eventId=${event.eventId}`)
+      .then((res) => {
+        handleClose();
       });
   };
 
@@ -540,8 +539,29 @@ export const NewEventForm = ({ show, handleClose, event }) => {
             </Card>
           </div>
         </div>
+        {removeEvent && (
+          <OkCancelModal
+            show={true}
+            title={"Usuwanie wydarzenia"}
+            text={`Czy napewno chcesz usunąć wydarzenie? Operacja nieodwracalna`}
+            handleAccept={() => {
+              fetchRemoveEvent();
+              setRemoveEvent(false);
+            }}
+            handleClose={() => setRemoveEvent(false)}
+          />
+        )}
       </Modal.Body>
       <Modal.Footer className={"justify-content-center"}>
+        {event && (
+          <Button
+            className={"mx-3"}
+            variant="secondary"
+            onClick={() => setRemoveEvent(true)}
+          >
+            Usuń wydarzenie
+          </Button>
+        )}
         <Button className={"mx-3"} variant="secondary" onClick={handleClose}>
           Anuluj
         </Button>

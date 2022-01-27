@@ -55,10 +55,10 @@ const DisqualificationTable = (props) => {
         Cell: (row) => (
           <Badge
             style={{
-              paddingTop: "5px",
-              paddingLeft: "5px",
-              width: "30px",
-              height: "30px",
+              paddingTop: "3px",
+              paddingLeft: "1px",
+              width: "25px",
+              height: "25px",
               borderRadius: "20px",
               backgroundColor: "#270ca4 !important",
               fontSize: 12,
@@ -99,15 +99,15 @@ const DisqualificationTable = (props) => {
                   </td>
                   <td className="text-left px-3">{penalty.name}</td>
                   <td>
-                    {/* {props.referee ? ( */}
-                    <FontAwesomeIcon
-                      icon={faTimesCircle}
-                      onClick={() => removePenalty(penalty.penaltyId)}
-                      title={"Wycofaj dyskwalifikacje"}
-                    />
-                    {/* ) : (
+                    {props.referee ? (
+                      <FontAwesomeIcon
+                        icon={faTimesCircle}
+                        onClick={() => removePenalty(penalty.penaltyId)}
+                        title={"Wycofaj dyskwalifikacje"}
+                      />
+                    ) : (
                       <></>
-                    )} */}
+                    )}
                   </td>
                 </tr>
               </>
