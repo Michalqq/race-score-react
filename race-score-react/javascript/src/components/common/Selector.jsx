@@ -65,6 +65,7 @@ export const Selector = (props) => {
           placeholder={props.placeholder}
           isDisabled={disabled || props.isLoading}
           isLoading={props.isLoading}
+          readonly
         />
       </div>
     </>
