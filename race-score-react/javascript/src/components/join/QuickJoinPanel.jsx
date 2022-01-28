@@ -8,10 +8,12 @@ import { InputLabeled } from "../common/InputLabeled";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
+import { Selector } from "../common/Selector";
 
 export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
   const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
+  const [options, setOptions] = useState();
   const [team, setTeam] = useState({
     coSportLicense: false,
     sportLicense: false,
@@ -35,6 +37,9 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
 
   useEffect(() => {
     if (show) {
+      axios.get(`${backendUrl()}/team/getTeamOptionList`).then((res) => {
+        setOptions(res.data);
+      });
       setTeam({
         coSportLicense: false,
         sportLicense: false,
@@ -153,6 +158,20 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
                 big={true}
                 required={true}
                 onlyNumber={true}
+              />
+              <Selector
+                label={"Rodzaj napędu"}
+                options={options?.driveTypeOption}
+                handleChange={(value) =>
+                  setTeam({
+                    ...team,
+                    currentCar: {
+                      ...team.currentCar,
+                      driveType: value,
+                    },
+                  })
+                }
+                isValid={true}
               />
               <div className="d-flex justify-content-center">
                 <Form>
