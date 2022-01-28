@@ -33,7 +33,7 @@ export const NavigationBar = () => {
   );
 
   return (
-    <Navbar bg="warning gradient" expand="lg">
+    <Navbar bg="primary gradient" expand="lg">
       <Container>
         <Navbar.Brand href="/">Wyniki online AKBP</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

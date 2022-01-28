@@ -199,46 +199,51 @@ const StageScorePage = (props) => {
   return (
     <>
       <div className="row">
+        <p style={{ fontSize: "11px" }} className="my-0 py-0">
+          Aplikacja w fazie testów
+        </p>
         <h4>{event?.name || ""}</h4>
-        <div className="col-xl-4">
-          <div className="m-2 text-center">
-            {event?.logoPath !== undefined && event?.logoPath !== null ? (
-              <img
-                style={{ height: "140px" }}
-                className="img-fluid rounded float-left"
-                src="http://www.automobilklub.chelm.pl/img_news/30wospb.jpg"
-                alt="Logo"
-              ></img>
-            ) : (
-              <img
-                style={{ height: "140px" }}
-                src="/akbpLogo.png"
-                className="img-fluid rounded float-left"
-                alt="..."
-              />
-            )}
+        <div className="col-xl-8 d-flex">
+          <div className="col-6">
+            <div className="m-2 text-center">
+              {event?.logoPath !== undefined && event?.logoPath !== null ? (
+                <img
+                  style={{ height: "140px" }}
+                  className="img-fluid rounded float-left"
+                  src="http://www.automobilklub.chelm.pl/img_news/30wospb.jpg"
+                  alt="Logo"
+                ></img>
+              ) : (
+                <img
+                  style={{ height: "140px" }}
+                  src="/akbpLogo.png"
+                  className="img-fluid rounded float-left"
+                  alt="..."
+                />
+              )}
+            </div>
           </div>
-        </div>
-        <div className="col-xl-4">
-          <Selector
-            label={"Klasyfikacja"}
-            options={classesOptions}
-            handleChange={(value) => {
-              setCurrentClass(
-                classesOptions.find((e) => e.value === value).label
-              );
-            }}
-            isValid={true}
-          />
-          <Selector
-            label={"PS"}
-            options={psOptions}
-            handleChange={(value) => {
-              setStage(value);
-              setStageName(psOptions.find((e) => e.value === value).label);
-            }}
-            isValid={true}
-          />
+          <div className="col-6">
+            <Selector
+              label={"Klasyfikacja"}
+              options={classesOptions}
+              handleChange={(value) => {
+                setCurrentClass(
+                  classesOptions.find((e) => e.value === value).label
+                );
+              }}
+              isValid={true}
+            />
+            <Selector
+              label={"PS"}
+              options={psOptions}
+              handleChange={(value) => {
+                setStage(value);
+                setStageName(psOptions.find((e) => e.value === value).label);
+              }}
+              isValid={true}
+            />
+          </div>
         </div>
         <div className="col-xl-4">
           <div className="m-2 text-center">

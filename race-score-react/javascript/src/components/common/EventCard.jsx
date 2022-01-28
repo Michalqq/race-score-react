@@ -72,12 +72,12 @@ export const EventCard = ({
           </div>
         </Card.Body>
         <Card.Footer className="text-start py-0">
-          <div className="row ">
-            <div className="col-lg-4 my-1">
+          <div className="row my-2">
+            <div className="col-6 px-0">
               {new Date().getTime() <=
                 new Date(event.signDeadline).getTime() && (
                 <Button
-                  className={"mx-2 start-0 py-1 px-2"}
+                  className={"start-0 py-1 px-1"}
                   variant="success"
                   onClick={onJoin}
                 >
@@ -85,18 +85,16 @@ export const EventCard = ({
                 </Button>
               )}
             </div>
-
-            <div className="col-lg-3 my-1"></div>
-            <div className="col-lg-5 my-1 text-end">
+            <div className="col-6 px-0 d-flex justify-content-end">
               <Button
-                className={"py-1 px-2"}
+                className={"py-1 px-1"}
                 variant="dark"
                 onClick={onTeamList}
               >
-                Lista zapisanych
+                Lista
               </Button>
               <Button
-                className={"py-1 px-2 mx-3"}
+                className={"py-1 px-1 mx-1"}
                 variant="warning"
                 onClick={onScore}
               >

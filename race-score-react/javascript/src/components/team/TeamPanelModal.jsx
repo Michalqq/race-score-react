@@ -167,23 +167,28 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
             )}
           </Modal.Title>
         </Modal.Header>
+        <p style={{ fontSize: "11px" }} className="text-center my-0 py-0">
+          Aplikacja w fazie testów
+        </p>
         <Tabs className="m-0 fw-bold">
           <Tab eventKey="event" title="Informacje">
-            <div className="m-2 text-center">
-              <h3>{event?.name || ""}</h3>
-              <h5>{`Data wydarzenia:  `}</h5>
-              <h5 className="fw-bold">
-                {moment(event?.date).format(" dddd, DD MMM YYYY, HH:mm")}
-              </h5>
-              <p className="m-3">{event?.description || ""}</p>
-              <p className="fw-bold fst-italic m-4">
-                {`Koniec zapisów:  ${moment(event?.signDeadline).format(
-                  "dddd, DD MMM YYYY, HH:mm"
-                )}`}
-              </p>
-            </div>
-            <div className="row mx-2 justify-content-center">
-              <div className="col-lg-6 pb-3 px-1">
+            <div className="row">
+              <div className="col-lg-6 pb-3 px-3">
+                <div className="m-2 text-center">
+                  <h3>{event?.name || ""}</h3>
+                  <h5>{`Data wydarzenia:  `}</h5>
+                  <h5 className="fw-bold">
+                    {moment(event?.date).format(" dddd, DD MMM YYYY, HH:mm")}
+                  </h5>
+                  <p className="m-3">{event?.description || ""}</p>
+                  <p className="fw-bold fst-italic m-4">
+                    {`Koniec zapisów:  ${moment(event?.signDeadline).format(
+                      "dddd, DD MMM YYYY, HH:mm"
+                    )}`}
+                  </p>
+                </div>
+              </div>
+              <div className="col-lg-6 pb-3 px-3">
                 <Card className="text-center">
                   <Card.Header className="bg-dark text-white">
                     Linki związane z wydarzeniem
@@ -495,10 +500,20 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
             </Tab>
           )}
         </Tabs>
-        <Modal.Footer className={""}>
-          <div className="row col-lg-12">
-            <div className="col-lg-9 justify-content-center d-inline-flex">
-              <Button
+        <Modal.Footer>
+          <div className="row justify-content-center">
+            <div className="col-xl-12 d-flex">
+              <div className="">
+                <Button
+                  className={"m-1"}
+                  variant="success"
+                  onClick={() => setQuickJoin(true)}
+                >
+                  Zapisz się
+                </Button>
+              </div>
+              <div className="">
+                {/* <Button
                 className={"m-1"}
                 variant="success"
                 onClick={() => {
@@ -506,32 +521,24 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                 }}
               >
                 {myEvent?.joined ? "Ok" : "Zapisz (po zalogowaniu)"}
-              </Button>
-              <Button
-                className={"m-1"}
-                variant="secondary"
-                onClick={handleClose}
-              >
-                Zamknij okno
-              </Button>
-              {myEvent?.joined && (
+              </Button> */}
                 <Button
-                  className={"mx-3"}
-                  variant="danger"
-                  onClick={() => fetchRemoveFromEvent()}
+                  className={"m-1"}
+                  variant="secondary"
+                  onClick={handleClose}
                 >
-                  Wypisz się
+                  Zamknij okno
                 </Button>
-              )}
-            </div>
-            <div className="col-lg-3 justify-content-end d-inline-flex">
-              <Button
-                className={"m-1"}
-                variant="secondary"
-                onClick={() => setQuickJoin(true)}
-              >
-                Zapisz się bez logowania
-              </Button>
+                {myEvent?.joined && (
+                  <Button
+                    className={"mx-3"}
+                    variant="danger"
+                    onClick={() => fetchRemoveFromEvent()}
+                  >
+                    Wypisz się
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </Modal.Footer>

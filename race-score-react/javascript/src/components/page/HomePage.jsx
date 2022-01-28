@@ -34,9 +34,9 @@ const HomePage = (props) => {
       })
       .then((res) => {
         setFutureEvents(
-          res.data.filter(
-            (x) => new Date().getTime() <= new Date(x.date).getTime()
-          )
+          res.data
+            .filter((x) => new Date().getTime() <= new Date(x.date).getTime())
+            .sort((x, y) => (x.date < y.date ? -1 : 1))
         );
         setArchiveEvents(
           res.data.filter(
@@ -77,7 +77,10 @@ const HomePage = (props) => {
 
   return (
     <>
-      <Card className=" my-2 pt-1">
+      <p style={{ fontSize: "11px" }} className="my-0 py-0">
+        Aplikacja w fazie testów
+      </p>
+      <Card className=" my-1 bg-dark text-white">
         <h3>Najbliższe wydarzenia</h3>
       </Card>
       <div className="row justify-content-center">
@@ -98,7 +101,7 @@ const HomePage = (props) => {
           />
         ))}
       </div>
-      <Card className="my-2 pt-1">
+      <Card className="my-1 bg-dark text-white">
         <h3>Archiwalne wydarzenia</h3>
       </Card>
 

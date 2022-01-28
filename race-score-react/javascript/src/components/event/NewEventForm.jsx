@@ -169,8 +169,10 @@ export const NewEventForm = ({ show, handleClose, event }) => {
       .then((res) => {
         setMyEvent({
           ...res.data,
-          date: new Date(res.data.date),
-          signDeadline: new Date(res.data.signDeadline),
+          date: res.data.date ? new Date(res.data.date) : new Date(),
+          signDeadline: res.data.signDeadline
+            ? new Date(res.data.signDeadline)
+            : new Date(),
         });
         setStages(
           res.data.stages.map((x) => {

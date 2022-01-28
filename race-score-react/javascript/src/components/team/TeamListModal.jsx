@@ -98,6 +98,9 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         <Modal.Title>Lista zapisanych</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <p style={{ fontSize: "11px" }} className="text-center my-0 py-0">
+          Aplikacja w fazie testów
+        </p>
         {loading && (
           <div className="text-center">
             <Spinner animation="border" variant="secondary" size="lg" />
