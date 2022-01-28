@@ -6,12 +6,12 @@ import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ScoreDiv, ScoreDivPenalty, TeamDiv, CarDiv } from "../common/Div";
 import { Selector } from "../common/Selector";
-import Badge from "react-bootstrap/Badge";
 import { backendUrl } from "../utils/fetchUtils";
 import PenaltyTable from "../tables/PenaltyTable";
 import DisqualificationTable from "../tables/DisqualificationTable";
 import authHeader from "../../service/auth-header";
 import moment from "moment";
+import { NrBadge } from "../common/NrBadge";
 
 const StageScorePage = (props) => {
   const location = useLocation();
@@ -121,20 +121,7 @@ const StageScorePage = (props) => {
         accessor: (cellInfo) => cellInfo.number,
         disableFilters: true,
         disableSortBy: true,
-        Cell: (row) => (
-          <Badge
-            style={{
-              paddingTop: "5px",
-              paddingLeft: "1px",
-              width: "25px",
-              height: "25px",
-              borderRadius: "20px",
-              backgroundColor: "#270ca4 !important",
-            }}
-          >
-            {"#" + row.value}
-          </Badge>
-        ),
+        Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
       },
       {
         width: "20%",

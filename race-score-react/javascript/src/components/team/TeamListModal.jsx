@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { backendUrl } from "../utils/fetchUtils";
 import ResultTable from "../common/table/ResultTable";
 import authHeader from "../../service/auth-header";
+import { NrBadge } from "../common/NrBadge";
 
 export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
@@ -54,6 +55,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         Header: "#Nr",
         accessor: (cellInfo) => cellInfo.number,
         disableFilters: true,
+        Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
       },
       {
         width: "20%",
@@ -73,6 +75,13 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
           (cellInfo.team.currentCar?.brand || "") +
           " " +
           (cellInfo.team.currentCar?.model || ""),
+        disableFilters: true,
+      },
+      {
+        width: "12%",
+        id: "carClass",
+        Header: "Klasa",
+        accessor: (cellInfo) => cellInfo.carClass.name,
         disableFilters: true,
       },
       {

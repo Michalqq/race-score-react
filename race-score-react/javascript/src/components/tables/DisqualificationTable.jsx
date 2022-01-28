@@ -2,12 +2,12 @@
 import React, { useMemo, useEffect, useState } from "react";
 import ResultTable from "../common/table/ResultTable";
 import { TeamDiv } from "../common/Div";
-import Badge from "react-bootstrap/Button";
 import axios from "axios";
 import { backendUrl } from "../utils/fetchUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import authHeader from "../../service/auth-header";
+import { NrBadge } from "../common/NrBadge";
 
 const DisqualificationTable = (props) => {
   const [penalties, setPenalties] = useState([]);
@@ -52,22 +52,7 @@ const DisqualificationTable = (props) => {
         accessor: (cellInfo) => cellInfo.number,
         disableFilters: true,
         disableSortBy: true,
-        Cell: (row) => (
-          <Badge
-            style={{
-              paddingTop: "3px",
-              paddingLeft: "1px",
-              width: "25px",
-              height: "25px",
-              borderRadius: "20px",
-              backgroundColor: "#270ca4 !important",
-              fontSize: 12,
-              fontWeight: 700,
-            }}
-          >
-            {"#" + row.value}
-          </Badge>
-        ),
+        Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
       },
       {
         width: "20%",

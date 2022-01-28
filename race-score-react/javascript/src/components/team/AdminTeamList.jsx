@@ -19,7 +19,7 @@ import authHeader from "../../service/auth-header";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Card from "react-bootstrap/Card";
 import { Selector } from "../common/Selector";
-import Badge from "react-bootstrap/Badge";
+import { NrBadge } from "../common/NrBadge";
 
 export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
@@ -273,19 +273,9 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                         &#9776;
                                       </td>
                                       <td style={{ width: "50px" }}>
-                                        <Badge
-                                          style={{
-                                            paddingTop: "8px",
-                                            paddingLeft: "5px",
-                                            width: "30px",
-                                            height: "30px",
-                                            borderRadius: "20px",
-                                            backgroundColor:
-                                              "#270ca4 !important",
-                                          }}
-                                        >
-                                          {"#" + item.number}
-                                        </Badge>
+                                        <NrBadge
+                                          value={"#" + item.number}
+                                        ></NrBadge>
                                       </td>
                                       <td style={{ width: "270px" }}>
                                         {item.team.driver +

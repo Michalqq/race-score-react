@@ -2,7 +2,7 @@
 import React, { useMemo, useEffect, useState } from "react";
 import ResultTable from "../common/table/ResultTable";
 import { TeamDiv } from "../common/Div";
-import Badge from "react-bootstrap/Button";
+import { NrBadge } from "../common/NrBadge";
 import axios from "axios";
 import { backendUrl } from "../utils/fetchUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -49,20 +49,7 @@ const PenaltyTable = (props) => {
         Cell: (cellInfo) => (
           <>
             <div className="py-1 px-2 mx-1 d-grid">
-              <Badge
-                style={{
-                  paddingTop: "3px",
-                  paddingLeft: "1px",
-                  width: "25px",
-                  height: "25px",
-                  borderRadius: "20px",
-                  backgroundColor: "#270ca4 !important",
-                  fontSize: 12,
-                  fontWeight: 700,
-                }}
-              >
-                {"#" + cellInfo.row.original.number}
-              </Badge>
+              <NrBadge value={"#" + cellInfo.row.original.number}></NrBadge>
             </div>
             <div className="px-1 mx-1 d-grid">
               <TeamDiv
