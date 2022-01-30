@@ -41,7 +41,7 @@ const HomePage = (props) => {
         setArchiveEvents(
           res.data
             .filter((x) => new Date().getTime() > new Date(x.date).getTime())
-            .sort((x, y) => (x.date < y.date ? -1 : 1))
+            .sort((x, y) => (x.date > y.date ? -1 : 1))
         );
         if (eventRedirect !== undefined) {
           const event = res.data.find(
