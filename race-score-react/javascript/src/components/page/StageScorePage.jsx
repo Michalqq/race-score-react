@@ -106,7 +106,7 @@ const StageScorePage = (props) => {
   const columns = useMemo(
     () => [
       {
-        width: "2%",
+        width: "1%",
         id: "place",
         Header: "P.",
         accessor: (cellInfo) => cellInfo.place,
@@ -115,7 +115,7 @@ const StageScorePage = (props) => {
         Cell: (row) => <> {row.row.index + 1}</>,
       },
       {
-        width: "7%",
+        width: "3%",
         id: "nr",
         Header: "Nr",
         accessor: (cellInfo) => cellInfo.number,
