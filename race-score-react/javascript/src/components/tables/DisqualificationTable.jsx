@@ -114,6 +114,7 @@ const DisqualificationTable = (props) => {
         isFooter={false}
         isHeader={true}
         cursor={"pointer"}
+        manualPagination={true}
       />
     </>
   );

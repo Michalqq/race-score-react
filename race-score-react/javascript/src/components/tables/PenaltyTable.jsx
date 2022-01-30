@@ -110,6 +110,7 @@ const PenaltyTable = (props) => {
       isFooter={false}
       isHeader={true}
       cursor={"pointer"}
+      manualPagination={true}
     />
   );
 };

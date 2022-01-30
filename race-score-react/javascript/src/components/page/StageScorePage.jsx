@@ -262,6 +262,7 @@ const StageScorePage = (props) => {
               isFooter={false}
               isHeader={true}
               cursor={"pointer"}
+              manualPagination={true}
             />
           </div>
         </div>
@@ -282,6 +283,7 @@ const StageScorePage = (props) => {
               isFooter={false}
               isHeader={true}
               cursor={"pointer"}
+              manualPagination={true}
             />
           </div>
         </div>
