@@ -78,11 +78,7 @@ export const AddScorePage = (props) => {
       })
       .then((res) => {
         fetchTeamsOptions();
-        setMsg(
-          `Dodano wynik kierowcy: ${
-            teamOptions.find((x) => x.value === data.teamId)?.label
-          }`
-        );
+        setMsg(res.data);
         setTimeout(() => setMsg(), 10000);
       });
   };
@@ -126,10 +122,14 @@ export const AddScorePage = (props) => {
       return;
     }
     setValid();
-
+    console.log(scoreMiliSec);
+    console.log(scoreSec);
+    console.log(scoreMin);
     const startStageInMin = stageStartHour * 60 + stageStartMin;
     const scoreInMilis =
-      scoreMin * 60 * 1000 + scoreSec * 1000 + scoreMiliSec * 10;
+      Number(scoreMin) * 60 * 1000 +
+      Number(scoreSec) * 1000 +
+      Number(scoreMiliSec) * 10;
 
     const data = {
       teamId: teamId,

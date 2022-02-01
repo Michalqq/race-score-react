@@ -52,10 +52,7 @@ const PenaltyTable = (props) => {
               <NrBadge value={"#" + cellInfo.row.original.number}></NrBadge>
             </div>
             <div className="px-1 mx-1 d-grid">
-              <TeamDiv
-                line1={cellInfo.row.original.driver}
-                line2={cellInfo.row.original.coDriver}
-              />
+              <TeamDiv team={cellInfo.row.original} />
             </div>
           </>
         ),

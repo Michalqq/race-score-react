@@ -89,7 +89,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         id: "engine",
         Header: "Silnik",
         accessor: (cellInfo) =>
-          cellInfo.team.currentCar?.engineCapacity + " dm3" || "",
+          cellInfo.team.currentCar?.engineCapacity + " cm3" || "",
         disableFilters: true,
       },
     ],

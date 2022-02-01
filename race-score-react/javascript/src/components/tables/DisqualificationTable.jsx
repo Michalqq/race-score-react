@@ -60,12 +60,7 @@ const DisqualificationTable = (props) => {
         Header: "Załoga",
         disableFilters: true,
         disableSortBy: true,
-        Cell: (cellInfo) => (
-          <TeamDiv
-            line1={cellInfo.row.original.driver}
-            line2={cellInfo.row.original.coDriver}
-          />
-        ),
+        Cell: (cellInfo) => <TeamDiv team={cellInfo.row.original} />,
       },
       {
         width: "60%",

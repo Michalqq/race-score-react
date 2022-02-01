@@ -48,12 +48,13 @@ export const Selector = (props) => {
 
   return (
     <>
-      <div className="form-group px-1 py-0">
+      <div className="form-group py-1 ">
         {props.label && (
-          <span className="input-group-text mb-1 py-0 " id="">
+          <span className="input-group-text py-0 justify-content-center" id="">
             {props.label}
           </span>
         )}
+        {/* <p className="input-label">{props.label}</p> */}
         <Select
           aria-label="select-label"
           classNamePrefix="react-select"

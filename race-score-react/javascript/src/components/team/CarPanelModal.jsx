@@ -140,7 +140,7 @@ export const CarPanelModal = ({ show, handleClose, teamId, carToEdit }) => {
                 <div className="row py-2">
                   <div className="col-lg-3 px-1">
                     <InputLabeled
-                      label="Silnik [dm3]"
+                      label="Silnik [cm3]"
                       name="engineCapacity"
                       handleChange={handleChange}
                       big={true}

@@ -148,8 +148,13 @@
 }
 
 .select {
-  border: solid rgb(138, 138, 138) 2px;
+  border: solid rgb(138, 138, 138) 1px;
   border-radius: 5px;
+  width: 100%;
+}
+
+.form-control {
+  border-color: grey !important;
 }
 
 .react-select__menu-portal {
@@ -158,4 +163,36 @@
 
 .DayPickerInput {
   display: flex !important;
+}
+/* 
+.form-group {
+  margin-top: -15px;
+} */
+
+.input-label {
+  position: relative;
+  top: 23px;
+  left: 5px;
+  padding-left: 2px;
+  padding-right: 2px;
+  z-index: 10;
+  text-align: left;
+  background-color: white;
+  width: max-content;
+}
+
+.navbar {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  margin-left: -20%;
+  padding-left: 20%;
+  margin-right: -20%;
+  padding-right: 20%;
+  background-image: linear-gradient(rgba(0, 13, 83, 0.308), rgb(86, 159, 255));
+  box-shadow: 0 7px 6px -6px rgb(86, 159, 255);
+}
+.navbar-light,
+.navbar-brand,
+.nav-link {
+  color: rgb(27, 26, 26) !important;
 }

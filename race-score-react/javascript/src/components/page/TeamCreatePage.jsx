@@ -80,7 +80,7 @@ export const TeamCreatePage = (props) => {
                   value={team.car}
                 />
                 <InputLabeled
-                  label="Pojemność [dm3]"
+                  label="Pojemność [cm3]"
                   name="engine"
                   handleChange={handleChange}
                   disabled={disable}

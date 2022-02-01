@@ -26,10 +26,15 @@ export const InputData = ({
   let timeout;
 
   const onChange = (val) => {
+    console.log(val);
     value = onlyNumber ? numericValidation(val) : val;
+    console.log(val);
     value = isMsisdn ? msisdnValidation(value) : value;
+    console.log(val);
     value = isDuration ? durationValidation(value) : value;
+    console.log(val);
     value = isAmount ? amountValidation(value) : value;
+    console.log(val);
     setCellValue(value);
     if (handleChange !== undefined) handleChange(value);
   };

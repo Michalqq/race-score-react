@@ -28,6 +28,11 @@ const HomePage = (props) => {
 
   const fetchEvents = () => {
     setLoading(true);
+
+    let endDay = new Date();
+    endDay.setHours(23, 59, 59, 999);
+    endDay.setDate(new Date().getDate() - 1);
+
     axios
       .get(`${backendUrl()}/event/getAll`, {
         headers: authHeader(),
@@ -35,12 +40,12 @@ const HomePage = (props) => {
       .then((res) => {
         setFutureEvents(
           res.data
-            .filter((x) => new Date().getTime() <= new Date(x.date).getTime())
+            .filter((x) => endDay.getTime() <= new Date(x.date).getTime())
             .sort((x, y) => (x.date < y.date ? -1 : 1))
         );
         setArchiveEvents(
           res.data
-            .filter((x) => new Date().getTime() > new Date(x.date).getTime())
+            .filter((x) => endDay.getTime() > new Date(x.date).getTime())
             .sort((x, y) => (x.date > y.date ? -1 : 1))
         );
         if (eventRedirect !== undefined) {
@@ -94,7 +99,10 @@ const HomePage = (props) => {
             key={x.eventId}
             event={x}
             onJoin={() => setEventToTeamPanel(x)}
-            onScore={() => navigate("event", { state: { eventId: x.eventId } })}
+            onScore={() => {
+              localStorage.setItem("eventId", x.eventId);
+              navigate("event", { state: { eventId: x.eventId } });
+            }}
             onTeamList={() => setEventToTeamList(x)}
             onEdit={() => setCreateEvent(x)}
             mainAdmin={mainAdmin}
@@ -116,7 +124,10 @@ const HomePage = (props) => {
             key={x.eventId}
             event={x}
             onJoin={() => setEventToTeamPanel(x)}
-            onScore={() => navigate("event", { state: { eventId: x.eventId } })}
+            onScore={() => {
+              localStorage.setItem("eventId", x.eventId);
+              navigate("event", { state: { eventId: x.eventId } });
+            }}
             onTeamList={() => setEventToTeamList(x)}
             onEdit={() => setCreateEvent(x)}
             mainAdmin={mainAdmin}

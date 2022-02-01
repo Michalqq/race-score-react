@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 import ResultTable from "../common/table/ResultTable";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ScoreDiv, ScoreDivPenalty, TeamDiv, CarDiv } from "../common/Div";
 import { Selector } from "../common/Selector";
@@ -12,10 +12,12 @@ import DisqualificationTable from "../tables/DisqualificationTable";
 import authHeader from "../../service/auth-header";
 import moment from "moment";
 import { NrBadge } from "../common/NrBadge";
+import Button from "react-bootstrap/Button";
 
 const StageScorePage = (props) => {
   const location = useLocation();
-  const eventId = location.state.eventId;
+  const navigate = useNavigate();
+  const eventId = localStorage.getItem("eventId") || location.state.eventId;
 
   const GENERAL = "GENERALNA";
 
@@ -124,21 +126,15 @@ const StageScorePage = (props) => {
         Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
       },
       {
-        width: "20%",
+        width: "40%",
         id: "team",
         Header: "Załoga",
         disableFilters: true,
         disableSortBy: true,
-        Cell: (cellInfo) => (
-          <TeamDiv
-            line1={cellInfo.row.original.driver}
-            line2={cellInfo.row.original.coDriver}
-            line3={cellInfo.row.original.teamName}
-          />
-        ),
+        Cell: (cellInfo) => <TeamDiv team={cellInfo.row.original} />,
       },
       {
-        width: "20%",
+        width: "30%",
         id: "car",
         Header: "Samochód",
         disableFilters: true,
@@ -153,7 +149,7 @@ const StageScorePage = (props) => {
       {
         width: "15%",
         id: "score",
-        Header: "Czas / kary",
+        Header: "Czas/kary",
         accessor: (cellInfo) => cellInfo.stageScore,
         disableFilters: true,
         disableSortBy: true,
@@ -190,26 +186,19 @@ const StageScorePage = (props) => {
           Aplikacja w fazie testów
         </p>
         <h4>{event?.name || ""}</h4>
-        <div className="col-xl-8 d-flex">
-          <div className="col-6">
-            <div className="m-2 text-center">
-              {event?.logoPath !== undefined && event?.logoPath !== null ? (
+        <div className="col-xl-8 d-flex justify-content-center">
+          {event?.logoPath !== undefined && event?.logoPath !== null && (
+            <div className="col-6">
+              <div className="m-2 text-center">
                 <img
                   style={{ height: "140px" }}
                   className="img-fluid rounded float-left"
                   src="http://www.automobilklub.chelm.pl/img_news/30wospb.jpg"
                   alt="Logo"
                 ></img>
-              ) : (
-                <img
-                  style={{ height: "140px" }}
-                  src="/akbpLogo.png"
-                  className="img-fluid rounded float-left"
-                  alt="..."
-                />
-              )}
+              </div>
             </div>
-          </div>
+          )}
           <div className="col-6">
             <Selector
               label={"Klasyfikacja"}
@@ -238,6 +227,32 @@ const StageScorePage = (props) => {
             <h6 className="fw-bold">
               {moment(event?.date).format(" dddd, DD MMM YYYY, HH:mm")}
             </h6>
+            {referee && (
+              <>
+                <Button
+                  className={"m-1"}
+                  variant="success"
+                  onClick={() =>
+                    navigate(`/add_score`, {
+                      state: { eventId: eventId },
+                    })
+                  }
+                >
+                  Dodaj wynik
+                </Button>
+                <Button
+                  className={"m-1"}
+                  variant="primary"
+                  onClick={() =>
+                    navigate(`/add_penalty`, {
+                      state: { eventId: eventId },
+                    })
+                  }
+                >
+                  Dodaj kare
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

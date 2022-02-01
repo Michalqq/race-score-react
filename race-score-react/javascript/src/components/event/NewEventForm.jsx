@@ -322,7 +322,7 @@ export const NewEventForm = ({ show, handleClose, event }) => {
                     <thead>
                       <tr>
                         <th>Klasa</th>
-                        <th>Max silnik [dm3]</th>
+                        <th>Max silnik [cm3]</th>
                         <th className="text-end">Usuń</th>
                       </tr>
                     </thead>
@@ -354,7 +354,7 @@ export const NewEventForm = ({ show, handleClose, event }) => {
                       skipDefault={true}
                     />
                     <InputLabeled
-                      label="Max silnik [dm3]"
+                      label="Max silnik [cm3]"
                       name="name"
                       handleChange={(e) =>
                         setEventClass({

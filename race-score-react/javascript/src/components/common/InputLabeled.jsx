@@ -24,7 +24,7 @@ export const InputLabeled = ({
     if (/\D/.test(newValue)) {
       return "";
     }
-    return Number(newValue);
+    return newValue;
   };
 
   const maxValidation = (newValue) => {
@@ -45,13 +45,14 @@ export const InputLabeled = ({
   const errorClass = error ? " border border-danger border-3 rounded" : "";
 
   return (
-    <div className="form-group p-1">
+    <div className="form-group py-1">
       <span
         className={"input-group-text py-0 " + (big ? "" : "my-input")}
         id=""
       >
         {label}
       </span>
+      {/* <p className="input-label">{label}</p> */}
       {multiline === undefined && (
         <>
           {required ? (
