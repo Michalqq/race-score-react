@@ -188,11 +188,11 @@
   padding-left: 10%;
   margin-right: -8.6%;
   padding-right: 8%;
-  background-image: linear-gradient(rgb(20, 20, 31), rgb(26, 39, 73));
-  box-shadow: 0 7px 6px -6px rgb(26, 39, 73);
+  background-image: linear-gradient(rgb(0, 21, 212), rgb(78, 134, 255));
+  box-shadow: 0 7px 6px -6px rgb(78, 134, 255);
 }
 .navbar-light,
 .navbar-brand,
 .nav-link {
-  color: rgb(255, 255, 255) !important;
+  color: rgb(0, 0, 0) !important;
 }
