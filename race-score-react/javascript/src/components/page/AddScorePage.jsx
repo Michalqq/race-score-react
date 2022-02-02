@@ -84,6 +84,7 @@ export const AddScorePage = (props) => {
   };
 
   useEffect(() => {
+    if (eventId === undefined) navigate("/");
     fetchPsOptions();
   }, []);
 

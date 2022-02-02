@@ -87,6 +87,7 @@ const StageScorePage = (props) => {
   };
 
   useEffect(() => {
+    if (eventId === undefined) navigate("/");
     axios
       .get(`${backendUrl()}/event/checkReferee?eventId=${eventId}`, {
         headers: authHeader(),

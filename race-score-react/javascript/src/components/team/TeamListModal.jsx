@@ -9,7 +9,7 @@ import { backendUrl } from "../utils/fetchUtils";
 import ResultTable from "../common/table/ResultTable";
 import authHeader from "../../service/auth-header";
 import { NrBadge } from "../common/NrBadge";
-import { TeamDiv } from "../common/Div";
+import { CarDiv, TeamDiv } from "../common/Div";
 
 export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
@@ -70,11 +70,14 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         width: "12%",
         id: "car",
         Header: "Samochód",
-        accessor: (cellInfo) =>
-          (cellInfo.team.currentCar?.brand || "") +
-          " " +
-          (cellInfo.team.currentCar?.model || ""),
+        accessor: (cellInfo) => cellInfo.team.currentCar,
         disableFilters: true,
+        Cell: (row) => (
+          <CarDiv
+            line1={row.value.brand + " " + row.value.model}
+            carBrand={row.value.brand}
+          ></CarDiv>
+        ),
       },
       {
         width: "12%",

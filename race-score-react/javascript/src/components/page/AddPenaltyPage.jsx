@@ -82,6 +82,7 @@ export const AddPenaltyPage = (props) => {
   };
 
   useEffect(() => {
+    if (eventId === undefined) navigate("/");
     fetchPenaltyOptions();
   }, []);
 
