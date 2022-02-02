@@ -36,9 +36,11 @@ export const TeamDiv = ({ team }) => {
   );
 };
 export const CarDiv = ({ line1, line2, carBrand }) => {
-  const path = `https://vehapi.com/img/car-logos/${carBrand
-    ?.toLowerCase()
-    .replace(/ /g, "")}.png`;
+  let brand = carBrand?.toLowerCase().replace(/ /g, "");
+
+  if (brand === "vw") brand = "volkswagen";
+
+  const path = `https://vehapi.com/img/car-logos/${brand}.png`;
 
   return (
     <div className="col-12 d-flex">
