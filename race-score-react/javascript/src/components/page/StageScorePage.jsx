@@ -150,7 +150,7 @@ const StageScorePage = (props) => {
       {
         width: "10%",
         id: "score",
-        Header: "Czas/kary",
+        Header: "Czas/ kary",
         accessor: (cellInfo) => cellInfo.stageScore,
         disableFilters: true,
         disableSortBy: true,
