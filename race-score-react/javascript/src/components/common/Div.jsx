@@ -15,17 +15,17 @@ export const TeamDiv = ({ team }) => {
         {/* </div> */}
         {/* <div className="col-md-6"> */}
         <p className="text-left font12 m-0">
-          &#160; {getWithBracketIfNotEmpty(team.club)}
+          {getWithBracketIfNotEmpty(team.club)}
         </p>
         {/* </div> */}
       </div>
       <div className="d-flex" style={{ flexWrap: "wrap" }}>
         {/* <div className="col-md-6"> */}
-        <p className="text-left font13 m-0 p-0">{team.coDriver}</p>
+        <p className="text-left font13 fw-bolder m-0 p-0">{team.coDriver}</p>
         {/* </div> */}
         {/* <div className="col-md-6"> */}
         <p className="text-left font12 m-0 p-0">
-          &#160; {getWithBracketIfNotEmpty(team.coClub)}
+          {getWithBracketIfNotEmpty(team.coClub)}
         </p>
         {/* </div> */}
       </div>
