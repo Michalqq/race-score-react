@@ -126,7 +126,7 @@ const StageScorePage = (props) => {
         Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
       },
       {
-        width: "40%",
+        width: "35%",
         id: "team",
         Header: "Załoga",
         disableFilters: true,
@@ -134,7 +134,7 @@ const StageScorePage = (props) => {
         Cell: (cellInfo) => <TeamDiv team={cellInfo.row.original} />,
       },
       {
-        width: "30%",
+        width: "35%",
         id: "car",
         Header: "Samochód",
         disableFilters: true,
@@ -148,7 +148,7 @@ const StageScorePage = (props) => {
         ),
       },
       {
-        width: "15%",
+        width: "10%",
         id: "score",
         Header: "Czas/kary",
         accessor: (cellInfo) => cellInfo.stageScore,
@@ -162,7 +162,7 @@ const StageScorePage = (props) => {
         ),
       },
       {
-        width: "15%",
+        width: "10%",
         id: "result",
         Header: "Wynik",
         accessor: (cellInfo) => cellInfo.stageScore,

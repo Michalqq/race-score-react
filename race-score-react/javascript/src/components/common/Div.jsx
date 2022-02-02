@@ -42,34 +42,16 @@ export const CarDiv = ({ line1, line2, carBrand }) => {
 
   return (
     <div className="col-12 d-flex">
-      <div className="col-3">
-        {checkIfImageExists(path) && (
-          <img className="img-fluid" src={path} alt="Logo"></img>
-        )}
+      <div className="col-xl-3 col-4 py-2">
+        <img className="img-fluid" src={path} alt=""></img>
       </div>
-      <div className="col-9">
-        <h6 className="font14  m-0">{line1}</h6>
-        <p className="font13 m-0 p-0">{line2}</p>
+      <div className="col-xl-9 col-8">
+        <h6 className="font13  m-0">{line1}</h6>
+        <p className="font12 m-0 p-0">{line2}</p>
       </div>
     </div>
   );
 };
-
-function checkIfImageExists(url) {
-  const img = new Image();
-  img.src = url;
-  if (img.complete) {
-    return true;
-  } else {
-    img.onload = () => {
-      return true;
-    };
-
-    img.onerror = () => {
-      return false;
-    };
-  }
-}
 
 export const ScoreDiv = ({ line1, line2, line3 }) => {
   return (
