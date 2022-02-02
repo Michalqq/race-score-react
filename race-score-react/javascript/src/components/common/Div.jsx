@@ -14,7 +14,7 @@ export const TeamDiv = ({ team }) => {
         </h6>
         {/* </div> */}
         {/* <div className="col-md-6"> */}
-        <p className="text-left font13 m-0">
+        <p className="text-left font12 m-0">
           &#160; {getWithBracketIfNotEmpty(team.club)}
         </p>
         {/* </div> */}
@@ -24,7 +24,7 @@ export const TeamDiv = ({ team }) => {
         <p className="text-left font13 m-0 p-0">{team.coDriver}</p>
         {/* </div> */}
         {/* <div className="col-md-6"> */}
-        <p className="text-left font13 m-0 p-0">
+        <p className="text-left font12 m-0 p-0">
           &#160; {getWithBracketIfNotEmpty(team.coClub)}
         </p>
         {/* </div> */}
@@ -43,7 +43,12 @@ export const CarDiv = ({ line1, line2, carBrand }) => {
   return (
     <div className="col-12 d-flex">
       <div className="col-xl-3 col-5 py-2">
-        <img className="img-fluid" src={path} alt=""></img>
+        <img
+          className="img-fluid"
+          style={{ height: "28px" }}
+          src={path}
+          alt=""
+        ></img>
       </div>
       <div className="col-xl-9 col-7">
         <h6 className="font13  m-0">{line1}</h6>

@@ -49,7 +49,7 @@ const PenaltyTable = (props) => {
         Cell: (cellInfo) => (
           <>
             <div className="py-1 px-2 mx-1 d-grid">
-              <NrBadge value={"#" + cellInfo.row.original.number}></NrBadge>
+              <NrBadge value={cellInfo.row.original.number}></NrBadge>
             </div>
             <div className="px-1 mx-1 d-grid">
               <TeamDiv team={cellInfo.row.original} />

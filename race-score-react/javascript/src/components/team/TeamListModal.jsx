@@ -56,7 +56,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         Header: "#Nr",
         accessor: (cellInfo) => cellInfo.number,
         disableFilters: true,
-        Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
+        Cell: (row) => <NrBadge value={row.value}></NrBadge>,
       },
       {
         width: "20%",

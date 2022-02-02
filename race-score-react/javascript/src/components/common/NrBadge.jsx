@@ -6,13 +6,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export const NrBadge = ({ value }) => {
   return (
     <Badge
+      bg="success"
       style={{
-        paddingTop: "8px",
-        paddingLeft: "1px",
-        width: "25px",
-        height: "25px",
+        paddingTop: "6px",
+        justifyContent: "center",
+        display: "grid",
+        width: "22px",
+        height: "22px",
         borderRadius: "20px",
-        backgroundColor: "#270ca4 !important",
         fontSize: "10px",
       }}
     >

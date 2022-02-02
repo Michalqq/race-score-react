@@ -288,9 +288,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                         />
                                       </td>
                                       <td style={{ width: "50px" }}>
-                                        <NrBadge
-                                          value={"#" + item.number}
-                                        ></NrBadge>
+                                        <NrBadge value={item.number}></NrBadge>
                                       </td>
                                       <td style={{ width: "270px" }}>
                                         {item.team.driver +

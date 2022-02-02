@@ -52,7 +52,7 @@ const DisqualificationTable = (props) => {
         accessor: (cellInfo) => cellInfo.number,
         disableFilters: true,
         disableSortBy: true,
-        Cell: (row) => <NrBadge value={"#" + row.value}></NrBadge>,
+        Cell: (row) => <NrBadge value={row.value}></NrBadge>,
       },
       {
         width: "20%",
