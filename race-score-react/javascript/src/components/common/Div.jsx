@@ -44,10 +44,10 @@ export const CarDiv = ({ line1, line2, carBrand }) => {
 
   return (
     <div className="col-12 d-flex">
-      <div className="col-xl-3 col-5 py-2">
+      <div className="col-xl-3 col-4 py-2">
         <img
           className="img-fluid"
-          style={{ height: "28px" }}
+          style={{ height: "23px" }}
           src={path}
           alt=""
         ></img>

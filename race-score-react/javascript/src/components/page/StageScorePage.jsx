@@ -135,7 +135,7 @@ const StageScorePage = (props) => {
         Cell: (cellInfo) => <TeamDiv team={cellInfo.row.original} />,
       },
       {
-        width: "35%",
+        width: "30%",
         id: "car",
         Header: "Samochód",
         disableFilters: true,
@@ -149,7 +149,7 @@ const StageScorePage = (props) => {
         ),
       },
       {
-        width: "10%",
+        width: "13%",
         id: "score",
         Header: "Czas/ kary",
         accessor: (cellInfo) => cellInfo.stageScore,
@@ -163,7 +163,7 @@ const StageScorePage = (props) => {
         ),
       },
       {
-        width: "10%",
+        width: "15%",
         id: "result",
         Header: "Wynik",
         accessor: (cellInfo) => cellInfo.stageScore,
