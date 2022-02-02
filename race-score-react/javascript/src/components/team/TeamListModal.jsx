@@ -9,6 +9,7 @@ import { backendUrl } from "../utils/fetchUtils";
 import ResultTable from "../common/table/ResultTable";
 import authHeader from "../../service/auth-header";
 import { NrBadge } from "../common/NrBadge";
+import { TeamDiv } from "../common/Div";
 
 export const TeamListModal = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
@@ -61,11 +62,9 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         width: "20%",
         id: "team",
         Header: "Załoga",
-        accessor: (cellInfo) =>
-          cellInfo.team.driver +
-          " " +
-          (cellInfo.team.coDriver ? cellInfo.team.coDriver : ""),
+        accessor: (cellInfo) => cellInfo.team,
         disableFilters: true,
+        Cell: (row) => <TeamDiv team={row.value}></TeamDiv>,
       },
       {
         width: "12%",

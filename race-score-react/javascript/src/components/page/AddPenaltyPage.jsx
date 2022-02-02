@@ -7,6 +7,7 @@ import { backendUrl } from "../utils/fetchUtils";
 import { useLocation, useNavigate } from "react-router-dom";
 import authHeader from "../../service/auth-header";
 import Button from "react-bootstrap/Button";
+import { InputLabeled } from "../common/InputLabeled";
 
 export const AddPenaltyPage = (props) => {
   const location = useLocation();
@@ -28,6 +29,7 @@ export const AddPenaltyPage = (props) => {
   const [loadingTeams, setLoadingTeams] = useState(false);
   const [disable, setDisable] = useState(false);
   const [msg, setMsg] = useState();
+  const [customPenaltySec, setCustomPenaltySec] = useState(-1);
 
   const fetchPsOptions = () => {
     axios
@@ -58,9 +60,9 @@ export const AddPenaltyPage = (props) => {
       });
   };
 
-  const postPenalty = (data) => {
+  const postPenalty = (data, seconds) => {
     axios
-      .post(`${backendUrl()}/penalty/addPenalty`, data, {
+      .post(`${backendUrl()}/penalty/addPenalty?seconds=${seconds}`, data, {
         headers: authHeader(),
       })
       .then((res) => {
@@ -69,7 +71,11 @@ export const AddPenaltyPage = (props) => {
           const penalty = penaltyOptions.find(
             (x) => x.value === data.penaltyKind
           );
-          setMsg(`Dodano karę ${penalty.label}; Kierowca:${team}`);
+          setMsg(
+            `Dodano karę: ${penalty.label} ${
+              seconds !== -1 ? ";Liczba sekund: " + seconds + "s " : ""
+            }; Kierowca:${team}`
+          );
           setTimeout(() => setMsg(), 10000);
         }
       });
@@ -98,12 +104,13 @@ export const AddPenaltyPage = (props) => {
       penaltyKind: penalty.penaltyKind,
       description: penalty.penaltyDesc,
     };
-    postPenalty(data);
+    postPenalty(data, customPenaltySec);
     resetPenalty();
   };
 
   const resetPenalty = () => {
     setPenalty({ ...penalty, penaltyDesc: "" });
+    setCustomPenaltySec(-1);
   };
 
   const handleChange = (event) => {
@@ -114,13 +121,12 @@ export const AddPenaltyPage = (props) => {
     <div className="u-text-center">
       <div className="u-box-shadow">
         <div className="col-xl-12">
-          <h4 className="pb-2 mb-3 border-bottom">Dodaj kare:</h4>
+          <h5 className="pb-2 mb-1 border-bottom">Dodaj kare:</h5>
         </div>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center text-center">
           <div className="col-lg-4 pb-1">
-            <h5 className={"pt-1"}>Załoga</h5>
             <Selector
-              label={"PS"}
+              label={"Odcinek PS"}
               options={psOptions}
               handleChange={(value) => setStage(value)}
               isValid={true}
@@ -132,17 +138,32 @@ export const AddPenaltyPage = (props) => {
               isValid={true}
               isLoading={loadingTeams}
             />
-            <h5 className={"pt-1"}>Kara</h5>
+            <div className="d-flex">
+              <div style={{ width: "-moz-available" }}>
+                <Selector
+                  label={"Rodzaj kary"}
+                  options={penaltyOptions}
+                  handleChange={(value) =>
+                    setPenalty({ ...penalty, penaltyKind: value })
+                  }
+                  isValid={true}
+                  isLoading={penaltyOptions.length === 0}
+                />
+              </div>
+              {penalty.penaltyKind === "100" && (
+                <div className="px-1">
+                  <InputLabeled
+                    label="Kara w sekundach"
+                    inputPlaceholder="00"
+                    value={customPenaltySec}
+                    handleChange={(e) => setCustomPenaltySec(e.target.value)}
+                    onlyNumber={true}
+                    big={true}
+                  />
+                </div>
+              )}
+            </div>
 
-            <Selector
-              label={"Rodzaj kary"}
-              options={penaltyOptions}
-              handleChange={(value) =>
-                setPenalty({ ...penalty, penaltyKind: value })
-              }
-              isValid={true}
-              isLoading={penaltyOptions.length === 0}
-            />
             <textarea
               placeholder={"Dodatkowy opis"}
               value={penalty.penaltyDesc}
@@ -152,7 +173,6 @@ export const AddPenaltyPage = (props) => {
               rows={2}
               disabled={disable}
             />
-
             <div className="col-xl-12 pt-1">
               <button
                 type="button"

@@ -508,6 +508,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                   className={"m-1"}
                   variant="success"
                   onClick={() => setQuickJoin(true)}
+                  disabled={event?.started}
                 >
                   Zapisz się
                 </Button>

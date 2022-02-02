@@ -13,6 +13,7 @@ import {
   faDownload,
   faExclamation,
   faTimesCircle,
+  faUserEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { OkCancelModal } from "../common/Modal";
 import authHeader from "../../service/auth-header";
@@ -20,6 +21,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Card from "react-bootstrap/Card";
 import { Selector } from "../common/Selector";
 import { NrBadge } from "../common/NrBadge";
+import { BasicTeamDataForm } from "./BasicTeamDataForm";
 
 export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
   const [teams, setTeams] = useState([]);
@@ -37,6 +39,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
   });
   const [msg, setMsg] = useState();
   const [eventClasses, setEventClasses] = useState([]);
+  const [teamToEdit, setTeamToEdit] = useState();
 
   const eraseTeamToRemove = () => {
     setTeamToRemove({
@@ -175,11 +178,6 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
     fetchTeams();
   }, [show]);
 
-  useEffect(() => {
-    setTeams([]);
-    fetchTeams();
-  }, [referee]);
-
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -202,8 +200,21 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
     setTeams(teams);
   };
 
+  const fetchSaveTeam = (team) => {
+    setLoading(true);
+    axios
+      .post(`${backendUrl()}/team/saveTeam`, team, {
+        headers: authHeader(),
+      })
+      .then(() => {
+        fetchTeams();
+        setTeamToEdit();
+      });
+  };
+
   return (
     <Modal
+      style={{ zIndex: teamToEdit ? 1000 : 1055 }}
       show={show}
       onHide={handleClose}
       backdrop="static"
@@ -226,9 +237,9 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
           <>
             <table>
               <th className="d-table-row fs-6">
-                <td style={{ width: "80px" }}></td>
+                <td style={{ width: "70px" }}>Edycja</td>
                 <td style={{ width: "60px" }}>Nr</td>
-                <td style={{ width: "350px" }}>Załoga</td>
+                <td style={{ width: "350px" }}>Kierowca</td>
                 <td style={{ width: "350px" }}>Samochód</td>
                 <td style={{ width: "100px" }}>Klasa</td>
                 <td style={{ width: "100px" }}>Zapłacone</td>
@@ -266,11 +277,15 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                 <Card.Body className="p-0">
                                   <table className="m-0">
                                     <th className="d-table-row fw-normal align-middle">
-                                      <td
-                                        className="fw-bold"
-                                        style={{ width: "30px" }}
-                                      >
-                                        &#9776;
+                                      <td style={{ width: "30px" }}>
+                                        <FontAwesomeIcon
+                                          icon={faUserEdit}
+                                          onClick={() =>
+                                            setTeamToEdit(item.team)
+                                          }
+                                          title={"Edytuj dane"}
+                                          cursor={"pointer"}
+                                        />
                                       </td>
                                       <td style={{ width: "50px" }}>
                                         <NrBadge
@@ -339,7 +354,6 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                       </td>
                                       <td style={{ width: "90px" }}>
                                         <FontAwesomeIcon
-                                          className={""}
                                           icon={faCoins}
                                           onClick={() =>
                                             setTeamToEntryFee(
@@ -353,7 +367,6 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                       <td style={{ width: "90px" }}>
                                         {item.entryFeeFile !== null ? (
                                           <FontAwesomeIcon
-                                            className={""}
                                             icon={faDownload}
                                             onClick={() =>
                                               fetchEntryFeeFile(
@@ -370,7 +383,6 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
                                       </td>
                                       <td style={{ width: "90px" }}>
                                         <FontAwesomeIcon
-                                          className={""}
                                           icon={faTimesCircle}
                                           onClick={() =>
                                             setTeamToRemove(
@@ -437,6 +449,17 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
             handleClose={() => setStartEvent(false)}
           />
         )}
+        {teamToEdit && (
+          <BasicTeamDataForm
+            show={true}
+            myTeam={teamToEdit}
+            eventId={eventId}
+            onSave={(team) => fetchSaveTeam(team)}
+            okBtnLabel={"Zapisz zmiany"}
+            handleClose={() => setTeamToEdit()}
+            title={"Edycja danych załogi"}
+          />
+        )}
         <div className="text-center">
           <Button className={"m-1"} variant="primary" onClick={sortByClass}>
             Sortuj wstępnie wg. klas
@@ -464,7 +487,7 @@ export const AdminTeamList = ({ show, handleClose, eventId, started }) => {
             </Button>
           )}
           <Button className={"m-1"} variant="secondary" onClick={handleClose}>
-            Ok
+            Wyjdź
           </Button>
         </div>
       </Modal.Footer>

@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { InputLabeled } from "../common/InputLabeled";
 import { RadioButton } from "../common/Button";
 import { backendUrl } from "../utils/fetchUtils";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import authHeader from "../../service/auth-header";
 import Button from "react-bootstrap/Button";
 
@@ -122,9 +122,6 @@ export const AddScorePage = (props) => {
       return;
     }
     setValid();
-    console.log(scoreMiliSec);
-    console.log(scoreSec);
-    console.log(scoreMin);
     const startStageInMin = stageStartHour * 60 + stageStartMin;
     const scoreInMilis =
       Number(scoreMin) * 60 * 1000 +
@@ -176,11 +173,11 @@ export const AddScorePage = (props) => {
     <div className="u-text-center">
       <div className="u-box-shadow">
         <div className="col-xl-12">
-          <h4 className="pb-2 mb-3 border-bottom">Dodaj wynik:</h4>
+          <h5 className="pb-1 mb-1 border-bottom">Dodaj wynik:</h5>
         </div>
 
         <div className="row justify-content-center">
-          <div className="col-lg-4 pb-3 border-bottom">
+          <div className="col-lg-4 pb-1 border-bottom">
             <div className="centered-grid form-group ">
               <RadioButton
                 label={mode[0].desc}
@@ -198,9 +195,9 @@ export const AddScorePage = (props) => {
               />
             </div>
 
-            <div className="pb-3" />
+            <div className="pb-1" />
             <Selector
-              label={"PS"}
+              label={"Odcinek PS"}
               options={psOptions}
               handleChange={(value) => setStage(value)}
               isValid={true}
@@ -214,10 +211,10 @@ export const AddScorePage = (props) => {
             />
           </div>
 
-          <div className="col-lg-4 pb-3 border-bottom">
+          <div className="col-lg-4 pb-1 border-bottom">
             <div className="row">
               <div className="col-xl-12">
-                <h4>Wynik</h4>
+                <h5>Czas</h5>
                 <div className="inline-flex">
                   <InputLabeled
                     label="Minuty"
@@ -263,7 +260,7 @@ export const AddScorePage = (props) => {
           </div>
         </div>
       </div>
-      <div className="col-sm pt-5"></div>
+      <div className="col-sm pt-3"></div>
       <Button
         className={"mx-2 py-1 px-2"}
         variant="primary"

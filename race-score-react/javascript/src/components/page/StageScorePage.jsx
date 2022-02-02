@@ -143,6 +143,7 @@ const StageScorePage = (props) => {
           <CarDiv
             line1={cellInfo.row.original.car}
             line2={cellInfo.row.original.className}
+            carBrand={cellInfo.row.original.brand}
           />
         ),
       },
