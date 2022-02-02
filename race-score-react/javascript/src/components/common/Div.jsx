@@ -6,7 +6,7 @@ export const TeamDiv = ({ team }) => {
   };
 
   return (
-    <div className="float-left px-1">
+    <div className="float-left">
       <div className="d-flex pt-1" style={{ flexWrap: "wrap" }}>
         {/* <div className="col-md-6"> */}
         <h6 className="text-left font14 fw-bolder fst-italic m-0">
