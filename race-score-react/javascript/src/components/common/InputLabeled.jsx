@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export const InputLabeled = ({
   name = "",
   value = "",
@@ -13,6 +15,7 @@ export const InputLabeled = ({
   type = "text",
   multiline,
   required,
+  icon,
 }) => {
   const [error, setError] = useState(false);
 
@@ -52,46 +55,82 @@ export const InputLabeled = ({
       >
         {label}
       </span>
-      {/* <p className="input-label">{label}</p> */}
-      {multiline === undefined && (
-        <>
-          {required ? (
-            <input
-              name={name}
-              className={"form-control " + (big ? "" : "my-input") + errorClass}
-              value={value}
-              placeholder={inputPlaceholder}
-              onChange={(e) => onChange(e)}
-              disabled={disabled}
-              max={max}
-              type={type}
-              required
-            ></input>
-          ) : (
-            <input
-              name={name}
-              className={"form-control " + (big ? "" : "my-input") + errorClass}
-              value={value}
-              placeholder={inputPlaceholder}
-              onChange={(e) => onChange(e)}
-              disabled={disabled}
-              max={max}
-              type={type}
-            ></input>
-          )}
-        </>
-      )}
-      {multiline !== undefined && (
-        <textarea
-          placeholder={inputPlaceholder}
-          value={value}
-          name={name}
-          onChange={(e) => onChange(e)}
-          className={"form-control "}
-          rows={multiline}
-          disabled={disabled}
-        />
-      )}
+      <div className="d-flex">
+        {/* <p className="input-label">{label}</p> */}
+        {multiline === undefined && (
+          <>
+            {required ? (
+              <>
+                <div class="input-group mb-0">
+                  {icon !== undefined && (
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">
+                        <FontAwesomeIcon
+                          className={"fa-lg my-1 text-muted"}
+                          icon={icon}
+                          cursor={"pointer"}
+                        />
+                      </span>
+                    </div>
+                  )}
+                  <input
+                    name={name}
+                    className={
+                      "form-control " + (big ? "" : "my-input") + errorClass
+                    }
+                    value={value}
+                    placeholder={inputPlaceholder}
+                    onChange={(e) => onChange(e)}
+                    disabled={disabled}
+                    max={max}
+                    type={type}
+                    required
+                  ></input>
+                </div>
+              </>
+            ) : (
+              <>
+                <div class="input-group mb-0">
+                  {icon !== undefined && (
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">
+                        <FontAwesomeIcon
+                          className={"fa-lg my-1 text-muted"}
+                          icon={icon}
+                          cursor={"pointer"}
+                        />
+                      </span>
+                    </div>
+                  )}
+                  <input
+                    name={name}
+                    className={
+                      "form-control " + (big ? "" : "my-input") + errorClass
+                    }
+                    value={value}
+                    placeholder={inputPlaceholder}
+                    onChange={(e) => onChange(e)}
+                    disabled={disabled}
+                    max={max}
+                    type={type}
+                  ></input>
+                </div>
+              </>
+            )}
+          </>
+        )}
+        {multiline !== undefined && (
+          <textarea
+            placeholder={inputPlaceholder}
+            value={value}
+            name={name}
+            onChange={(e) => onChange(e)}
+            className={"form-control "}
+            rows={multiline}
+            disabled={disabled}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -74,8 +74,8 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         disableFilters: true,
         Cell: (row) => (
           <CarDiv
-            line1={row.value.brand + " " + row.value.model}
-            carBrand={row.value.brand}
+            line1={(row.value?.brand || "") + " " + (row.value?.model || "")}
+            carBrand={row.value?.brand}
           ></CarDiv>
         ),
       },
@@ -91,7 +91,7 @@ export const TeamListModal = ({ show, handleClose, eventId, started }) => {
         id: "engine",
         Header: "Silnik",
         accessor: (cellInfo) =>
-          cellInfo.team.currentCar?.engineCapacity + " cm3" || "",
+          cellInfo.team.currentCar?.engineCapacity || "" + " cm3",
         disableFilters: true,
       },
     ],

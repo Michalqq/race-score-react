@@ -36,3 +36,27 @@ export const OkCancelModal = ({
     </Modal>
   );
 };
+
+export const OkModal = ({ show, title, text, handleAccept }) => {
+  return (
+    <Modal show={show} onHide={handleAccept} backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <p>{text}</p>
+      </Modal.Body>
+
+      <Modal.Footer className={"justify-content-center"}>
+        <Button
+          className={"px-4 mx-3"}
+          variant="success"
+          onClick={handleAccept}
+        >
+          OK
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};

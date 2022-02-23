@@ -6,32 +6,28 @@ import Card from "react-bootstrap/Card";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { InputLabeled } from "../common/InputLabeled";
 import { backendUrl } from "../utils/fetchUtils";
-import { MyDatePicker } from "../common/DateInput";
-import { CarPanelModal } from "./CarPanelModal";
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import { Selector } from "../common/Selector";
 import authHeader from "../../service/auth-header";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { QuickJoinPanel } from "../join/QuickJoinPanel";
+import { TeamModal } from "./TeamModal";
 
 export const TeamPanelModal = ({ show, handleClose, event }) => {
-  const disable = false;
   const navigate = useNavigate();
 
   const [team, setTeam] = useState(undefined);
-  const [carsOption, setCarsOption] = useState([]);
-  const [addCar, setAddCar] = useState();
   const [file, setFile] = useState();
   const [uploading, setUploading] = useState(false);
   const [fileMsg, setFileMsg] = useState();
   const [notJoined, setNotJoined] = useState(false);
   const [myEvent, setMyEvent] = useState();
   const [quickJoin, setQuickJoin] = useState();
+  const [activeTab, setActiveTab] = useState(1);
+  const [fillTeam, setFillTeam] = useState();
 
   const loggedUser = sessionStorage.getItem("username") !== null;
 
@@ -39,7 +35,6 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
     if (!show) return;
 
     fetchGetTeam();
-    setCarsOption([]);
     setUploading(false);
     setFileMsg();
     setNotJoined(false);
@@ -58,18 +53,6 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   };
 
   useEffect(() => {
-    let tempOptions = [];
-    if (team !== undefined && team.cars) {
-      team.cars.map((x) => {
-        const option = {
-          label: x.brand + " " + x.model + " " + x.licensePlate,
-          value: x.carId,
-          defValue: false,
-        };
-        tempOptions.push(option);
-      });
-      setCarsOption(tempOptions);
-    }
     if (event?.eventId !== undefined && team?.teamId !== undefined)
       axios
         .get(
@@ -86,16 +69,6 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
         });
   }, [team]);
 
-  const fetchAddTeam = () => {
-    axios
-      .post(`${backendUrl()}/team/addTeam?eventId=${event.eventId}`, team, {
-        headers: authHeader(),
-      })
-      .then(() => {
-        handleClose();
-      });
-  };
-
   const fetchRemoveFromEvent = () => {
     axios
       .post(
@@ -109,14 +82,6 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
       .then(() => {
         setMyEvent({ ...myEvent, joined: false });
       });
-  };
-
-  const handleChange = (event) => {
-    setTeam({ ...team, [event.target.name]: event.target.value });
-  };
-
-  const addTeam = () => {
-    fetchAddTeam();
   };
 
   const fetchUpload = (eventId, teamId) => {
@@ -147,7 +112,8 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
   return (
     <div>
       <Modal
-        show={show && !addCar && !quickJoin}
+        style={{ zIndex: quickJoin || fillTeam ? 1000 : 1055 }}
+        show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
@@ -170,8 +136,12 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
         <p style={{ fontSize: "11px" }} className="text-center my-0 py-0">
           Aplikacja w fazie testów
         </p>
-        <Tabs className="m-0 fw-bold">
-          <Tab eventKey="event" title="Informacje">
+        <Tabs
+          activeKey={activeTab}
+          onSelect={(key) => setActiveTab(key)}
+          className="m-0 fw-bold"
+        >
+          <Tab eventKey={1} title="Informacje">
             <div className="row">
               <div className="col-lg-6 pb-3 px-3">
                 <div className="m-2 text-center">
@@ -217,7 +187,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
           {!loggedUser ? (
             <></>
           ) : (
-            <Tab eventKey="entryFee" title="Wpisowe">
+            <Tab eventKey={2} title="Wpisowe">
               <div className="row mx-2 justify-content-center">
                 <div className="col-lg-6 pb-3 px-1">
                   <h5 className="text-center py-4">
@@ -267,238 +237,6 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
               </div>
             </Tab>
           )}
-          {!loggedUser ? (
-            <></>
-          ) : (
-            <Tab eventKey="team" title="Moje dane zawodnika">
-              <Modal.Body>
-                {team === undefined && (
-                  <div className="text-center">
-                    <Spinner animation="border" variant="secondary" size="lg" />
-                  </div>
-                )}
-                {team !== undefined && (
-                  <div className="row">
-                    <div className="col-lg-7 pb-3 px-1">
-                      <Card className="">
-                        <Card.Header className="bg-dark text-white">
-                          Kierowca
-                        </Card.Header>
-                        <Card.Body>
-                          <div className="row d-flex">
-                            <div className="col-lg-4 px-0">
-                              <InputLabeled
-                                label="Imie i nazwisko"
-                                name="driver"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.driver}
-                              />
-                            </div>
-                            <div className="col-lg-4 px-0">
-                              <InputLabeled
-                                label="Nazwa Teamu"
-                                name="teamName"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.teamName}
-                              />
-                            </div>
-                            <div className="col-lg-4 px-0">
-                              <InputLabeled
-                                label="Automobilklub"
-                                name="club"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.club}
-                              />
-                            </div>
-                          </div>
-
-                          <div className="row mt-3">
-                            <div className="col-lg-6 px-0">
-                              <InputLabeled
-                                label="Email"
-                                name="email"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.email}
-                              />
-                            </div>
-                            <div className="col-lg-6 px-0">
-                              <InputLabeled
-                                label="Nr. telefonu"
-                                name="phone"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.phone}
-                              />
-                            </div>
-                          </div>
-                          <div className="row mt-3">
-                            <div className="col-lg-6 px-0">
-                              <MyDatePicker
-                                label={"Data urodzenia"}
-                                onChange={(val) =>
-                                  setTeam({ ...team, birthDate: val })
-                                }
-                                selected={team.birthDate || new Date()}
-                              />
-                            </div>
-                            <div className="col-lg-6 px-0">
-                              <InputLabeled
-                                label="Nr. prawa jazdy"
-                                name="drivingLicense"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.drivingLicense}
-                              />
-                            </div>
-                          </div>
-                          <div className="row mt-3">
-                            <div className="col-lg-6 px-0">
-                              <InputLabeled
-                                label="Imię i nazwisko (wypadek)"
-                                name="emergencyPerson"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.emergencyPerson}
-                              />
-                            </div>
-                            <div className="col-lg-6 px-0">
-                              <InputLabeled
-                                label="Nr. telefonu (wypadek)"
-                                name="emergencyPhone"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.emergencyPhone}
-                              />
-                            </div>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </div>
-                    <div className="col-lg-5 pb-3 px-1">
-                      <Card className="text-center">
-                        <Card.Header className="bg-dark text-white">
-                          Pilot
-                        </Card.Header>
-                        <Card.Body>
-                          <div className="row ">
-                            <div className="col-lg-5 px-0">
-                              <InputLabeled
-                                label="Imie i nazwisko"
-                                name="coDriver"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.coDriver}
-                              />
-                            </div>
-                            <div className="col-lg-3 px-0">
-                              <InputLabeled
-                                label="Email"
-                                name="coEmail"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.coEmail}
-                              />
-                            </div>
-                            <div className="col-lg-4 px-0">
-                              <InputLabeled
-                                label="Nr. telefonu"
-                                name="coPhone"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.coPhone}
-                              />
-                            </div>
-                          </div>
-                          <div className="row px-0">
-                            <div className="col-lg-4 px-0">
-                              <MyDatePicker
-                                label={"Data urodzenia"}
-                                onChange={(val) =>
-                                  setTeam({ ...team, coBirthDate: val })
-                                }
-                                selected={team.coBirthDate || new Date()}
-                              />
-                            </div>
-                            <div className="col-lg-4 px-0">
-                              <InputLabeled
-                                label="Nr. prawa jazdy"
-                                name="coDrivingLicense"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.coDrivingLicense}
-                              />
-                            </div>
-                            <div className="col-lg-4 px-0">
-                              <InputLabeled
-                                label="Automobilklub"
-                                name="coClub"
-                                handleChange={handleChange}
-                                disabled={disable}
-                                big={true}
-                                value={team.coClub}
-                              />
-                            </div>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                      <Card className="text-center">
-                        {team.currentCar !== undefined &&
-                          team.currentCar !== null && (
-                            <Card.Header className="bg-dark text-white">{`Aktualny samochód: ${team.currentCar.brand} ${team.currentCar.model} ${team.currentCar.licensePlate}`}</Card.Header>
-                          )}
-                        <Card.Body>
-                          <Selector
-                            label={"Samochody"}
-                            options={carsOption}
-                            handleChange={(value) =>
-                              setTeam({
-                                ...team,
-                                currentCar: team.cars.find(
-                                  (x) => x.carId === value
-                                ),
-                              })
-                            }
-                            isValid={true}
-                            skipDefault={true}
-                          />
-                          <Button
-                            className="m-1"
-                            variant="primary"
-                            onClick={() => setAddCar(true)}
-                          >
-                            Dodaj samochód
-                          </Button>
-                          <Button
-                            className="m-1"
-                            variant="secondary"
-                            onClick={() => setAddCar(team.currentCar)}
-                          >
-                            Edytuj
-                          </Button>
-                        </Card.Body>
-                      </Card>
-                    </div>
-                  </div>
-                )}
-              </Modal.Body>
-            </Tab>
-          )}
         </Tabs>
         <Modal.Footer>
           <div className="row justify-content-center">
@@ -507,7 +245,13 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                 <Button
                   className={"m-1"}
                   variant="success"
-                  onClick={() => setQuickJoin(true)}
+                  form="teamForm"
+                  type="submit"
+                  onClick={() => {
+                    loggedUser
+                      ? setFillTeam(true)
+                      : navigate(`login?${event.eventId}`);
+                  }}
                   disabled={event?.started}
                 >
                   Zapisz się
@@ -518,7 +262,7 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
                 className={"m-1"}
                 variant="success"
                 onClick={() => {
-                  loggedUser ? addTeam() : navigate(`login?${event.eventId}`);
+                  loggedUser ? setFillTeam(true) : navigate(`login?${event.eventId}`);
                 }}
               >
                 {myEvent?.joined ? "Ok" : "Zapisz (po zalogowaniu)"}
@@ -544,19 +288,16 @@ export const TeamPanelModal = ({ show, handleClose, event }) => {
           </div>
         </Modal.Footer>
       </Modal>
-      <CarPanelModal
-        show={addCar}
-        handleClose={() => {
-          setAddCar(false);
-          fetchGetTeam();
-        }}
-        teamId={team?.teamId}
-        carToEdit={addCar}
-      />
       <QuickJoinPanel
         show={quickJoin}
         handleClose={() => setQuickJoin()}
         eventId={event?.eventId}
+      />
+      <TeamModal
+        show={fillTeam}
+        handleClose={() => setFillTeam()}
+        handleOk={() => handleClose()}
+        event={event}
       />
     </div>
   );

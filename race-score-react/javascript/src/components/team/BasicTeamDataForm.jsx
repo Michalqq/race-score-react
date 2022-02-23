@@ -8,6 +8,12 @@ import Spinner from "react-bootstrap/Spinner";
 import { Selector } from "../common/Selector";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import {
+  faCar,
+  faCarAlt,
+  faUserAstronaut,
+  faUserClock,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const BasicTeamDataForm = ({
   show,
@@ -62,6 +68,7 @@ export const BasicTeamDataForm = ({
                   value={team.driver}
                   big={true}
                   required={true}
+                  icon={faUserAstronaut}
                 />
               </div>
               <div className="col-6">
@@ -73,6 +80,7 @@ export const BasicTeamDataForm = ({
                   }
                   value={team.coDriver}
                   big={true}
+                  icon={faUserClock}
                 />
               </div>
             </div>
@@ -90,6 +98,7 @@ export const BasicTeamDataForm = ({
                   value={team.currentCar.brand}
                   big={true}
                   required={true}
+                  icon={faCar}
                 />
               </div>
               <div className="col-6">
@@ -105,6 +114,7 @@ export const BasicTeamDataForm = ({
                   value={team.currentCar.model}
                   big={true}
                   required={true}
+                  icon={faCarAlt}
                 />
               </div>
             </div>

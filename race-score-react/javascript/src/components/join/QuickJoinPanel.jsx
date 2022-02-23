@@ -9,6 +9,12 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 import { Selector } from "../common/Selector";
+import {
+  faCar,
+  faCarAlt,
+  faUserAstronaut,
+  faUserClock,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
   const [msg, setMsg] = useState();
@@ -107,6 +113,7 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
                   value={team.driver}
                   big={true}
                   required={true}
+                  icon={faUserAstronaut}
                 />
               </div>
               <div className="col-6">
@@ -118,6 +125,7 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
                   }
                   value={team.coDriver}
                   big={true}
+                  icon={faUserClock}
                 />
               </div>
             </div>
@@ -135,6 +143,7 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
                   value={team.currentCar.brand}
                   big={true}
                   required={true}
+                  icon={faCar}
                 />
               </div>
               <div className="col-6">
@@ -150,6 +159,7 @@ export const QuickJoinPanel = ({ show, handleClose, eventId }) => {
                   value={team.currentCar.model}
                   big={true}
                   required={true}
+                  icon={faCarAlt}
                 />
               </div>
             </div>
