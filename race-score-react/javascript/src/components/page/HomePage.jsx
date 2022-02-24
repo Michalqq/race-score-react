@@ -8,7 +8,7 @@ import { NewEventForm } from "../event/NewEventForm";
 import { EventCard } from "../common/EventCard";
 import Card from "react-bootstrap/Card";
 import { TeamListModal } from "../team/TeamListModal";
-import { TeamPanelModal } from "../team/TeamPanelModal";
+import { EventModal } from "../event/EventModal";
 import authHeader from "../../service/auth-header";
 import { AdminTeamList } from "../team/AdminTeamList";
 import Spinner from "react-bootstrap/Spinner";
@@ -175,7 +175,7 @@ const HomePage = (props) => {
           started={eventToTeamList?.started}
         />
       )}
-      <TeamPanelModal
+      <EventModal
         show={eventToTeamPanel !== undefined}
         handleClose={() => {
           setEventToTeamPanel();

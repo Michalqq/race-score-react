@@ -14,9 +14,9 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { QuickJoinPanel } from "../join/QuickJoinPanel";
-import { TeamModal } from "./TeamModal";
+import { TeamModal } from "../team/TeamModal";
 
-export const TeamPanelModal = ({ show, handleClose, event }) => {
+export const EventModal = ({ show, handleClose, event }) => {
   const navigate = useNavigate();
 
   const [team, setTeam] = useState(undefined);

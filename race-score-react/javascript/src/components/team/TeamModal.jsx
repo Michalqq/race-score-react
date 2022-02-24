@@ -21,7 +21,7 @@ import {
   faCarCrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const TeamModal = ({ show, handleClose, handleOk, event }) => {
+export const TeamModal = ({ show, handleClose, handleOk, myEvent }) => {
   const disable = false;
 
   const [team, setTeam] = useState(undefined);
@@ -55,7 +55,6 @@ export const TeamModal = ({ show, handleClose, handleOk, event }) => {
           defValue: false,
         };
         tempOptions.push(option);
-        console.log(option);
       });
       setCarsOption(tempOptions);
     }
@@ -63,7 +62,7 @@ export const TeamModal = ({ show, handleClose, handleOk, event }) => {
 
   const fetchAddTeam = () => {
     axios
-      .post(`${backendUrl()}/team/addTeam?eventId=${event.eventId}`, team, {
+      .post(`${backendUrl()}/team/addTeam?eventId=${myEvent.eventId}`, team, {
         headers: authHeader(),
       })
       .then(() => {
@@ -349,23 +348,25 @@ export const TeamModal = ({ show, handleClose, handleOk, event }) => {
                 </div>
               </div>
             )}
+            <div className="text-center pb-2">
+              <Button
+                className={"m-1"}
+                variant="success"
+                type="submit"
+                disabled={myEvent?.started}
+              >
+                Zapisz się
+              </Button>
+              <Button
+                className={"m-1"}
+                variant="secondary"
+                onClick={handleClose}
+              >
+                Zamknij okno
+              </Button>
+            </div>
           </form>
         </Modal.Body>
-
-        <div className="text-center pb-2">
-          <Button
-            className={"m-1"}
-            variant="success"
-            form="teamForm"
-            type="submit"
-            disabled={event?.started}
-          >
-            Zapisz się
-          </Button>
-          <Button className={"m-1"} variant="secondary" onClick={handleClose}>
-            Zamknij okno
-          </Button>
-        </div>
       </Modal>
       <CarPanelModal
         show={addCar}
